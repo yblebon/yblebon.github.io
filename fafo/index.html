@@ -16,11 +16,13 @@
 
   <label for="sounds">Choose a sound record:</label>
 
- <select   onChange="onSoundChange(this.value);"  name="sounds" id="sounds">
+ <select   onChange="onSoundChange(this.value);"  class="sounds" name="sounds" id="sounds">
   <option value="sound1.mp3">mp3</option>
   <option value="sound1.webm">webm</option>
  </select>
 </div>
+
+<div class="debugging"></div>
   
 <br>
 </br>
@@ -43,6 +45,13 @@
 <script src="./howler.js"></script>
 
 <script>
+    const soundsElement = document.querySelector(".sounds");
+  const debugging = document.querySelector(".debugging");
+
+soundsElement.addEventListener("change", (event) => {
+  debugging.textContent = `You want to listen to that sound ${event.target.value}`;
+});
+    
 
     funtion onSoundChange(val) {
       alert("the sound you selected: "+val);
