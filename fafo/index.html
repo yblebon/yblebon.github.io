@@ -57,7 +57,8 @@
       }
       
       sound = new Howl({
-          src: ['./audio/'+$(this).val()]
+          src: ['./audio/'+$(this).val()],
+          html5: true
       });
       sound.play();
      } );
