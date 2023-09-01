@@ -16,7 +16,7 @@
 
   <label for="sounds">Choose a sound record:</label>
 
- <select name="sounds" id="sounds">
+ <select   onChange="onSoundChange(this.value);"  name="sounds" id="sounds">
   <option value="sound1.mp3">mp3</option>
   <option value="sound1.webm">Saab</option>
  </select>
@@ -43,6 +43,11 @@
 <script src="./howler.js"></script>
 
 <script>
+
+    funtion onSoundChange(val) {
+      alert("the sound you selected: "+val);
+    }
+  
     var sound = new Howl({
       src: ['./audio/sound1.webm', './audio/sound1.mp3']
     });
