@@ -47,15 +47,13 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 <script>
+    var sound;
     $( ".sounds" ).on( "change", function() {
-  alert( "Handler for `change` called: "+$(this).val());
-} );
-  
-    var sound = new Howl({
-      src: ['./audio/sound1.webm', './audio/sound1.mp3']
-    });
-    sound.play();
-  
+      sound = new Howl({
+          src: ['./audio/'+$(this).val()]
+      });
+      sound.play();
+     } );
 </script>
 
   
