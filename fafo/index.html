@@ -44,12 +44,15 @@
 <img src="IMG_2158.jpeg" />
 
 <script src="./howler.js"></script>
-
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 <script>
+
+  $(function() {
+    console.log( "ready!" );
     var sound = null;
-    $( ".sounds" ).on( "change", function() {
+    $( ".sounds" ).on( "change", function() 
+    {
        if (sound != null) {
         sound.stop();
         sound.unload();
@@ -62,6 +65,8 @@
       });
       sound.play();
      } );
+  });
+  
 </script>
 
   
