@@ -48,7 +48,7 @@
 
 <script>
     $( ".sounds" ).on( "change", function() {
-  alert( "Handler for `change` called: "+this.value);
+  alert( "Handler for `change` called: "+$(this).val());
 } );
   
     var sound = new Howl({
