@@ -49,6 +49,12 @@
 <script>
     var sound;
     $( ".sounds" ).on( "change", function() {
+       if (sound != null) {
+        sound.stop();
+        sound.unload();
+        sound = null;
+      }
+      
       sound = new Howl({
           src: ['./audio/'+$(this).val()]
       });
