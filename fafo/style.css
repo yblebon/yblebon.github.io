@@ -11,3 +11,7 @@ img {
   min-height: 200px;
   display: block;
 }
+
+div#audio {
+  width: 800px;
+}
