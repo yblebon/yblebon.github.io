@@ -16,7 +16,7 @@
 
   <label for="sounds">Choose a sound record:</label>
 
- <select   onChange="onSoundChange(this.value);"  class="sounds" name="sounds" id="sounds">
+ <select class="sounds" name="sounds" id="sounds">
   <option value="sound1.mp3">mp3</option>
   <option value="sound1.webm">webm</option>
  </select>
@@ -44,18 +44,12 @@
 
 <script src="./howler.js"></script>
 
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
 <script>
-    const soundsElement = document.querySelector(".sounds");
-  const debugging = document.querySelector(".debugging");
-
-soundsElement.addEventListener("change", (event) => {
-  debugging.textContent = `You want to listen to that sound ${event.target.value}`;
-});
-    
-
-    funtion onSoundChange(val) {
-      alert("the sound you selected: "+val);
-    }
+    $( ".sounds" ).on( "change", function() {
+  alert( "Handler for `change` called." );
+} );
   
     var sound = new Howl({
       src: ['./audio/sound1.webm', './audio/sound1.mp3']
