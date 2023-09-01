@@ -51,9 +51,8 @@
   $(function() {
     console.log( "ready!" );
     var sound = null;
-    $( ".sounds" ).on( "change", function() 
-    {
-       if (sound != null) {
+    $(".sounds").on("change", function() {
+      if (sound != null) {
         sound.stop();
         sound.unload();
         sound = null;
@@ -63,8 +62,10 @@
           src: ['./audio/'+$(this).val()],
           html5: true
       });
+      
       sound.play();
-     } );
+      
+    });
   });
   
 </script>
