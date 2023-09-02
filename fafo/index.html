@@ -3,6 +3,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
+
+  <script src="./howler.js"></script>
+<script src="./jquery-3.7.1.min.js"></script>
+<script src="./player.js"></script>
 </head>
 
 <body>
@@ -11,6 +15,19 @@
 
 <h4> Twitter backup </h4>
 <a href="https://github.com/yblebon/FaFo"> Previous repo </a>
+
+  <div id="audio"> 
+
+  <label for="sounds">Choose a sound record:</label>
+
+ <select class="sounds" name="sounds" id="sounds">
+
+  <option value=""></option>
+  <option value="./audio/sound1.mp3">mp3</option>
+  <option value="./audio/sound1.webm">webm</option>
+  <option value="https://onlinetestcase.com/wp-content/uploads/2023/06/500-KB-MP3.mp3">mp3 online</option>
+ </select>
+</div>
 
 <div class="debugging"></div>
 
@@ -29,22 +46,9 @@
 <img src="IMG_2150.jpeg" />
 <img src="IMG_2158.jpeg" />
 
-<script src="./howler.js"></script>
-<script src="./jquery-3.7.1.min.js"></script>
-<script src="./player.js"></script>
 
-<div id="audio"> 
 
-  <label for="sounds">Choose a sound record:</label>
 
- <select class="sounds" name="sounds" id="sounds">
-
-  <option value=""></option>
-  <option value="./audio/sound1.mp3">mp3</option>
-  <option value="./audio/sound1.webm">webm</option>
-  <option value="https://onlinetestcase.com/wp-content/uploads/2023/06/500-KB-MP3.mp3">mp3 online</option>
- </select>
-</div>
 
   
 </body>
