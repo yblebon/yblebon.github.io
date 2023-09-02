@@ -17,4 +17,6 @@ img {
 
 div#audio {
   width: 800px;
+  margin-top: 10px;
+  text-align: left;
 }
