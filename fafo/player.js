@@ -1,21 +1,44 @@
-
-  $(function() {
-    console.log( "ready!" );
+$(function() {
+    console.log( "Player JS loaded");
     var sound = null;
     $(".sounds").on("change", function() {
       if (sound != null) {
+        console.log("stopping current sound, status: "+sound.state());
         sound.stop();
         sound.unload();
         sound = null;
       }
       
+      let soundSelected = $(this).find('option:selected');
+      console.log("sound selected: "+soundSelected.text());
+      
+      if (soundSelected.val() === "")  {
+        return
+      }
+      
+      let soundExt = soundSelected.val().split('.').pop();
+      console.log("sound extension: "+soundExt)
+      console.log("sound extension support: " + Howler.codecs(soundExt));
+      
       sound = new Howl({
-          src: ['./audio/'+$(this).val()],
-          html5: true
+          src: [soundSelected.val()],
+          html5: true,
+          onload: function() {
+          	console.log("loading sound ...");
+          },
+          onplay: function(id) {
+          	console.log("playing sound ...");
+          },
+          onplayerror: function(id) {
+          	console.log("error playing sound: "+this.id);
+          },
+          onploaderror: function(id) {
+          	console.log("error loading sound: "+this.id);
+          }
+          
       });
       
       sound.play();
       
     });
   });
-  
