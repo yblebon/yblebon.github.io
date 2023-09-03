@@ -29,11 +29,13 @@ $(function() {
           onplay: function(id) {
           	console.log("playing sound ...");
           },
-          onplayerror: function(id) {
-          	console.log("error playing sound: "+this.id);
+          onplayerror: function() {
+          	console.log("error playing sound");
+            Howler.unload();
           },
-          onploaderror: function(id) {
-          	console.log("error loading sound: "+this.id);
+          onloaderror: function() {
+          	console.log("error loading sound");
+            Howler.unload();
           }
           
       });
