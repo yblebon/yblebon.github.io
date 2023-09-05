@@ -35,7 +35,7 @@ $(function() {
           },
           onstop: function(id) {
           	console.log("stopping sound ...");
-            $( "#sound-gif" ).show( "hide", function() {
+            $( "#sound-gif" ).hide( "slow", function() {
                 console.log("hiding sound gif");
             });
             
