@@ -41,6 +41,10 @@ $(function() {
             });
             
           },
+          onend: function() {
+          	console.log("sound ended");
+            Howler.unload();
+          },
           onplayerror: function() {
           	console.log("error playing sound");
             Howler.unload();
