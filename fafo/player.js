@@ -23,6 +23,7 @@ $(function() {
       sound = new Howl({
           src: [soundSelected.val()],
           html5: true,
+          volume: 0.9,
           onload: function() {
           	console.log("loading sound ...");
           },
