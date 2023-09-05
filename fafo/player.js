@@ -28,6 +28,17 @@ $(function() {
           },
           onplay: function(id) {
           	console.log("playing sound ...");
+            $( "#sound-gif" ).show( "slow", function() {
+                console.log("showing sound gif");
+            });
+            
+          },
+          onstop: function(id) {
+          	console.log("stopping sound ...");
+            $( "#sound-gif" ).show( "hide", function() {
+                console.log("hiding sound gif");
+            });
+            
           },
           onplayerror: function() {
           	console.log("error playing sound");
