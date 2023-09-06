@@ -25,6 +25,7 @@ div#audio {
 div#menu {
   margin-top: 0px;
   margin-bottom: 10px;
+  text-align: center;
 }
 
 div#menu ul {
