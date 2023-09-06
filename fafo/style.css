@@ -21,6 +21,10 @@ div#audio {
   text-align: left;
 }
 
+div#menu {
+  margin-top: 5px;
+}
+
 div#menu ul {
   list-style-type: none;
   margin: 0;
