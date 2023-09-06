@@ -30,15 +30,15 @@ div#menu {
 
 div#menu ul {
   list-style-type: none;
-  margin: 0;
+  margin-left: auto;
+  margin-right: auto;
   padding: 0;
   overflow: hidden;
   background-color: #333333;
 }
 
 div#menu li {
-  margin-left:auto;
-  margin-right: auto;
+  float: left;
 }
 
 div#menu li a {
