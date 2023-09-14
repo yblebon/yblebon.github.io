@@ -66,20 +66,20 @@
     $(function() {
       console.log("videos body ready");
 
-      var player = videojs('my-video-player', {
+      var mplayer = videojs('my-video-player', {
         controls: true,
-        autoplay: false,
+        autoplay: true,
         width: 640,
         height: 264,
         preload: 'auto'
       }
 
-     player.poster("IMG_0461.png");
-     player.src([
+     mplayer.poster("IMG_0461.png");
+     mplayer.src([
          {type: 'video/mp4', src: 'https://yblebon-public.s3.eu-north-1.amazonaws.com/fafo/videos/IMG_0448.mov'},  
      ]);
 
-      player.ready(function() {
+      mplayer.ready(function() {
         console.log("video player ready ...");
       });
       
