@@ -1,6 +1,6 @@
 <link href="https://vjs.zencdn.net/8.5.2/video-js.css" rel="stylesheet" />
 
-<!-- 
+
 <video
     id="my-video"
     class="video-js"
@@ -22,10 +22,6 @@
   </video>
   <video id="my-video-player" class="video-js" width="640" height="264" poster="IMG_0461.png" controls >
   <source src="https://yblebon-public.s3.eu-north-1.amazonaws.com/fafo/videos/IMG_0448.mov" type="video/mp4" />
-</video>
--->
-
-<video id="my-video-player" class="video-js">
 </video>
 
 <script src="https://vjs.zencdn.net/8.5.2/video.min.js"></script>
@@ -66,13 +62,8 @@
     $(function() {
       console.log("videos body ready");
 
-      var mplayer = videojs('my-video-player', {
-        controls: true,
-        autoplay: true,
-        width: 640,
-        height: 264,
-        preload: 'auto'
-      }
+      let mplayer = videojs('my-video-player', {
+      });
 
      mplayer.poster("IMG_0461.png");
      mplayer.src([
