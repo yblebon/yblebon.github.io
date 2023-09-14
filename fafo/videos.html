@@ -94,7 +94,12 @@
           console.log("video src: "+ vidSrc);
         });
         mplayer.pause();
-        mplayer.src(vidSrc);
+        mplayer.src(
+          {
+            'src': vid["src"],
+            'type': vid["type"]
+          }
+        );
         mplayer.load();
         mplayer.play();
       });
