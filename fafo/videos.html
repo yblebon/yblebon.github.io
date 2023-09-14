@@ -25,7 +25,7 @@
   </video>
   </div>
 
-  <div id="video-player-playlist" style="float: right">
+  <div id="video-player-playlist" style="float: right; width: 100px; height: 70px;">
       <p> Videos Playlist </p>
   </div>
   
@@ -76,7 +76,7 @@
           let vid = myPlayList[i];
           let poster = vid['poster'];
           console.log(vid['src']);
-          $( "#video-player-playlist" ).append( '<img src="'+poster+'" style="width: 40px; height=30px" />' );
+          $( "#video-player-playlist" ).append( '<img src="'+poster+'" />' );
         }
 
       });
