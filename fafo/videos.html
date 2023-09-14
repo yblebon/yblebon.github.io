@@ -30,16 +30,7 @@
 <script src="https://cdn.jsdelivr.net/npm/videojs-playlist/dist/videojs-playlist.min.js"></script>
 
 <script>
-    $(function() {
-      console.log("videos body ready");
-
-      var player = videojs('my-video-player', {
-        controls: true,
-        autoplay: false,
-        preload: 'auto'
-      }
-
-player.playlist([{
+    var myPlayList = [{
   sources: [{
     src: 'http://media.w3.org/2010/05/sintel/trailer.mp4',
     type: 'video/mp4'
@@ -69,11 +60,28 @@ player.playlist([{
     type: 'video/mp4'
   }],
   poster: 'http://media.w3.org/2010/05/video/poster.png'
-}]);
+}]
+    $(function() {
+      console.log("videos body ready");
 
-// Play through the playlist automatically.
-player.playlist.autoadvance(0);
+      var player = videojs('my-video-player', {
+        controls: true,
+        autoplay: false,
+        width: 640,
+        height: 264,
+        preload: 'auto'
+      }
 
+    
+     myPlayer.src([
+         {type: 'video/mp4', src: 'https://yblebon-public.s3.eu-north-1.amazonaws.com/fafo/videos/IMG_0448.mov'},  
+     ]);
+
+      player.ready(function() {
+        console.log("video player ready ...");
+      });
+      
+      //player.playlist(myPlayList);
 
     });
 </script>
