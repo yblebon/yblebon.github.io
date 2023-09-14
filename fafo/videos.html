@@ -35,37 +35,28 @@
 <script src="https://cdn.jsdelivr.net/npm/videojs-playlist/dist/videojs-playlist.min.js"></script>
 
 <script>
-    var myPlayList = [{
-  sources: [{
+    var myPlayList = [
+      {
     src: 'http://media.w3.org/2010/05/sintel/trailer.mp4',
-    type: 'video/mp4'
-  }],
-  poster: 'http://media.w3.org/2010/05/sintel/poster.png'
-}, {
-  sources: [{
+    type: 'video/mp4',
+    poster: 'http://media.w3.org/2010/05/sintel/poster.png'
+      }, {
     src: 'http://media.w3.org/2010/05/bunny/trailer.mp4',
-    type: 'video/mp4'
-  }],
-  poster: 'http://media.w3.org/2010/05/bunny/poster.png'
-}, {
-  sources: [{
+    type: 'video/mp4',
+    poster: 'http://media.w3.org/2010/05/bunny/poster.png'
+   }, {
     src: 'http://vjs.zencdn.net/v/oceans.mp4',
-    type: 'video/mp4'
-  }],
-  poster: 'http://www.videojs.com/img/poster.jpg'
-}, {
-  sources: [{
+    type: 'video/mp4',
+    poster: 'http://www.videojs.com/img/poster.jpg'
+  }, {
     src: 'http://media.w3.org/2010/05/bunny/movie.mp4',
-    type: 'video/mp4'
-  }],
+    type: 'video/mp4',
   poster: 'http://media.w3.org/2010/05/bunny/poster.png'
-}, {
-  sources: [{
+  }, {
     src: 'http://media.w3.org/2010/05/video/movie_300.mp4',
-    type: 'video/mp4'
-  }],
-  poster: 'http://media.w3.org/2010/05/video/poster.png'
-}]
+    type: 'video/mp4',
+    poster: 'http://media.w3.org/2010/05/video/poster.png'
+ }]
     $(function() {
       console.log("videos body ready");
 
@@ -75,7 +66,13 @@
       mplayer.ready(function() {
         console.log("video player ready ...");
       });
-      
+
+      let poster;
+      let vid;
+      for (let i = 0; i < myPlayList.length; i++) {
+          vid = myPlayList[i];
+          console.log(vid['src']);
+      }
       //player.playlist(myPlayList);
 
     });
