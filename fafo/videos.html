@@ -35,29 +35,32 @@
 <script src="https://cdn.jsdelivr.net/npm/videojs-playlist/dist/videojs-playlist.min.js"></script>
 
 <script>
-    var myPlayList = [
+    var myPlayList =
+    [
       {
-    src: 'http://media.w3.org/2010/05/sintel/trailer.mp4',
-    type: 'video/mp4',
-    poster: 'http://media.w3.org/2010/05/sintel/poster.png'
+      src: 'http://media.w3.org/2010/05/sintel/trailer.mp4',
+      type: 'video/mp4',
+      poster: 'http://media.w3.org/2010/05/sintel/poster.png'
       }, {
-    src: 'http://media.w3.org/2010/05/bunny/trailer.mp4',
-    type: 'video/mp4',
-    poster: 'http://media.w3.org/2010/05/bunny/poster.png'
-   }, {
-    src: 'http://vjs.zencdn.net/v/oceans.mp4',
-    type: 'video/mp4',
-    poster: 'http://www.videojs.com/img/poster.jpg'
-  }, {
-    src: 'http://media.w3.org/2010/05/bunny/movie.mp4',
-    type: 'video/mp4',
-  poster: 'http://media.w3.org/2010/05/bunny/poster.png'
-  }, {
-    src: 'http://media.w3.org/2010/05/video/movie_300.mp4',
-    type: 'video/mp4',
-    poster: 'http://media.w3.org/2010/05/video/poster.png'
- }]
-    $(function() {
+      src: 'http://media.w3.org/2010/05/bunny/trailer.mp4',
+      type: 'video/mp4',
+      poster: 'http://media.w3.org/2010/05/bunny/poster.png'
+     }, {
+      src: 'http://vjs.zencdn.net/v/oceans.mp4',
+      type: 'video/mp4',
+      poster: 'http://www.videojs.com/img/poster.jpg'
+     }, {
+      src: 'http://media.w3.org/2010/05/bunny/movie.mp4',
+      type: 'video/mp4',
+     poster: 'http://media.w3.org/2010/05/bunny/poster.png'
+     }, {
+     src: 'http://media.w3.org/2010/05/video/movie_300.mp4',
+     type: 'video/mp4',
+     poster: 'http://media.w3.org/2010/05/video/poster.png'
+   }
+  ]
+  
+  $(function() {
       console.log("videos body ready");
 
       let mplayer = videojs('my-video-player', {
@@ -67,13 +70,12 @@
         console.log("video player ready ...");
       
 
-      for (var i = 0, len = myPlayList.length; i < len; i++) {
+        for (var i = 0, len = myPlayList.length; i < len; i++) {
           let vid = myPlayList[i];
           let poster = vid['poster'];
           console.log(vid['src']);
           $( "#video-player-playlist" ).append( "<img src='"+poster+"' style='width: 40px; height: 30px'"/>;
-      }
-      //player.playlist(myPlayList);
+        }
 
       });
 
