@@ -1,12 +1,15 @@
 <link href="https://vjs.zencdn.net/8.5.2/video-js.css" rel="stylesheet" />
 
+<div id="video-container">
 
+  <div id="video-player-screen"  style="float: left">
+    
 <video
     id="my-video"
     class="video-js"
     controls
     preload="auto"
-    width="640"
+    width="500"
     height="264"
     poster="IMG_0461.png"
     data-setup="{}"
@@ -20,6 +23,12 @@
       >
     </p>
   </video>
+
+  </div>
+
+  <div id="video-player-playlist" style="float: right">
+      <p> Videos Playlist </p>
+  </div>
 
 <script src="https://vjs.zencdn.net/8.5.2/video.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/videojs-playlist/dist/videojs-playlist.min.js"></script>
@@ -75,6 +84,8 @@
 
     });
 </script>
+
+</div>
 
 
 
