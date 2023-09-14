@@ -26,7 +26,7 @@
   </div>
 
   <div id="video-player-playlist" style="float: right; text-align:center; width: 100px; height: 70px;">
-      <p> Videos Playlist </p>
+      <h4> Videos Playlist </h4>
   </div>
   
   <div style="clear: both;"></div>
@@ -65,21 +65,36 @@
   $(function() {
       console.log("videos body ready");
 
-      let mplayer = videojs('my-video-player', {
-      });
-
-      mplayer.ready(function() {
-        console.log("video player ready ...");
       
-
-        for (var i = 0, len = myPlayList.length; i < len; i++) {
+      for (var i = 0, len = myPlayList.length; i < len; i++) {
           let vid = myPlayList[i];
           let poster = vid['poster'];
           console.log(vid['src']);
-          $( "#video-player-playlist" ).append( '<p>'+i+'</p>' );
-        }
-
+          $( "#video-player-playlist" ).append( '<p track-index="'+i+'" >'+i+'</p>' );
+      }
+    
+      let mplayer = videojs('my-video-player', {
       });
+
+
+      $("#video-player-playlist p").on("click", function() {
+        let trackIndex = $(this).attr("track-index");
+        let vid = myPlayList[parseInt(trackIndex)]
+        let vidSrc=vid["src"]
+        let visPoster=vid["poster"]
+        let mplayer = videojs('my-video-player');
+        mplayer.ready(function() {
+          console.log("video player ready ...");
+      
+
+        });
+        player.pause();
+        mplayer.src(vidSrc);
+        mplayer.load();
+        mplayer.play();
+      });
+
+      
 
     });
 </script>
