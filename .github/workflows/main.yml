@@ -16,6 +16,5 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_PROD_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_PROD_SECRET_ACCESS_KEY }}
-          aws-region: eu-central-1
       - name: Sync files to S3 bucket
         run: aws s3  --endpoint-url https://gateway.storjshare.io cp . s3://yblebon --recursive
