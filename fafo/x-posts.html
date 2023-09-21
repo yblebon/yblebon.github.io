@@ -1,7 +1,8 @@
-<link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
+<script src="lazyload.js"></script>
 
 <div>
+<img class="lazy" data-original="https://pin.ski/3Rv2gAz" />
+<img class="lazy" data-original="https://pin.ski/3rofnZV" />
 <img src="https://pin.ski/3Rv2gAz" />
 <img src="https://pin.ski/3rofnZV" />
 <img src="https://pin.ski/3ELJj5a" />
@@ -47,3 +48,6 @@
 <img src="IMG_2150.jpeg" />
 <img src="IMG_2158.jpeg" />
 </div>
+<script>
+  $("img.lazy").lazyload();
+</script>
