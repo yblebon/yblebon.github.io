@@ -1,4 +1,4 @@
-<div id="audio">
+<div id="podcast">
  
  <div id="podcast-container" style="margin: 0px auto;" >
   
@@ -7,17 +7,14 @@
   </div>
 
   <div id="podcast-player-playlist" style="float: right; text-align:center; width: 200px;">
-      <h4> Videos Playlist </h4>
+      <h4> Podcasts Playlist </h4>
   </div>
   
   <div style="clear: both;"></div>
-   
-</div>
 
+  <script src="./howler.js"></script>
 
-<script src="./howler.js"></script>
-<script src="./player.js"></script>
-<script>
+  <script>
     var myPlayList =
     [
       {
@@ -51,20 +48,18 @@
        }
 
        
-        let trackIndex = $(this).attr("track-index");
-        let pod = myPlayList[parseInt(trackIndex)]
-        let podTitle = pod["title"]
-        let podSrc = pod["src"]
-        let podPoster = pod["poster"]
+       let trackIndex = $(this).attr("track-index");
+       let pod = myPlayList[parseInt(trackIndex)]
+       let podTitle = pod["title"]
+       let podSrc = pod["src"]
+       let podPoster = pod["poster"]
 
-        let podExt = podSrc.split('.').pop();
-        console.log("podcast selected: "+podSrc);
-        console.log("podcast source extension: "+podExt)
-        console.log("podcast source support: " + Howler.codecs(podExt));
-       
- 
-     
-        podcast = new Howl({
+       let podExt = podSrc.split('.').pop();
+       console.log("podcast selected: "+podSrc);
+       console.log("podcast source extension: "+podExt)
+       console.log("podcast source support: " + Howler.codecs(podExt));
+         
+       podcast = new Howl({
           src: [podSrc],
           html5: true,
           volume: 0.9,
@@ -103,8 +98,7 @@
       podcast.play();
       
     });
-
-
+ });
 </script>
 
   
