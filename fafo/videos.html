@@ -25,7 +25,11 @@
   </div>
 
   <div id="video-player-playlist" style="float: right; text-align:center; width: 200px;">
-      <h4> Videos Playlist </h4>
+    <h4> Videos Playlist </h4>
+    <div class="list-group list-group-light" id="video-player-playlist-tab">
+      
+    </div>
+
   </div>
   
   <div style="clear: both;"></div>
@@ -68,7 +72,8 @@
           let poster = vid['poster'];
           let title = vid['title'];
           console.log(vid['src']);
-          $( "#video-player-playlist" ).append( '<p track-index="'+i+'" >'+title+'</p>' );
+          $( "#video-player-playlist-tab" ).append( '<button type="button" class="list-group-item list-group-item-action px-3 border-0 active"
+    aria-current="true" track-index="'+i+'" >'+title+'</button>' );
       }
     
       let mplayer = videojs('my-video-player', {
