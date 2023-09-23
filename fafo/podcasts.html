@@ -1,28 +1,24 @@
 <div id="podcast" class="container">
- 
- <div id="podcast-container">
-
   <div class="row">
    
    <div class="col-8">
-     <img id="podcast-poster" src="IMG_0749.jpeg"/>
-   </div>
-  
-   <div class="col-4">
-     <div id="podcast-player-playlist">
-      <h4> Podcasts Playlist </h4>
+     <div id="podcast-poster" > 
+       <img id="podcast-img" src="IMG_0749.jpeg"/>
      </div>
    </div>
-
-  </div>
-  
- </div>
- 
+   
+   <div class="col-4">
+     <div id="podcast-player-playlist">
+       <h4> Podcasts Playlist </h4>
+     </div>
+   </div>
+   
+  </div> 
 </div>
 
-  <script src="./howler.js"></script>
+<script src="./howler.js"></script>
 
-  <script>
+<script>
     var myPlayList =
     [
      
@@ -83,12 +79,12 @@
         
           onplay: function(id) {
           	console.log("playing podcast ...");
-           $( "#podcast-poster" ).attr("src","sound.gif");
+           $( "#podcast-img" ).attr("src","sound.gif");
           },
         
           onstop: function(id) {
           	console.log("stopping podcast ...");
-           $( "#podcast-poster" ).attr("src","IMG_0749.jpeg");
+           $( "#podcast-img" ).attr("src","IMG_0749.jpeg");
             
           },
           onend: function() {
