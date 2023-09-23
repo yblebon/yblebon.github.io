@@ -17,8 +17,7 @@
 
 <script src="./howler.js"></script>
 <script src="./player.js"></script>
-
- <script>
+<script>
     var myPlayList =
     [
       {
@@ -27,10 +26,10 @@
         poster: 'IMG_0461.png',
         title: '9-second melody using background drums'
       }
-  ]
+    ]
   
-  $(function() {
-      console.log("podcasts body ready");
+    $(function() {
+      console.log("podcasts player JS looading ...");
 
       
       for (var i = 0, len = myPlayList.length; i < len; i++) {
@@ -40,18 +39,72 @@
           $( "#podcast-player-playlist" ).append( '<p track-index="'+i+'" >'+title+'</p>' );
       }
 
+      var podcast = null;
+   
       $("#podcast-player-playlist p").on("click", function() {
+
+       if (podcast != null) {
+        console.log("stopping current podcast, status: "+podcast.state());
+        podcast.stop();
+        podcast.unload();
+        podcast = null;
+       }
+
+       
         let trackIndex = $(this).attr("track-index");
         let pod = myPlayList[parseInt(trackIndex)]
+        let podTitle = pod["title"]
         let podSrc = pod["src"]
         let podPoster = pod["poster"]
-      
+
+        let podExt = podSrc.split('.').pop();
+        console.log("podcast selected: "+podSrc);
+        console.log("podcast source extension: "+podExt)
+        console.log("podcast source support: " + Howler.codecs(podExt));
        
+ 
+     
+        podcast = new Howl({
+          src: [podSrc],
+          html5: true,
+          volume: 0.9,
+          onload: function() {
+          	console.log("loading podcast ...");
+          },
+          onplay: function(id) {
+          	console.log("playing podcast ...");
+            $( "#sound-gif" ).show( "slow", function() {
+                console.log("showing podcast gif");
+            });
+            
+          },
+          onstop: function(id) {
+          	console.log("stopping podcast ...");
+            $( "#sound-gif" ).hide( "slow", function() {
+                console.log("hiding podcast gif");
+            });
+            
+          },
+          onend: function() {
+          	console.log("podcast ended");
+            Howler.unload();
+          },
+          onplayerror: function() {
+          	console.log("error playing podcast");
+            Howler.unload();
+          },
+          onloaderror: function() {
+          	console.log("error loading podcast");
+            Howler.unload();
+          }
+          
       });
-
+       
+      podcast.play();
       
-
     });
+
+
 </script>
 
   
