@@ -1,8 +1,16 @@
-<div id="audio"> 
+<div id="audio">
+ 
  <div id="podcast-container" style="margin: 0px auto;" >
+  
   <div id="podcast-player-screen"  style="float: left">
     <img id="sound-gif" src="sound.gif" style="text-align: right; display: none"/>
   </div>
+
+  <div id="podcast-player-playlist" style="float: right; text-align:center; width: 200px;">
+      <h4> Videos Playlist </h4>
+  </div>
+  
+  <div style="clear: both;"></div>
    
 </div>
 
@@ -10,4 +18,42 @@
 <script src="./howler.js"></script>
 <script src="./player.js"></script>
 
-<div class="debugging"></div>
+ <script>
+    var myPlayList =
+    [
+      {
+        src: 'https://download.samplelib.com/mp3/sample-9s.mp3',
+        type: 'audio/mp3',
+        poster: 'IMG_0461.png',
+        title: '9-second melody using background drums'
+      }
+  ]
+  
+  $(function() {
+      console.log("podcasts body ready");
+
+      
+      for (var i = 0, len = myPlayList.length; i < len; i++) {
+          let pod = myPlayList[i];
+          let poster = pod['poster'];
+          let title = pod['title'];
+          $( "#podcast-player-playlist" ).append( '<p track-index="'+i+'" >'+title+'</p>' );
+      }
+
+      $("#podcast-player-playlist p").on("click", function() {
+        let trackIndex = $(this).attr("track-index");
+        let pod = myPlayList[parseInt(trackIndex)]
+        let podSrc = pod["src"]
+        let podPoster = pod["poster"]
+      
+       
+      });
+
+      
+
+    });
+</script>
+
+  
+</div>
+
