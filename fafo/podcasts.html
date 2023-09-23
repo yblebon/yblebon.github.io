@@ -1,16 +1,21 @@
 <div id="podcast">
  
- <div id="podcast-container" style="margin: 0px auto;" >
-  
-  <div id="podcast-player-screen"  style="float: left; width: 400px">
-    <img id="sound-gif" src="sound.gif" style="text-align: right; display: none"/>
-  </div>
+ <div id="podcast-container" style="margin: 0px auto;" class="container" >
 
-  <div id="podcast-player-playlist" style="float: right; text-align:center; width: 200px;">
-      <h4> Podcasts Playlist </h4>
-  </div>
+  <div class="row">
+   
+   <div class="col-8">
+     <img id="podcast-poster" src="IMG_0749.jpeg"/>
+   </div>
   
-  <div style="clear: both;"></div>
+   <div class="col-4">
+     <div id="podcast-player-playlist">
+      <h4> Podcasts Playlist </h4>
+     </div>
+   </div>
+
+  </div>
+</div>
 
   <script src="./howler.js"></script>
 
@@ -48,7 +53,6 @@
       $("#podcast-player-playlist p").on("click", function() {
 
        if (podcast != null) {
-        console.log("stopping current podcast, status: "+podcast.state());
         podcast.stop();
         podcast.unload();
         podcast = null;
@@ -73,18 +77,15 @@
           onload: function() {
           	console.log("loading podcast ...");
           },
+        
           onplay: function(id) {
           	console.log("playing podcast ...");
-            $( "#sound-gif" ).show( "slow", function() {
-                console.log("showing podcast gif");
-            });
-            
+           $( "#podcast-poster" ).attr("src","sound.gif");
           },
+        
           onstop: function(id) {
           	console.log("stopping podcast ...");
-            $( "#sound-gif" ).hide( "slow", function() {
-                console.log("hiding podcast gif");
-            });
+           $( "#podcast-poster" ).attr("src","IMG_0749.jpeg");
             
           },
           onend: function() {
