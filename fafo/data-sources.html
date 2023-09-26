@@ -1,8 +1,13 @@
-
+<div class="container" >
+   <div id="data-content">
+     
+   </div>
+</div>
 <script>
   $(function() {
      $.getJSON('./conf/x-posts.json', function(data) {         
-         console.log(data);
+        console.log(data);
+        $("#data-content" ).append( JSON.stringify(data) );
      });
   });
 </script>
