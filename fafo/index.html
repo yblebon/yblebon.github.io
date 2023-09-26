@@ -21,6 +21,7 @@
      <li id="podcasts"> <a href="#podcasts">Podcasts</a></li>
      <li id="videos"> <a href="#videos">Videos</a></li>
      <li id="articles"> <a href="#articles">Articles</a></li>
+     <li id="sources"> <a href="#sources">Data Sources</a></li>
      <li id="about"> <a href="#about">About</a></li>
     </ul>
    </div>
@@ -125,6 +126,12 @@ $('#podcasts').click(function () {
       
    $('#content').load("articles.html");
     });
+
+   $('#sources').click(function () {
+      console.log("sources");
+      console.log( $(this) );
+      $('#content').load("data-sources.html");
+   });
     
   </script>
 
