@@ -1,7 +1,7 @@
 <script src="js/lazyload.js"></script>
 
 <div id="container">
-  <div id="x-posts">
+  <div id="x-posts-content">
   </div>
 </div>
 <script>
@@ -15,7 +15,7 @@
         for (var i = 0, len = xpostList.length; i < len; i++) {
           let xpost = xpostList[i];
           let src = xpost['src'];
-          $( "#x-posts" ).append(
+          $( "#x-posts-content" ).append(
             '<img src="'+src+'" />'
           );
         }       
