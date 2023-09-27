@@ -44,39 +44,15 @@
 
   $(function() {
       console.log("videos body ready");
-
-    
-    var myPlayList =
-    [
-      {
-        src: 'https://bafybeiflmfislkf6wjbzprwcepthjvmpjgstbk2iecujtpwj67yjuh6wkm.ipfs.w3s.link/IMG_0641.mov',
-        type: 'video/mp4',
-        poster: 'IMG_0461.png',
-        title: 'Etang Sale Les Hauts Marche'
-      },
-      {
-        src: 'https://bafybeiek7jugunq3aornur4vhgzlzrl2n2qfsw3rn7rgpcr47eglralax4.ipfs.w3s.link/IMG_0662.mov',
-        type: 'video/mp4',
-        poster: 'IMG_0461.png',
-        title: 'Grand Anse Marche'
-      },
-      {
-        src: 'https://bafybeidrpedyfg6gbze6e5phj345ppykr3epp5sqaxwnada357p5pvzv7a.ipfs.w3s.link/IMG_2753.mov',
-        type: 'video/mp4',
-        poster: 'IMG_0461.png',
-        title: 'St Leu Dogs'
-      },
-      {
-        src: 'https://bafybeihcwmvucudyrdcfll5g44vdjdlwxayasomljfg4r4qzsczd4huuwu.ipfs.w3s.link/IMG_2788.mov',
-        type: 'video/mp4',
-        poster: 'IMG_0461.png',
-        title: 'St Gilles Carrefour supermarket'
-      }
-
-  ]
-  
       
-      for (var i = 0, len = myPlayList.length; i < len; i++) {
+          $.getJSON('./conf/videos.json', function(data) {         
+          
+          
+        console.log(data);
+        
+        var myPlayList = data["videos"]
+        
+              for (var i = 0, len = myPlayList.length; i < len; i++) {
           let vid = myPlayList[i];
           let poster = vid['poster'];
           let title = vid['title'];
@@ -112,7 +88,12 @@
         mplayer.play();
       });
 
-      
+
+        
+        
+     }).fail(function(){
+          console.log("Error occured when trying to load videos data.");
+     });
 
     });
 </script>
