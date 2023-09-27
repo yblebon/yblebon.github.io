@@ -1,9 +1,9 @@
-<div id="podcast" class="container">
+<div class="container">
   <div class="row">
+  
    
-   <div class="col-8" style="background-color: #80ced6">
-     <div id="podcast-poster" > 
-     </div>
+   <div class="col-8" >
+       <img id="podcast-poster-img" class="img-fluid" src="IMG_0749.jpeg"/>
    </div>
    
    <div class="col-4" >
@@ -15,6 +15,7 @@
    </div>
    
   </div> 
+  
 </div>
 
 <script src="./howler.js"></script>
@@ -22,6 +23,10 @@
 <script>
     $(function() {
        console.log("podcasts player JS looading ...");
+                
+                
+        
+       
       
        $.getJSON('./conf/podcasts.json', function(data) {         
        
@@ -73,16 +78,18 @@
         
           onplay: function(id) {
           	console.log("playing podcast ...");
-           //$( "#podcast-p" ).attr("src","sound.gif");
+            $("#podcast-poster-img" ).attr("src","sound.gif");
           },
         
           onstop: function(id) {
           	console.log("stopping podcast ...");
-           //$( "#podcast-img" ).attr("src","IMG_0749.jpeg");
+           $("#podcast-poster-img" ).attr("src","IMG_0749.jpeg");
             
           },
           onend: function() {
           	console.log("podcast ended");
+          	           $("#podcast-poster-img" ).attr("src","IMG_0749.jpeg");
+          	
             Howler.unload();
           },
           onplayerror: function() {
