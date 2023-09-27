@@ -23,21 +23,21 @@
 
      $.getJSON('./conf/x-posts.json', function(data) {         
         console.log(data);
-        $("#x-posts-src" ).append("<p>"+JSON.stringify(data, null, 2)+"</p>" );
+        $("#x-posts-src" ).append("<pre>"+JSON.stringify(data, null, 2)+"</pre>" );
      }).fail(function(){
           console.log("Error occured when trying to load data sources page.");
      });
      
           $.getJSON('./conf/podcasts.json', function(data) {         
         console.log(data);
-        $("#podcasts-src" ).append("<p>"+JSON.stringify(data)+"</p>" );
+      $("#podcasts-src" ).append("<pre>"+JSON.stringify(data, null, 2)+"</pre>");
      }).fail(function(){
           console.log("Error occured when trying to load data sources page.");
      });
      
           $.getJSON('./conf/videos.json', function(data) {         
         console.log(data);
-        $("#videos-src" ).append("<p>"+JSON.stringify(data)+"</p>" );
+        $("#videos-src" ).append("<pre>"+JSON.stringify(data, null, 2)+"</pre>" );
      }).fail(function(){
           console.log("Error occured when trying to load data sources page.");
      });
