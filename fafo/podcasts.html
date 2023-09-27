@@ -3,6 +3,8 @@
   
    
    <div class="col-8" >
+   
+   <span id="title" class="badge rounded-pill bg-primary"></span>
        <img id="podcast-poster-img" class="img-fluid" src="IMG_0749.jpeg"/>
    </div>
    
@@ -62,6 +64,8 @@
        let podTitle = pod["title"]
        let podSrc = pod["src"]
        let podPoster = pod["poster"]
+       
+       $("#title").text(podTitle);
 
        let podExt = podSrc.split('.').pop();
        console.log("podcast selected: "+podSrc);
