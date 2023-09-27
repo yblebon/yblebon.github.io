@@ -1,16 +1,17 @@
 <div id="podcast" class="container">
   <div class="row">
    
-   <div class="col-8">
+   <div class="col-8" style="background-color: #80ced6">
      <div id="podcast-poster" > 
-       <img id="podcast-img" src="IMG_0749.jpeg"/>
      </div>
    </div>
    
-   <div class="col-4">
-     <div id="podcast-player-playlist">
-       <h4> Podcasts Playlist </h4>
-     </div>
+   <div class="col-4" >
+     <div class="list-group list-group-light" id="podcast-player-playlist-tab">
+     
+      <h4> Podcasts Playlist </h4>
+      
+    </div>
    </div>
    
   </div> 
@@ -32,12 +33,17 @@
           let pod = myPlayList[i];
           let poster = pod['poster'];
           let title = pod['title'];
-          $( "#podcast-player-playlist" ).append( '<p track-index="'+i+'" >'+title+'</p>' );
+
+          
+          $( "#podcast-player-playlist-tab" ).append(
+            '<button type="button" class="list-group-item list-group-item-action px-3" aria-current="true" track-index="'+i+'" >'+title+'</button>'
+          );
+          
       }
 
       var podcast = null;
    
-      $("#podcast-player-playlist p").on("click", function() {
+      $("#podcast-player-playlist-tab button").on("click", function() {
 
        if (podcast != null) {
         podcast.stop();
@@ -67,12 +73,12 @@
         
           onplay: function(id) {
           	console.log("playing podcast ...");
-           $( "#podcast-img" ).attr("src","sound.gif");
+           //$( "#podcast-p" ).attr("src","sound.gif");
           },
         
           onstop: function(id) {
           	console.log("stopping podcast ...");
-           $( "#podcast-img" ).attr("src","IMG_0749.jpeg");
+           //$( "#podcast-img" ).attr("src","IMG_0749.jpeg");
             
           },
           onend: function() {
