@@ -5,9 +5,30 @@
 </div>
 <script>
   $(function() {
+     console.log("loading data sources page in progress ...")
+
      $.getJSON('./conf/x-posts.json', function(data) {         
         console.log(data);
         $("#data-content" ).append("<p>"+JSON.stringify(data)+"</p>" );
+     }).fail(function(){
+          console.log("Error occured when trying to load data sources page.");
      });
+     
+          $.getJSON('./conf/podcasts.json', function(data) {         
+        console.log(data);
+        $("#data-content" ).append("<p>"+JSON.stringify(data)+"</p>" );
+     }).fail(function(){
+          console.log("Error occured when trying to load data sources page.");
+     });
+     
+          $.getJSON('./conf/videos.json', function(data) {         
+        console.log(data);
+        $("#data-content" ).append("<p>"+JSON.stringify(data)+"</p>" );
+     }).fail(function(){
+          console.log("Error occured when trying to load data sources page.");
+     });
+     
+     
+     
   });
 </script>
