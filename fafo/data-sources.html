@@ -1,29 +1,43 @@
 <div class="container" >
    <div id="data-content">
-     
+        <div id="x-posts-src">
+          <h3> X Posts  </h3>
+        </div>
+        <div id="podcasts-src">
+          <h3> Podcasts  </h3>
+        </div>
+
+         <div id="videos-src">
+          <h3> Videos  </h3>
+        </div>
    </div>
+   
+
+   
 </div>
 <script>
   $(function() {
      console.log("loading data sources page in progress ...")
+     
+
 
      $.getJSON('./conf/x-posts.json', function(data) {         
         console.log(data);
-        $("#data-content" ).append("<p>"+JSON.stringify(data)+"</p>" );
+        $("#x-posts-src" ).append("<pre>"+JSON.stringify(data, null, 2)+"</pre>" );
      }).fail(function(){
           console.log("Error occured when trying to load data sources page.");
      });
      
           $.getJSON('./conf/podcasts.json', function(data) {         
         console.log(data);
-        $("#data-content" ).append("<p>"+JSON.stringify(data)+"</p>" );
+      $("#podcasts-src" ).append("<pre>"+JSON.stringify(data, null, 2)+"</pre>");
      }).fail(function(){
           console.log("Error occured when trying to load data sources page.");
      });
      
           $.getJSON('./conf/videos.json', function(data) {         
         console.log(data);
-        $("#data-content" ).append("<p>"+JSON.stringify(data)+"</p>" );
+        $("#videos-src" ).append("<pre>"+JSON.stringify(data, null, 2)+"</pre>" );
      }).fail(function(){
           console.log("Error occured when trying to load data sources page.");
      });
