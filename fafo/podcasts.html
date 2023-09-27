@@ -19,28 +19,16 @@
 <script src="./howler.js"></script>
 
 <script>
-    var myPlayList =
-    [
-     
-      {
-        src: 'https://bafybeidafxblileikhlrsrsvuao5lw627qjalmcfy3cbhg2cj3jd5xryrm.ipfs.w3s.link/ipfs/bafybeidafxblileikhlrsrsvuao5lw627qjalmcfy3cbhg2cj3jd5xryrm/69RueduLagon.m4a',
-        type: 'audio/m4a',
-        poster: 'IMG_0461.png',
-        title: '69 rue du lagon St Leu,test'
-      },
-      {
-        src: 'https://download.samplelib.com/mp3/sample-9s.mp3',
-        type: 'audio/mp3',
-        poster: 'IMG_0461.png',
-        title: '9-second melody using background drums'
-      }
-    ]
-  
     $(function() {
-      console.log("podcasts player JS looading ...");
-
+       console.log("podcasts player JS looading ...");
       
-      for (var i = 0, len = myPlayList.length; i < len; i++) {
+       $.getJSON('./conf/podcasts.json', function(data) {         
+       
+         console.log(data);
+       
+       var myPlayList = data["podcasts"]
+       
+            for (var i = 0, len = myPlayList.length; i < len; i++) {
           let pod = myPlayList[i];
           let poster = pod['poster'];
           let title = pod['title'];
@@ -104,7 +92,16 @@
        
       podcast.play();
       
-    });
+      });
+      
+      
+
+     }).fail(function(){
+          console.log("Error occured when trying to load data sources page.");
+     });
+
+     
+
  });
 </script>
 
