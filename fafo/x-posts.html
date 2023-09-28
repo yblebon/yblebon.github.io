@@ -1,8 +1,17 @@
 <script src="js/lazyload.js"></script>
 
 <div id="container">
-  <div id="x-posts-content">
+  <div class="row">
+  <div class="col-8">
+  
+    <div id="x-posts-content"/>
+  <div class="col-4">
+  
   </div>
+
+ 
+  </div>
+
 </div>
 <script>
   $(function() {
@@ -12,7 +21,10 @@
         
         var xpostList = data["x-posts"];
         
-        for (var i = 0, len = xpostList.length; i < len; i++) {
+        let sizeToLoad = xpostList.length;
+        sizeToLoad = 5;
+        
+        for (var i = 0, len = sizeToLoad; i < len; i++) {
           let xpost = xpostList[i];
           let src = xpost['src'];
           $( "#x-posts-content" ).append(
