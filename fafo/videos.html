@@ -1,9 +1,20 @@
 <link href="https://vjs.zencdn.net/8.5.2/video-js.css" rel="stylesheet" />
 
-<div id="video-container" style="margin: 0px auto;" >
+<div class="container">
+<div class="row">
+ <div class="col-12">
 
-  <div id="video-player-screen"  style="float: left">
+ </div>
+</div>
+
+</div>
+  <div class="row">
+  
+    <div class="col-8">
     
+<span id="title" class="badge rounded-pill bg-primary mb-2"></span>
+       
+      
   <video
     id="my-video-player"
     class="video-js"
@@ -23,72 +34,48 @@
     </p>
   </video>
   </div>
+    
+    
+    <div class="col-4">
+    
+      <div id="video-player-playlist">
+    <h4> Videos Playlist </h4>
+    <div class="list-group list-group-light" id="video-player-playlist-tab">
+      
+    </div>
 
-  <div id="video-player-playlist" style="float: right; text-align:center; width: 200px;">
-      <h4> Videos Playlist </h4>
   </div>
+
   
-  <div style="clear: both;"></div>
-  
+  </div>
+
 </div>
+
 
 <script src="https://vjs.zencdn.net/8.5.2/video.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/videojs-playlist/dist/videojs-playlist.min.js"></script>
 <script src="./Youtube.min.js"></script>
 
 <script>
-    var myPlayList =
-    [
-      {
-        src: 'https://bafybeiflmfislkf6wjbzprwcepthjvmpjgstbk2iecujtpwj67yjuh6wkm.ipfs.w3s.link/IMG_0641.mov',
-        type: 'video/mp4',
-        poster: 'IMG_0461.png',
-        title: 'Etang Sale Les Hauts Marche'
-      },
-      {
-        src: 'https://bafybeiek7jugunq3aornur4vhgzlzrl2n2qfsw3rn7rgpcr47eglralax4.ipfs.w3s.link/IMG_0662.mov',
-        type: 'video/mp4',
-        poster: 'IMG_0461.png',
-        title: 'Grand Anse Marche'
-      },
-      {
-      src: 'http://media.w3.org/2010/05/sintel/trailer.mp4',
-      type: 'video/mp4',
-      poster: 'http://media.w3.org/2010/05/sintel/poster.png',
-      title: 'test 1'
-      }, {
-      src: 'http://media.w3.org/2010/05/bunny/trailer.mp4',
-      type: 'video/mp4',
-      poster: 'http://media.w3.org/2010/05/bunny/poster.png',
-      title: 'test 2'
-     }, {
-      src: 'http://vjs.zencdn.net/v/oceans.mp4',
-      type: 'video/mp4',
-      poster: 'http://www.videojs.com/img/poster.jpg',
-      title: 'test 3'
-     }, {
-      src: 'http://media.w3.org/2010/05/bunny/movie.mp4',
-      type: 'video/mp4',
-      poster: 'http://media.w3.org/2010/05/bunny/poster.png',
-      title: 'test 4'
-     }, {
-     src: 'http://media.w3.org/2010/05/video/movie_300.mp4',
-     type: 'video/mp4',
-     poster: 'http://media.w3.org/2010/05/video/poster.png',
-    title: 'test 5'
-   }
-  ]
-  
+
   $(function() {
       console.log("videos body ready");
-
       
-      for (var i = 0, len = myPlayList.length; i < len; i++) {
+          $.getJSON('./conf/videos.json', function(data) {         
+          
+          
+        console.log(data);
+        
+        var myPlayList = data["videos"]
+        
+              for (var i = 0, len = myPlayList.length; i < len; i++) {
           let vid = myPlayList[i];
           let poster = vid['poster'];
           let title = vid['title'];
           console.log(vid['src']);
-          $( "#video-player-playlist" ).append( '<p track-index="'+i+'" >'+title+'</p>' );
+          $( "#video-player-playlist-tab" ).append(
+            '<button type="button" class="list-group-item list-group-item-action px-3" aria-current="true" track-index="'+i+'" >'+title+'</button>'
+          );
       }
     
       let mplayer = videojs('my-video-player', {
@@ -96,12 +83,18 @@
       });
 
 
-      $("#video-player-playlist p").on("click", function() {
+      $("#video-player-playlist-tab button").on("click", function() {
+        
+        
         let trackIndex = $(this).attr("track-index");
         let vid = myPlayList[parseInt(trackIndex)]
         let vidSrc=vid["src"]
         let visPoster=vid["poster"]
         let mplayer = videojs('my-video-player');
+        
+        $("#title").text(vid["title"]);
+        
+        
         mplayer.ready(function() {
           console.log("video player ready ...");
           console.log("video src: "+ vidSrc);
@@ -117,7 +110,12 @@
         mplayer.play();
       });
 
-      
+
+        
+        
+     }).fail(function(){
+          console.log("Error occured when trying to load videos data.");
+     });
 
     });
 </script>

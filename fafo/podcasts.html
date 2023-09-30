@@ -1,19 +1,125 @@
-  <div id="audio"> 
-
-  <label for="sounds">Select a sound record:</label>
-
- <select class="sounds" name="sounds" id="sounds">
-  <option value=""></option>
-  <option value="https://yblebon-public.s3.eu-north-1.amazonaws.com/fafo/videos/mediatheque.m4a"> Mediatheque test </option>
-  <option value="https://yblebon-public.s3.eu-north-1.amazonaws.com/fafo/audio/67RueduLagon3.m4a">Test podcast direct listening</option>
-  <option value="https://yblebon-public.s3.eu-north-1.amazonaws.com/fafo/audio/69RueduLagon.m4a">S3 .m4a</option>
-  <option value="https://onlinetestcase.com/wp-content/uploads/2023/06/500-KB-MP3.mp3">Online .mp3</option>
- </select>
-
-  <img id="sound-gif" src="sound.gif" style="text-align: right; display: none"/>
+<div class="container">
+  <div class="row">
+  
+   
+   <div class="col-8" >
+   
+   <span id="title" class="badge rounded-pill bg-primary"></span>
+       <img id="podcast-poster-img" class="img-fluid" src="IMG_0749.jpeg"/>
+   </div>
+   
+   <div class="col-4" >
+     <div class="list-group list-group-light" id="podcast-player-playlist-tab">
+     
+      <h4> Podcasts Playlist </h4>
+      
+    </div>
+   </div>
+   
+  </div> 
+  
 </div>
 
 <script src="./howler.js"></script>
-<script src="./player.js"></script>
 
-<div class="debugging"></div>
+<script>
+    $(function() {
+       console.log("podcasts player JS looading ...");
+                
+                
+        
+       
+      
+       $.getJSON('./conf/podcasts.json', function(data) {         
+       
+         console.log(data);
+       
+       var myPlayList = data["podcasts"]
+       
+            for (var i = 0, len = myPlayList.length; i < len; i++) {
+          let pod = myPlayList[i];
+          let poster = pod['poster'];
+          let title = pod['title'];
+
+          
+          $( "#podcast-player-playlist-tab" ).append(
+            '<button type="button" class="list-group-item list-group-item-action px-3" aria-current="true" track-index="'+i+'" >'+title+'</button>'
+          );
+          
+      }
+
+      var podcast = null;
+   
+      $("#podcast-player-playlist-tab button").on("click", function() {
+
+       if (podcast != null) {
+        podcast.stop();
+        podcast.unload();
+        podcast = null;
+       }
+
+       
+       let trackIndex = $(this).attr("track-index");
+       let pod = myPlayList[parseInt(trackIndex)]
+       let podTitle = pod["title"]
+       let podSrc = pod["src"]
+       let podPoster = pod["poster"]
+       
+       $("#title").text(podTitle);
+
+       let podExt = podSrc.split('.').pop();
+       console.log("podcast selected: "+podSrc);
+       console.log("podcast source extension: "+podExt)
+       console.log("podcast source support: " + Howler.codecs(podExt));
+         
+       podcast = new Howl({
+          src: [podSrc],
+          html5: true,
+          volume: 0.9,
+          onload: function() {
+          	console.log("loading podcast ...");
+          },
+        
+          onplay: function(id) {
+          	console.log("playing podcast ...");
+            $("#podcast-poster-img" ).attr("src","sound.gif");
+          },
+        
+          onstop: function(id) {
+          	console.log("stopping podcast ...");
+           $("#podcast-poster-img" ).attr("src","IMG_0749.jpeg");
+            
+          },
+          onend: function() {
+          	console.log("podcast ended");
+          	           $("#podcast-poster-img" ).attr("src","IMG_0749.jpeg");
+          	
+            Howler.unload();
+          },
+          onplayerror: function() {
+          	console.log("error playing podcast");
+            Howler.unload();
+          },
+          onloaderror: function() {
+          	console.log("error loading podcast");
+            Howler.unload();
+          }
+          
+      });
+       
+      podcast.play();
+      
+      });
+      
+      
+
+     }).fail(function(){
+          console.log("Error occured when trying to load data sources page.");
+     });
+
+     
+
+ });
+</script>
+
+  
