@@ -36,7 +36,7 @@
       
        
                
-        for (var i = startIndex, len = size; i < (startIndex+len); i++) {
+        for (let i = startIndex; i < (startIndex+size); i++) {
           let xpost = data[i];
           let src = xpost['src'];
           console.log(src);
@@ -72,7 +72,9 @@
       $("#x-posts-list-tab button").on("click", function() {
        
              let trackIndex = $(this).attr("track-index");
-           
+
+             
+           $( "#x-posts-content" ).empty();
              
               loadImages(xpostList, trackIndex, 5);
        
