@@ -29,28 +29,27 @@
    
       function loadImages(data, startIndex, size){
        
-       console.log(data);
+       console.log("----")
+    
        console.log(startIndex);
        console.log(size);
-       console.log("loaded");
+      
        
                
-        for (var i = startIndex, len = size; i < len; i++) {
+        for (var i = startIndex, len = size; i < (startIndex+len); i++) {
           let xpost = data[i];
           let src = xpost['src'];
+          console.log(src);
           $( "#x-posts-content" ).append(
             '<img src="'+src+'" class="img-fluid"/>'
           );
         }
-        
-        lastIndex = lastIndex + 1;
-        console.log(lastIndex);
-        
+
       }
       
       $.getJSON('./conf/x-posts.json', function(data) {
 
-        console.log(data);
+
         
         var xpostList = data["x-posts"];
         
@@ -67,6 +66,18 @@
       }
       
       loadImages(xpostList, 0, 5);
+      
+      
+
+      $("#x-posts-list-tab button").on("click", function() {
+       
+             let trackIndex = $(this).attr("track-index");
+           
+             
+              loadImages(xpostList, trackIndex, 5);
+       
+       })
+       
       
 
         
