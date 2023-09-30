@@ -32,6 +32,16 @@
         let sizeToLoad = xpostList.length;
         sizeToLoad = 5;
         
+                      for (var i = 0, len = xpostList.length ; i < len; i++) {
+          let xpost = xpostList[i];
+          let src = xpost['src'];
+
+          $( "#x-posts-list-tab" ).append(
+            '<button type="button" class="list-group-item list-group-item-action px-3" aria-current="true" track-index="'+i+'" >'+(i+1)+'</button>'
+          );
+      }
+      
+        
         for (var i = 0, len = sizeToLoad; i < len; i++) {
           let xpost = xpostList[i];
           let src = xpost['src'];
