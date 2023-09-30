@@ -1,17 +1,25 @@
-<script src="js/lazyload.js"></script>
 
-<div id="container">
-  <div class="row">
+
+<div class="container-fluid">
+  <div class="row   justify-content-md-center">
+  
   <div class="col-8">
+    <div id="x-posts-content">
+    <p>
+    </p>
+    </div>
+  </div>
   
-    <div id="x-posts-content"/>
   <div class="col-4">
-  
+       <div id="x-posts-list-tab">
+    <p>
+    X Post List
+    </p>
+    </div>
   </div>
 
  
   </div>
-
 </div>
 <script>
   $(function() {
@@ -28,9 +36,10 @@
           let xpost = xpostList[i];
           let src = xpost['src'];
           $( "#x-posts-content" ).append(
-            '<img src="'+src+'" />'
+            '<img src="'+src+'" class="img-fluid"/>'
           );
-        }       
+        }
+        
       })
   });
 </script>
