@@ -17,7 +17,7 @@ for fname in os.listdir(images_dir):
          orig_x, orig_y = img.size
          factor = 800 / orig_x
          y = factor * orig_y
-         img.resize((800, y), Image.ANTIALIAS)
+         img.resize((800, y))
          output_img = os.path.join(tmp_dir, fname)
          img.save(output_img, 'JPEG', quality=90)
          print(f"New file size: {img.size}")
