@@ -20,6 +20,7 @@ for fname in os.listdir(images_dir):
          img.resize((800, y))
          output_img = os.path.join(tmp_dir, fname)
          img.save(output_img, 'JPEG', quality=90)
-         print(f"New file size: {img.size}")
+         new_img = Image.open(output_img)
+         print(f"New file size: {new_img.size}")
 
       
