@@ -17,11 +17,10 @@ for fname in os.listdir(images_dir):
          orig_x, orig_y = img.size
          factor = 800 / orig_x
          y = int(factor * orig_y)
-         img.resize((800, y))
+         new_img = img.resize((800, y))
          output_img = os.path.join(tmp_dir, fname)
-         img.save(output_img, 'JPEG', quality=90)
+         new_img.save(output_img, 'JPEG', quality=90)
          print(f"New image file: {output_img}")
-         new_img = Image.open(output_img)
          print(f"New file size: {new_img.size}")
 
       
