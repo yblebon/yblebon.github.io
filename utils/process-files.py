@@ -1,6 +1,6 @@
 import os 
 
 print("Processing image files")
-print(f"Current directory: {os.getcwd()}"}
+print(f"Current directory: {os.getcwd()}")
 
       
