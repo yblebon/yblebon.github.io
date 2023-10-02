@@ -39,13 +39,14 @@
         for (let i = startIndex; i < (startIndex+size); i++) {
           let xpost = data[i];
           let src = xpost['src'];
+          let tagshtml = "";
           console.log(src);
           $( "#x-posts-content" ).append(
             '<img src="'+src+'" class="img-fluid mt-2 rounded"/>'
           );
-          $("#x-posts-content" ).append(
-            '<span class="badge rounded-pill text-bg-primary">tag 1</span><span class="badge rounded-pill text-bg-secondary">tag 2</span>'
-          );
+          if xpost.hasOwnProperty("tags"):
+             tagshtml = tagshtml + '<span class="badge rounded-pill text-bg-primary">tag 1</span><span class="badge rounded-pill text-bg-secondary">tag 2</span>'
+             $("#x-posts-content").append(tagshtml);
         }
 
       }
