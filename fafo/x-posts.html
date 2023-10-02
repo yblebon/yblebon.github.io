@@ -44,9 +44,10 @@
           $( "#x-posts-content" ).append(
             '<img src="'+src+'" class="img-fluid mt-2 rounded"/>'
           );
-          if xpost.hasOwnProperty("tags"):
+          if (xpost.hasOwnProperty("tags")) {
              tagshtml = tagshtml + '<span class="badge rounded-pill text-bg-primary">tag 1</span><span class="badge rounded-pill text-bg-secondary">tag 2</span>'
              $("#x-posts-content").append(tagshtml);
+          }
         }
 
       }
