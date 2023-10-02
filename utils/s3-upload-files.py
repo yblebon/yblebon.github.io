@@ -8,7 +8,7 @@ s3_client = boto3.client('s3',
 	aws_secret_access_key=os.getenv("S3_SECRET_ACCESS_KEY")
 )
 
-input_dir = sys.argv[0]
+input_dir = sys.argv[1]
 print(f"Processing input directory: {input_dir}")
 
 for fname in os.listdir(input_dir):
