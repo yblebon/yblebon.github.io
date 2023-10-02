@@ -9,6 +9,7 @@ images_dir = os.path.join(os.getcwd(), "fafo", "images")
 
 if len(sys.argv) > 1:
   output_dir = sys.argv[1]
+  os.mkdir(ouput_dir)
 else:
   output_dir = tempfile.mkdtemp()
   
