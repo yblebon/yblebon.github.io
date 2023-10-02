@@ -33,6 +33,13 @@ jobs:
             /tmp/${{ github.run_id }}
       
       - name: S3 upload images
+        env:
+          S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
+          S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+          S3_UPLOAD_DIR: ${{ secrets.S3_UPLOAD_DIR }}
+        
         run: python utils/s3-upload-files.py /tmp/$GITHUB_RUN_ID
             
       - name: Deploy
