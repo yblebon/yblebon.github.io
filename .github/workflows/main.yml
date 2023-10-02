@@ -32,6 +32,9 @@ jobs:
           path: |
             /tmp/${{ github.run_id }}
       
+      - name: S3 upload images
+        run: python utils/s3-upload-files.py /tmp/$GITHUB_RUN_ID
+            
       - name: Deploy
         uses: jakejarvis/s3-sync-action@v0.5.1
         with:
