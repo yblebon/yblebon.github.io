@@ -17,7 +17,7 @@ for fname in os.listdir(images_dir):
          orig_x, orig_y = img.size
          factor = 800 / orig_x
          y = int(factor * orig_y)
-         new_img = img.thumbail((800, y))
+         new_img = img.thumbnail((800, y))
          output_img = os.path.join(tmp_dir, fname)
          new_img.save(output_img, 'JPEG', quality=90)
          print(f"New image file: {output_img}")
