@@ -24,6 +24,13 @@ jobs:
 
       - name: Resize images
         run: python utils/process-files.py /tmp/$GITHUB_RUN_ID
+
+      - name: Archive resized images
+        uses: actions/upload-artifact@v3
+        with:
+          name: resized-images
+          path: |
+            /tmp/$GITHUB_RUN_ID
       
       - name: Deploy
         uses: jakejarvis/s3-sync-action@v0.5.1
