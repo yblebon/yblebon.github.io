@@ -23,7 +23,7 @@ jobs:
           pip install -r requirements-utils.txt
 
       - name: Test Python script execution
-        run: python utils/process-files.py /tmp/"${{ env.branch }}_${{ env.sha_short }}"
+        run: python utils/process-files.py /tmp/$GITHUB_RUN_ID
       
       - name: Deploy
         uses: jakejarvis/s3-sync-action@v0.5.1
