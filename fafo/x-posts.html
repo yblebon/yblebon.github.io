@@ -47,9 +47,9 @@
           if (xpost.hasOwnProperty("tags")) {
              let tags = xpost["tags"];
              for (let ii = 0 ; ii < tags.length; ii++) {
-                  tagshtml = tagshtml + '<span class="badge rounded-pill text-bg-primary">'+tags[ii]+'</span>'
-                  $("#x-posts-content").append(tagshtml);
+                  tagshtml = tagshtml + '<span class="badge rounded-pill text-bg-primary">'+tags[ii]+'</span>';
              }
+             $("#x-posts-content").append(tagshtml);
           }
         }
 
