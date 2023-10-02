@@ -30,7 +30,7 @@ jobs:
         with:
           name: resized-images
           path: |
-            /tmp/$GITHUB_RUN_ID
+            /tmp/${{ github.run_id }}
       
       - name: Deploy
         uses: jakejarvis/s3-sync-action@v0.5.1
