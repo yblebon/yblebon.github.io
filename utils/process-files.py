@@ -1,12 +1,16 @@
 import os
 import tempfile
+import sys
 from PIL import Image
 
 print("Processing image files")
 print(f"Current directory: {os.getcwd()}")
 images_dir = os.path.join(os.getcwd(), "fafo", "images")
 
-tmp_dir = tempfile.mkdtemp()
+if sys.argv:
+  output_dir = sys.argv[0]
+else:
+  output_dir = tempfile.mkdtemp()
 
 for fname in os.listdir(images_dir):
       print(f"processing file: {fname}")
@@ -18,7 +22,7 @@ for fname in os.listdir(images_dir):
          factor = 800 / orig_x
          y = int(factor * orig_y)
          new_img = img.thumbnail((800, y))
-         output_img = os.path.join(tmp_dir, fname)
+         output_img = os.path.join(output_dir, fname)
          new_img.save(output_img, 'JPEG', quality=90)
          print(f"New image file: {output_img}")
          print(f"New file size: {new_img.size}")
