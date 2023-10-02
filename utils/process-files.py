@@ -7,8 +7,8 @@ print("Processing image files")
 print(f"Current directory: {os.getcwd()}")
 images_dir = os.path.join(os.getcwd(), "fafo", "images")
 
-if sys.argv:
-  output_dir = sys.argv[0]
+if len(sys.argv) > 1:
+  output_dir = sys.argv[1]
 else:
   output_dir = tempfile.mkdtemp()
   
