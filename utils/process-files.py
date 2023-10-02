@@ -11,6 +11,8 @@ if sys.argv:
   output_dir = sys.argv[0]
 else:
   output_dir = tempfile.mkdtemp()
+  
+print(f"Output directory: {output_dir}")
 
 for fname in os.listdir(images_dir):
       print(f"processing file: {fname}")
@@ -21,10 +23,10 @@ for fname in os.listdir(images_dir):
          orig_x, orig_y = img.size
          factor = 800 / orig_x
          y = int(factor * orig_y)
-         new_img = img.thumbnail((800, y))
+         img.thumbnail((800, y))
          output_img = os.path.join(output_dir, fname)
-         new_img.save(output_img, 'JPEG', quality=90)
+         img.save(output_img, 'JPEG', quality=90)
          print(f"New image file: {output_img}")
-         print(f"New file size: {new_img.size}")
+         print(f"New file size: {img.size}")
 
       
