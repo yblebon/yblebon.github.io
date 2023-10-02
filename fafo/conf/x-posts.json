@@ -1,6 +1,9 @@
 {
   "x-posts": [
-{"src": "https://ipfs.filebase.io/ipfs/QmXnEhGg7sncJRYhXhPCQ5Mkuz2xAbJDiaEw4CZjxc6dur"},
+{
+  "src": "https://ipfs.filebase.io/ipfs/QmXnEhGg7sncJRYhXhPCQ5Mkuz2xAbJDiaEw4CZjxc6dur",
+  "tags": ["jardin d'eden", "chill", "nature"]
+},
 {"src": "https://ipfs.filebase.io/ipfs/QmRrXiKACMsdBNbcPc5CSWLoKGAUw4h1Gy4YZ2hXL9szRn"},
 {"src":"https://ipfs.filebase.io/ipfs/QmdmRqYpFiEK4ChKeHYzi9bT9yvGaaQ8qtqGVC1N47uQRB"},
 {"src":"https://ipfs.filebase.io/ipfs/QmWVXE775APsLn2WEWZ4VeHbFrejBZzMiAN2E9g3siA1zk"},
