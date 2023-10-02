@@ -22,7 +22,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-utils.txt
 
-      - name: Test Python script execution
+      - name: Resize images
         run: python utils/process-files.py /tmp/$GITHUB_RUN_ID
       
       - name: Deploy
