@@ -2,12 +2,24 @@
   "x-posts": [
 {
   "src": "https://ipfs.filebase.io/ipfs/QmXnEhGg7sncJRYhXhPCQ5Mkuz2xAbJDiaEw4CZjxc6dur",
-  "tags": ["jardin d'eden", "chill", "nature"]
+  "tags": ["jardin d'eden", "chill", "nature", "st gilles"]
 },
-{"src": "https://ipfs.filebase.io/ipfs/QmRrXiKACMsdBNbcPc5CSWLoKGAUw4h1Gy4YZ2hXL9szRn"},
-{"src":"https://ipfs.filebase.io/ipfs/QmdmRqYpFiEK4ChKeHYzi9bT9yvGaaQ8qtqGVC1N47uQRB"},
-{"src":"https://ipfs.filebase.io/ipfs/QmWVXE775APsLn2WEWZ4VeHbFrejBZzMiAN2E9g3siA1zk"},
-{"src":"https://ipfs.filebase.io/ipfs/QmV7mp3Ca6SUQEAz7ZLTQW9f4oDtaqxPftq13smWKwPCoh"},
+{
+  "src": "https://ipfs.filebase.io/ipfs/QmRrXiKACMsdBNbcPc5CSWLoKGAUw4h1Gy4YZ2hXL9szRn",
+  "tags": ["biometric", "thought"]
+},
+{
+  "src":"https://ipfs.filebase.io/ipfs/QmdmRqYpFiEK4ChKeHYzi9bT9yvGaaQ8qtqGVC1N47uQRB",
+  "tags": ["apple", "end-to-end"]
+},
+{
+  "src":"https://ipfs.filebase.io/ipfs/QmWVXE775APsLn2WEWZ4VeHbFrejBZzMiAN2E9g3siA1zk",
+  "tags": ["anecdote", "st leu", "library"]
+},
+{
+  "src":"https://ipfs.filebase.io/ipfs/QmV7mp3Ca6SUQEAz7ZLTQW9f4oDtaqxPftq13smWKwPCoh",
+  "tags": ["restaurant", "etang sale les bains"]
+},
 {"src":"https://pin.ski/3ELJj5a"},
 {"src":"https://pin.ski/3Pk1ML4"},
 {"src":"https://pin.ski/46fL9qI"},
