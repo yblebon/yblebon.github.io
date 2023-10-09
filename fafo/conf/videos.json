@@ -1,6 +1,12 @@
 {
 	"videos": [
 		{
+			"src": "https://bafybeidoo7h2wd2zr74iyyfoyidgpemyk6grg22uzxolc7ppycmvwzjvza.ipfs.w3s.link/IMG_0306.mov",
+		        "type": "video/mp4",
+			"poster": "IMG_0461.png",
+			"title": "Tournus: Place Mairie"
+		},
+		{
 			"src": "https://bafybeife5gj5hhtcv6aralio6ypugkpgykdqjom7x3rir5umlxzk3qe7ee.ipfs.w3s.link/IMG_0018.MOV",
 		        "type": "video/mp4",
 			"poster": "IMG_0461.png",
