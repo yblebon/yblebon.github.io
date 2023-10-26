@@ -10,6 +10,10 @@
          <div id="videos-src">
           <h3> Videos  </h3>
         </div>
+        
+          <div id="articles-src">
+          <h3> Articles  </h3>
+        </div>
    </div>
    
 
@@ -42,6 +46,13 @@
           console.log("Error occured when trying to load data sources page.");
      });
      
+     
+               $.getJSON('./conf/articles.json', function(data) {         
+        console.log(data);
+        $("#articles-src" ).append("<pre>"+JSON.stringify(data, null, 2)+"</pre>" );
+     }).fail(function(){
+          console.log("Error occured when trying to load data sources page.");
+     });
      
      
   });
