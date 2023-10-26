@@ -14,7 +14,45 @@
 
   $(function() {
      
-
+    console.log("test");
+     $.getJSON('./conf/articles.json', function(data) {
+      
+       console.log(data);
+       let articleList = data["articles"];
+       
+       
+       
+               
+       for (let i = 0, len = articleList.length ; i < len; i++) {
+       let article = articleList[i];
+       
+       console.log(article);
+       let title = article['title'];
+       let url = article['url'];
+       let htmlContent = "";
+       htmlContent = `
+       
+       <div class="card">
+  <div class="card-body">
+   <a href="${url}">
+     ${title}
+   </a>
+   
+  </div>
+</div>
+       `
+       
+       
+       
+       
+       $( "#x-articles-content" ).append(htmlContent);
+          
+          
+   }
+          
+       
+       
+      });
   })
 
 
