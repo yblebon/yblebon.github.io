@@ -1,19 +1,19 @@
 {
 	"videos": [
 		{
-			"src": "https://bafybeidoo7h2wd2zr74iyyfoyidgpemyk6grg22uzxolc7ppycmvwzjvza.ipfs.w3s.link/IMG_0306.mov",
+			"src": "https://ipfs.filebase.io/ipfs/QmUGMZTM8kTmcijsCDhC9sRaMB6hweJoMVAyQStS8RiZkk",
 		        "type": "video/mp4",
 			"poster": "IMG_0461.png",
 			"title": "Tournus: Place Mairie"
 		},
 		{
-			"src": "https://bafybeife5gj5hhtcv6aralio6ypugkpgykdqjom7x3rir5umlxzk3qe7ee.ipfs.w3s.link/IMG_0018.MOV",
+			"src": "https://ipfs.filebase.io/ipfs/QmXsSetEA8iuBhMowdJ8LrRur8HundrjYtoUm9aJnNp73o",
 		        "type": "video/mp4",
 			"poster": "IMG_0461.png",
 			"title": "Trying new style: only mustache"
 		},
                 {
-			"src": "https://bafybeiflmfislkf6wjbzprwcepthjvmpjgstbk2iecujtpwj67yjuh6wkm.ipfs.w3s.link/IMG_0641.mov",
+			"src": "https://ipfs.filebase.io/ipfs/QmcQPvkMfPrauR6YmzJEjioLAzHCGYr1gHMYAxpVacCU6a",
 			"type": "video/mp4",
 			"poster": "IMG_0461.png",
 			"title": "Etang Sale Les Hauts Marche"
@@ -25,13 +25,13 @@
 			"title": "Grand Anse Marche"
 		},
 		{
-			"src": "https://bafybeidrpedyfg6gbze6e5phj345ppykr3epp5sqaxwnada357p5pvzv7a.ipfs.w3s.link/IMG_2753.mov",
+			"src": "https://ipfs.filebase.io/ipfs/QmQ8W9hdookPK4e7fCGzx84g2QhE9EPU9KiTnC22tiLTEQ",
 			"type": "video/mp4",
 			"poster": "IMG_0461.png",
 			"title": "St Leu Dogs"
 		},
 		{
-			"src": "https://bafybeihcwmvucudyrdcfll5g44vdjdlwxayasomljfg4r4qzsczd4huuwu.ipfs.w3s.link/IMG_2788.mov",
+			"src": "https://ipfs.filebase.io/ipfs/QmQ8W9hdookPK4e7fCGzx84g2QhE9EPU9KiTnC22tiLTEQ",
 			"type": "video/mp4",
 			"poster": "IMG_0461.png",
 			"title": "St Gilles Carrefour supermarket"
