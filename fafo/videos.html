@@ -3,121 +3,53 @@
 <div class="container">
 <div class="row">
  <div class="col-12">
+ 
+    <div id="videos-content">
+    </div>
 
  </div>
 </div>
 
-</div>
-  <div class="row">
-  
-    <div class="col-8">
-    
-<span id="title" class="badge rounded-pill bg-primary mb-2"></span>
-       
-      
-  <video
-    id="my-video-player"
-    class="video-js"
-    controls
-    width="400"
-    height="300"
-    preload="auto"
-    poster="IMG_0461.png"
-    data-setup="{}"
-  >
-    <p class="vjs-no-js">
-      To view this video please enable JavaScript, and consider upgrading to a
-      web browser that
-      <a href="https://videojs.com/html5-video-support/" target="_blank"
-        >supports HTML5 video</a
-      >
-    </p>
-  </video>
-  </div>
-    
-    
-    <div class="col-4">
-    
-      <div id="video-player-playlist">
-    <h4> Videos Playlist </h4>
-    <div class="list-group list-group-light" id="video-player-playlist-tab">
-      
-    </div>
 
-  </div>
-
-  
-  </div>
-
-</div>
 
 
 <script src="https://vjs.zencdn.net/8.5.2/video.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/videojs-playlist/dist/videojs-playlist.min.js"></script>
-<script src="./Youtube.min.js"></script>
+<script src="./fafo/Youtube.min.js"></script>
 
 <script>
 
   $(function() {
-      console.log("videos body ready");
+    console.log("videos body ready");
       
-          $.getJSON('./conf/videos.json', function(data) {         
-          
-          
+    $.getJSON('./fafo/conf/videos.json', function(data) {         
         console.log(data);
         
-        var myPlayList = data["videos"]
+        var videos = data["videos"];
         
-              for (var i = 0, len = myPlayList.length; i < len; i++) {
-          let vid = myPlayList[i];
+        
+        
+        for (var i = 0, len = videos.length; i < len; i++) {
+          let vid = videos[i];
           let poster = vid['poster'];
           let title = vid['title'];
-          console.log(vid['src']);
-          $( "#video-player-playlist-tab" ).append(
-            '<button type="button" class="list-group-item list-group-item-action px-3" aria-current="true" track-index="'+i+'" >'+title+'</button>'
-          );
-      }
-    
-      let mplayer = videojs('my-video-player', {
-         techOrder: ["youtube", "html5"],
-      });
+          let src = vid['src'];
+          let html =  '<div class="mt-2 container-fluid"><video id="my-video-player-'+i+'" class="video-js" controls width="100%" height="300" preload="auto" poster="fafo/IMG_0461.png" data-setup="{`fluid`:true}">  <source src="'+src+'" type="video/mp4"></video> </div>';
+          console.log(html);
+          
+          
+         $("#videos-content").append(html); 
+          
 
+ 
 
-      $("#video-player-playlist-tab button").on("click", function() {
-        
-        
-        let trackIndex = $(this).attr("track-index");
-        let vid = myPlayList[parseInt(trackIndex)]
-        let vidSrc=vid["src"]
-        let visPoster=vid["poster"]
-        let mplayer = videojs('my-video-player');
-        
-        $("#title").text(vid["title"]);
-        
-        
-        mplayer.ready(function() {
-          console.log("video player ready ...");
-          console.log("video src: "+ vidSrc);
-        });
-        mplayer.pause();
-        mplayer.src(
-          {
-            'src': vid["src"],
-            'type': vid["type"]
-          }
-        );
-        mplayer.load();
-        mplayer.play();
-      });
+        }
 
-
-        
-        
-     }).fail(function(){
+    }).fail(function(){
           console.log("Error occured when trying to load videos data.");
      });
 
-    });
+  });
 </script>
 
 

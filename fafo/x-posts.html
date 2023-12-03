@@ -3,23 +3,11 @@
 <div class="container-fluid">
   <div class="row   justify-content-md-center">
   
-  <div class="col-8">
+  <div class="col-12">
     <div id="x-posts-content">
-    <p>
-    </p>
     </div>
   </div>
   
-  <div class="col-4">
-     <div class="btn-group" role="group" aria-label="Photos scroll">
-     <button type="button" class="btn btn-primary">Left</button>
-     <button type="button" class="btn btn-primary">Right</button>
-   </div>
-    
-       <div id="x-posts-list-tab" class="list-group list-group-light">
-    
-    </div>
-  </div>
 
  
   </div>
@@ -32,70 +20,27 @@
    
       function loadImages(data, startIndex, size){
        
-       console.log("----")
-    
-       console.log(startIndex);
-       console.log(size);
-      
-       
+        console.log('loading images from '+ startIndex);  
                
-        for (let i = startIndex; i < (startIndex+size); i++) {
+        for (let i = startIndex; i < (startIndex+size); i++)          {
           let xpost = data[i];
           let src = xpost['src'];
-          let html = '<img src="'+src+'" class="img-fluid mt-2 rounded"/>';
-          let tagshtml = "";      
           console.log(src);
-        
-          if (xpost.hasOwnProperty("tags")) {
-             let tags = xpost["tags"];
-             for (let ii = 0 ; ii < tags.length; ii++) {
-                  tagshtml = tagshtml + '<span class="badge rounded-pill ms-1 text-bg-primary">'+tags[ii]+'</span>';
-             }
-          }
-          html = html + tagshtml; 
+          let html = '<img src="'+src+'" class="img-fluid mt-2 rounded"/>';
+          console.log(html);
           $("#x-posts-content").append(html);
         }
 
       }
       
-      $.getJSON('./conf/x-posts.json', function(data) {
-
-
-        
+    $.getJSON('./fafo/conf/x-posts.json', function(data) {
         var xpostList = data["x-posts"];
-        
-        let sizeToLoad = xpostList.length;
-        sizeToLoad = 5;
-        
-                      for (var i = 0, len = xpostList.length ; i < len; i++) {
-          let xpost = xpostList[i];
-          let src = xpost['src'];
-
-          $( "#x-posts-list-tab" ).append(
-            '<button type="button" class="list-group-item list-group-item-action px-3" aria-current="true" track-index="'+i+'" >'+(i+1)+'</button>'
-          );
-      }
-      
-      loadImages(xpostList, 0, 5);
-      
-      
-
-      $("#x-posts-list-tab button").on("click", function() {
-
-       $('#x-posts-content').empty();
-       
-             let trackIndex = $(this).attr("track-index");
-
-             
-  
-             
-              loadImages(xpostList, trackIndex, 5);
-       
-       })
-       
-      
-
+        let sizeToLoad = 5;
+        loadImages(xpostList, 0, 12);
+$('.lazy').Lazy();
         
       })
+      
+      
   });
 </script>
