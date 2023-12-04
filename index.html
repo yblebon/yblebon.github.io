@@ -31,7 +31,7 @@
                   </div>
                   
                   <div class="navbar-nav ms-auto">
-                     <a href="#" class="nav-item nav-link">Contact</a>
+                     <a id="contact" href="#" class="nav-item nav-link">Contact</a>
                   </div>
                </div>
             </div>
@@ -85,6 +85,15 @@ $('#podcasts').click(function () {
       console.log("loading data sources page");
       $('#content').load("data-sources.html");
    });
+    
+       $('#contact').click(function () {
+       $('#content').load("contact.html", function(response, status, xhr) {
+      console.log("contact loaded");
+      });
+      
+      
+    });
+    
     
   </script>
       
