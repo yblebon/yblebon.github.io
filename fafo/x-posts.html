@@ -25,8 +25,19 @@
         for (let i = startIndex; i < (startIndex+size); i++)          {
           let xpost = data[i];
           let src = xpost['src'];
-          console.log(src);
-          let html = '<img src="'+src+'" class="img-fluid mt-2 rounded"/>';
+          let tags = xpost['tags'];
+          let tagsHtml = '';
+          if (tags !== null) { 
+            tagsHtml = tags.join(' - ');
+           }
+          
+          console.log(tags);
+          let html = `
+          <div class="card mt-2">
+          <div class="card-header">`+tagsHtml+`</div>
+          <img src="`+src+`" class="img-fluid"/>
+          </div>
+          `;
           console.log(html);
           $("#x-posts-content").append(html);
         }
