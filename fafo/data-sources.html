@@ -25,21 +25,21 @@
      
 
 
-     $.getJSON('./conf/x-posts.json', function(data) {         
+     $.getJSON('./fafo/conf/x-posts.json', function(data) {         
         console.log(data);
         $("#x-posts-src" ).append("<pre>"+JSON.stringify(data, null, 2)+"</pre>" );
      }).fail(function(){
           console.log("Error occured when trying to load data sources page.");
      });
      
-          $.getJSON('./conf/podcasts.json', function(data) {         
+          $.getJSON('./fafo/conf/podcasts.json', function(data) {         
         console.log(data);
       $("#podcasts-src" ).append("<pre>"+JSON.stringify(data, null, 2)+"</pre>");
      }).fail(function(){
           console.log("Error occured when trying to load data sources page.");
      });
      
-          $.getJSON('./conf/videos.json', function(data) {         
+          $.getJSON('./fafo/conf/videos.json', function(data) {         
         console.log(data);
         $("#videos-src" ).append("<pre>"+JSON.stringify(data, null, 2)+"</pre>" );
      }).fail(function(){
@@ -47,7 +47,7 @@
      });
      
      
-               $.getJSON('./conf/articles.json', function(data) {         
+               $.getJSON('./fafo/conf/articles.json', function(data) {         
         console.log(data);
         $("#articles-src" ).append("<pre>"+JSON.stringify(data, null, 2)+"</pre>" );
      }).fail(function(){
