@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row justify-content-md-center">
  
-    <div class="col-8">
+    <div class="col-12">
        <div id="x-articles-content">
        </div>
     </div>
@@ -15,7 +15,7 @@
   $(function() {
      
     console.log("test");
-     $.getJSON('./conf/articles.json', function(data) {
+     $.getJSON('./fafo/conf/articles.json', function(data) {
       
        console.log(data);
        let articleList = data["articles"];
@@ -32,13 +32,15 @@
        let htmlContent = "";
        htmlContent = `
        
-       <div class="card">
-  <div class="card-body">
-   <a href="${url}">
+       <div class="container-fluid card">
+       
+  <div class="card-header"> <a href="${url}">
      ${title}
-   </a>
+   </a></div>
    
-  </div>
+   <div class="card-body"></div>
+  
+
 </div>
        `
        
