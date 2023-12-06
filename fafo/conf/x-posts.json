@@ -1,5 +1,10 @@
 {
+  
   "x-posts": [
+        {
+    "src": "https://ipfs.filebase.io/ipfs/QmS9UfFMSF2uzf5gpV61P69j59Lp2apopoai61SS5wnq4F",
+    "tags": ["funny", "x post comment"]
+  },
     {
     "src": "https://ipfs.filebase.io/ipfs/QmYb3dtL3EWYWxZWnWyso9XGNsbuNVKR2JL92p8PZfounW",
     "tags": ["linkedin", "fake jobs"]
