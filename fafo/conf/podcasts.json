@@ -1,5 +1,11 @@
 {
   "podcasts": [
+    {
+        "src": "https://ipfs.filebase.io/ipfs/QmSJMAHdbZKqMkXnPaiPV4x7ETq64xyF8wLHiyMnrLeyL1",
+        "type": "audio/m4a",
+        "poster": "IMG_0461.png",
+        "title": "rembrandtplein"
+      },
       {
         "src": "https://bafybeidafxblileikhlrsrsvuao5lw627qjalmcfy3cbhg2cj3jd5xryrm.ipfs.w3s.link/ipfs/bafybeidafxblileikhlrsrsvuao5lw627qjalmcfy3cbhg2cj3jd5xryrm/69RueduLagon.m4a",
         "type": "audio/m4a",
