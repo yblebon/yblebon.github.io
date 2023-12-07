@@ -1,9 +1,13 @@
 {
   
   "x-posts": [
+    {
+    "src": "https://ipfs.filebase.io/ipfs/QmZWf3yK32bC75bmE4maxQFPEZbujEgenuA6t2Mi7G316L",
+    "tags": ["interesting", "x-post"]
+  },
         {
     "src": "https://ipfs.filebase.io/ipfs/QmS9UfFMSF2uzf5gpV61P69j59Lp2apopoai61SS5wnq4F",
-    "tags": ["funny", "x post comment"]
+    "tags": ["funny", "x-post comment"]
   },
     {
     "src": "https://ipfs.filebase.io/ipfs/QmYb3dtL3EWYWxZWnWyso9XGNsbuNVKR2JL92p8PZfounW",
