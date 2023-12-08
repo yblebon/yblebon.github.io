@@ -1,6 +1,8 @@
 # yblebon.github.io
  
-This is a personal web repository aka "Western repository"
+This is a personal web repository aka "Western" repository.
+
+![Alt text](./IMG_2856.jpeg "a title")
 
 where:
 
