@@ -1,10 +1,6 @@
 # yblebon.github.io
  
-This is a personal web repository
-
-with:
-- no requirements
-- no delivery date
+This is a personal web repository aka "Western repository"
 
 where:
 
@@ -12,4 +8,10 @@ where:
 - I change what i want
 - I commit directly to master branch if I want
 - I fix bugs whenever i want.
+
+with:
+- no requirements
+- no delivery date
+
+
 
