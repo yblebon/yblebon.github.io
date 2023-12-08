@@ -20,7 +20,7 @@
   </div> 
 </div>
 
-<script src="./fafo/howler.js"></script>
+<script src="./fafo/js/howler.js"></script>
 
 <script>
     $(function() {
@@ -79,17 +79,17 @@
         
           onplay: function(id) {
           	console.log("playing podcast ...");
-            $("#podcast-poster-img" ).attr("src","./fafo/sound.gif");
+            $("#podcast-poster-img" ).attr("src","./fafo/icons/sound.gif");
           },
         
           onstop: function(id) {
           	console.log("stopping podcast ...");
-           $("#podcast-poster-img" ).attr("src","./fafo/IMG_0749.jpeg");
+           $("#podcast-poster-img" ).attr("src","./fafo/icons/podcast.jpeg");
             
           },
           onend: function() {
           	console.log("podcast ended");
-          	           $("#podcast-poster-img" ).attr("src","./fafo/IMG_0749.jpeg");
+          	           $("#podcast-poster-img" ).attr("src","./fafo/icons/podcast.jpeg");
           	
             Howler.unload();
           },
