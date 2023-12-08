@@ -2,7 +2,7 @@
  
 This is a personal web repository aka "Western" repository.
 
-![Alt text](./IMG_2856.jpeg "a title")
+![Alt text](./home.jpeg "a title")
 
 where:
 
