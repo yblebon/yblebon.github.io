@@ -15,9 +15,6 @@ with:
 - no requirements
 - no delivery date
 
-# Example
-A little taste: Link posted in a private personal whatsapp end-to-end conversation accessed by IP adresses from China and US with "Digital Ocean" machines
-
 # Prerequisites
 
 - The GitHub Arctic Code Vault is a data repository preserved in the Arctic World Archive (AWA), a very-long-term archival facility 250 meters deep in the permafrost of an Arctic mountain. GitHub captured a snapshot of every active public repository on 02/02/2020 and preserved that data in the Arctic Code Vault. :smile:
@@ -43,6 +40,8 @@ A little taste: Link posted in a private personal whatsapp end-to-end conversati
 # Bug Tracking
 
 - In some cases prosecutor can be also a persecutor, when prosecutor exploits laws and his/her network in both worlds (ying and yang) to harass someone so he/her stays on governement payroll or for job promotion. For example: exploiting EU law about disease (COVID), exploiting EU laws about nationalities, exploiting laws in the countries you visit if you are travelling, etc. For instance "Pachamama" who works as a legal officer at the Office of the Prosecutor at the United Nations stuidies torture. She can use that knowledge to protect innocents people or in certain case use it to perscute (torture) mentally a victim (persecution, tricks, media, information manipulation, etc).
+  
+- Link posted in a private personal whatsapp end-to-end conversation accessed by IP adresses from China and US with "Digital Ocean" machines
 
 - Who is supposed to sanction EU if there is a poisoning attempt from EU?
 
