@@ -31,7 +31,23 @@
           let poster = vid['poster'];
           let title = vid['title'];
           let src = vid['src'];
-          let html =  '<div class="card mt-2 container-fluid"><div class="card-header">'+title+'</div><video id="my-video-player-'+i+'" class="video-js" controls width="100%" height="300" preload="auto" poster="fafo/IMG_0461.png" data-setup="{`fluid`:true}">  <source src="'+src+'" type="video/mp4"></video> </div>';
+          
+          let tagsHtml = `<span class="me-2 badge bg-dark">${title}</span>`
+          
+          let html = `
+          <div class="card mx-2 mt-2" >
+          <div class="ms-4 pt-2">
+          
+          <video id="my-video-player-${i}" class="video-js" controls width="100%" height="300" preload="auto" poster="fafo/IMG_0461.png" data-setup="{'fluid':true}">  <source src="${src}" type="video/mp4"></video>
+          </div>
+
+
+  <div class="card-body bg-light">
+    <p class="ms-2 card-text">${tagsHtml}</p>
+  </div>
+</div>
+          `
+          
           console.log(html);
           
           

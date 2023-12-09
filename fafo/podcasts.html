@@ -1,17 +1,13 @@
 <div class="container-fluid">
   <div class="row">
    <div class="col-12" >
-     <div class="card">
-       <div class="card-header">
-                   <select id="selection" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-         
-         </select>
-       </div>
+     <div class="card mt-4">
        <div class="card-body">
-       <img id="podcast-poster-img" class="img-fluid" src="./fafo/IMG_0749.jpeg"/>
+               <select id="selection" class="form-select form-select-sm my-auto" aria-label=".form-select-lg example">  </select>
+       <img id="podcast-poster-img" class="mx-auto img-fluid" src="https://ipfs.filebase.io/ipfs/Qmcrww6uA7cWJAenhRwXWFJQkcCNAoMhntMCkue8aitoEV"/>
        </div>
-       <div class="card-footer">
-        <p id="title"></p>
+       <div class="card-footer bg-light">
+          <p class="card-text"><span id="title" class="me-2 badge bg-dark"></span></p>
        </div>
 
      </div>
@@ -19,6 +15,7 @@
    </div> 
   </div> 
 </div>
+`
 
 <script src="./fafo/js/howler.js"></script>
 
@@ -41,7 +38,7 @@
 
           
           $( "#selection" ).append(
-            `<option value="${i}">${title}</button>`
+           `<option value="${i}">${title}</button>`
           );
           
       }
@@ -61,6 +58,7 @@
        let podTitle = pod["title"]
        let podSrc = pod["src"]
        let podPoster = pod["poster"]
+       let podcastStopImg = "https://ipfs.filebase.io/ipfs/Qmcrww6uA7cWJAenhRwXWFJQkcCNAoMhntMCkue8aitoEV";
        
        $("#title").text(podTitle);
 
@@ -84,12 +82,12 @@
         
           onstop: function(id) {
           	console.log("stopping podcast ...");
-           $("#podcast-poster-img" ).attr("src","./fafo/icons/podcast.jpeg");
+           $("#podcast-poster-img" ).attr("src", podcastStopImg);
             
           },
           onend: function() {
           	console.log("podcast ended");
-          	           $("#podcast-poster-img" ).attr("src","./fafo/icons/podcast.jpeg");
+          	           $("#podcast-poster-img" ).attr("src",podcastStopImg);
           	
             Howler.unload();
           },
