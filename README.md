@@ -32,23 +32,23 @@ A little taste: Link posted in a private personal whatsapp end-to-end conversati
 
 - "The EU has imposed sanctions on six senior Russian officials and a chemical research centre over the Novichok poisoning of anti-Putin campaigner Alexei Navalny. " - https://www.bbc.com/news/world-europe-54552480
 
-Out of curiosity: Who is supposed to sanction EU if there is a poisoning attempt from EU?
-
 - "EU corruption scandal puts democracy under attack - European Parliament head" - https://www.bbc.co.uk/news/world-europe-63941509
 
 - "Police in Brussels have raided a lockdown orgy in the basement of a gay bar – collaring 25 people, including several diplomats and a member of the European Parliament, according to reports." - https://nypost.com/2020/12/01/brussels-cops-bust-lockdown-orgy-attended-by-diplomats-reports/
 
 - "As nouns the difference between persecutor and prosecutor is that persecutor is a person or thing that persecutes or harasses while prosecutor is a lawyer who decides whether to charge a person with a crime and tries to prove in court that the person is guilty." - https://wikidiff.com/prosecutor/persecutor
 
-In some cases prosecutor can be also a persecutor, when prosecutor exploits laws and his/her network in both worlds (ying and yang) to harass someone so he/her stays on governement payroll or for job promotion. For example: exploiting EU law about disease (COVID), exploiting EU laws about nationalities, exploiting laws in the countries you visit if you are travelling, etc
-
-For instance "Pachamama" who works as a legal officer at the Office of the Prosecutor at the United Nations stuidies torture. She can use that knowledge to protect innocents people or in certain case use it to perscute (torture) mentally a victim (persecution, tricks, media, information manipulation, etc).
-
 - "The couple met when Emmanuel was only 15 years old ... It is often said that Emmanuel developed very warm feelings for his teacher, and the two started a relationship, which adds that the sexual minimum age in France is 15 years. Thus, nothing illegal should have taken place." - https://timespek.com/love-story-emmanuel-and-brigitte-macron/
 
 - "The U.S. Food and Drug Administration (FDA) has announced that new evidence has emerged linking Pfizer Covid shots to blood clotting, according to reports." - https://ussanews.com/2022/12/17/fda-pfizers-covid-shots-linked-to-blood-clotting/
 
-If there is a blood clotting in the brain, an assault with a blow on the head (left side) is the first explanation (was a welcome message in Madagascar, may be). An assault that resulted in a little scar (left eyebrow)
+# Bug Tracking
+
+- In some cases prosecutor can be also a persecutor, when prosecutor exploits laws and his/her network in both worlds (ying and yang) to harass someone so he/her stays on governement payroll or for job promotion. For example: exploiting EU law about disease (COVID), exploiting EU laws about nationalities, exploiting laws in the countries you visit if you are travelling, etc. For instance "Pachamama" who works as a legal officer at the Office of the Prosecutor at the United Nations stuidies torture. She can use that knowledge to protect innocents people or in certain case use it to perscute (torture) mentally a victim (persecution, tricks, media, information manipulation, etc).
+
+- Who is supposed to sanction EU if there is a poisoning attempt from EU?
+
+- Individual supposed to feel better better in Africa bur being assaulted the first weeks.
 
 # Behaviour Driven Development Testing
 Let's show some examples of stories that we call "vespa contacts" using BDD:
