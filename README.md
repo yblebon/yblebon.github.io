@@ -37,7 +37,7 @@ with:
 
 - "The U.S. Food and Drug Administration (FDA) has announced that new evidence has emerged linking Pfizer Covid shots to blood clotting, according to reports." - https://ussanews.com/2022/12/17/fda-pfizers-covid-shots-linked-to-blood-clotting/
 
-# Bug Tracking
+# Behaviour Bug Tracking
 
 - In some cases prosecutor can be also a persecutor, when prosecutor exploits laws and his/her network in both worlds (ying and yang) to harass someone so he/her stays on governement payroll or for job promotion. For example: exploiting EU law about disease (COVID), exploiting EU laws about nationalities, exploiting laws in the countries you visit if you are travelling, etc. For instance "Pachamama" who works as a legal officer at the Office of the Prosecutor at the United Nations stuidies torture. She can use that knowledge to protect innocents people or in certain case use it to perscute (torture) mentally a victim (persecution, tricks, media, information manipulation, etc).
   
