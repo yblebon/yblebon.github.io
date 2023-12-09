@@ -1,13 +1,9 @@
 {
   
   "x-posts": [
-    {
-    "src": "https://ipfs.filebase.io/ipfs/QmZWf3yK32bC75bmE4maxQFPEZbujEgenuA6t2Mi7G316L",
-    "tags": ["interesting", "x-post"]
-  },
         {
     "src": "https://ipfs.filebase.io/ipfs/QmS9UfFMSF2uzf5gpV61P69j59Lp2apopoai61SS5wnq4F",
-    "tags": ["funny", "x-post comment"]
+    "tags": ["funny", "x-comment"]
   },
     {
     "src": "https://ipfs.filebase.io/ipfs/QmYb3dtL3EWYWxZWnWyso9XGNsbuNVKR2JL92p8PZfounW",
@@ -15,15 +11,11 @@
   },
     {
     "src": "https://ipfs.filebase.io/ipfs/QmS2wLKsj2do2XuWvcbNqFdbLVMqrSbrEEUpnkMxeihpa6",
-    "tags": ["netherlands", "den haag", "walk", "haagse bos"]
+    "tags": ["netherlands", "den haag", "haagse bos", "walk"]
   },
        {
     "src": "https://ipfs.filebase.io/ipfs/QmaMXisU5dwyUM1XHycTsWjKXzyF2rTdWTqBYGymTsHHmC",
     "tags": ["netherlands", "den haag", "chill", "herring"]
-  },
-     {
-    "src": "https://ipfs.filebase.io/ipfs/QmTjS3hEgD9WauxbNNkhnHmwbHRZnAqTwdNzSQqDyByZ3D",
-    "tags": ["france", "toulouse", "chill", "bills"]
   },
   {
     "src": "https://ipfs.filebase.io/ipfs/QmP1U1dUfWLceCouxtYRDkYHGH9Pmd1JAJHac62kqbcyqj",
@@ -44,22 +36,6 @@
 {
   "src": "https://ipfs.filebase.io/ipfs/QmXnEhGg7sncJRYhXhPCQ5Mkuz2xAbJDiaEw4CZjxc6dur",
   "tags": ["jardin d'eden", "chill", "nature", "st gilles"]
-},
-{
-  "src": "https://ipfs.filebase.io/ipfs/QmRrXiKACMsdBNbcPc5CSWLoKGAUw4h1Gy4YZ2hXL9szRn",
-  "tags": ["biometric", "thought"]
-},
-{
-  "src":"https://ipfs.filebase.io/ipfs/QmdmRqYpFiEK4ChKeHYzi9bT9yvGaaQ8qtqGVC1N47uQRB",
-  "tags": ["apple", "end-to-end"]
-},
-{
-  "src":"https://ipfs.filebase.io/ipfs/QmWVXE775APsLn2WEWZ4VeHbFrejBZzMiAN2E9g3siA1zk",
-  "tags": ["anecdote", "st leu", "library"]
-},
-{
-  "src":"https://ipfs.filebase.io/ipfs/QmV7mp3Ca6SUQEAz7ZLTQW9f4oDtaqxPftq13smWKwPCoh",
-  "tags": ["restaurant", "etang sale les bains"]
 }
 ]
 }
