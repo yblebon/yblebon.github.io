@@ -21,6 +21,9 @@
       function loadImages(data, startIndex, size){
        
         console.log('loading images from '+ startIndex);  
+        
+        $( "#x-posts-content" ).empty();
+        
                
         for (let i = startIndex; i < (startIndex+size); i++)          {
           let xpost = data[i];
@@ -28,15 +31,20 @@
           let tags = xpost['tags'];
           let tagsHtml = '';
           if (tags !== null) { 
-            tagsHtml = tags.join(' - ');
+            for (ii in tags) {
+                 console.log(tags[ii]);
+                 tagsHtml += `<span class="me-2 badge bg-dark">${tags[ii]}</span>`
+} 
            }
           
           console.log(tags);
           let html = `
-          <div class="card mt-2">
-          <div class="card-header">`+tagsHtml+`</div>
-          <img src="`+src+`" class="img-fluid"/>
-          </div>
+          <div class="card mt-2" >
+  <img src="${src}" class="card-img-top">
+  <div class="card-body">
+    <p class="card-text">${tagsHtml}</p>
+  </div>
+</div>
           `;
           console.log(html);
           $("#x-posts-content").append(html);
