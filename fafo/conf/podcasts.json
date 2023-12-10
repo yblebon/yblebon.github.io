@@ -1,5 +1,11 @@
 {
   "podcasts": [
+        {
+        "src": "https://bafkreigzigbcxychvj42nvf3nbpbjhg7nami6madudvzltiqnhmiyugc4a.ipfs.w3s.link",
+        "type": "audio/m4a",
+        "poster": "IMG_0461.png",
+        "title": "promenade du balzac, Toulouse"
+      },
     {
         "src": "https://ipfs.filebase.io/ipfs/QmSJMAHdbZKqMkXnPaiPV4x7ETq64xyF8wLHiyMnrLeyL1",
         "type": "audio/m4a",
