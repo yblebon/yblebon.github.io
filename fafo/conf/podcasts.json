@@ -1,7 +1,13 @@
 {
   "podcasts": [
+     {
+        "src": "https://download.samplelib.com/mp3/sample-9s.mp3",
+        "type":  "audio/mp3",
+        "poster": "IMG_0461.png",
+        "title": "test mp3"
+      },
         {
-        "src": "https://bafkreigzigbcxychvj42nvf3nbpbjhg7nami6madudvzltiqnhmiyugc4a.ipfs.w3s.link",
+        "src": "https://ipfs.filebase.io/ipfs/QmW2ynAhZxaUetmCfd1XxTPEbosj5pYmxjCWby62xTugYo",
         "type": "audio/m4a",
         "poster": "IMG_0461.png",
         "title": "promenade du balzac, Toulouse"
@@ -10,19 +16,7 @@
         "src": "https://ipfs.filebase.io/ipfs/QmSJMAHdbZKqMkXnPaiPV4x7ETq64xyF8wLHiyMnrLeyL1",
         "type": "audio/m4a",
         "poster": "IMG_0461.png",
-        "title": "night out, rembrandtplein"
-      },
-      {
-        "src": "https://bafybeidafxblileikhlrsrsvuao5lw627qjalmcfy3cbhg2cj3jd5xryrm.ipfs.w3s.link/ipfs/bafybeidafxblileikhlrsrsvuao5lw627qjalmcfy3cbhg2cj3jd5xryrm/69RueduLagon.m4a",
-        "type": "audio/m4a",
-        "poster": "IMG_0461.png",
-        "title": "test sound, 69 rue du lagon st Leu"
-      },
-      {
-        "src": "https://download.samplelib.com/mp3/sample-9s.mp3",
-        "type":  "audio/mp3",
-        "poster": "IMG_0461.png",
-        "title": "test mp3"
+        "title": "night out, Rembrandtplein"
       }
     ]
 }
