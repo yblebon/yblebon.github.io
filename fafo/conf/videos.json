@@ -12,37 +12,37 @@
 			"src": "https://ipfs.filebase.io/ipfs/QmUGMZTM8kTmcijsCDhC9sRaMB6hweJoMVAyQStS8RiZkk",
 		        "type": "video/mp4",
 			"poster": "IMG_0461.png",
-			"title": "Tournus: Place Mairie"
+			"title": "Place Mairie, Tournus"
 		},
 		{
 			"src": "https://ipfs.filebase.io/ipfs/QmXsSetEA8iuBhMowdJ8LrRur8HundrjYtoUm9aJnNp73o",
 		        "type": "video/mp4",
 			"poster": "IMG_0461.png",
-			"title": "Trying new style: only mustache"
+			"title": "Le test du style moustache"
 		},
                 {
 			"src": "https://ipfs.filebase.io/ipfs/QmcQPvkMfPrauR6YmzJEjioLAzHCGYr1gHMYAxpVacCU6a",
 			"type": "video/mp4",
 			"poster": "IMG_0461.png",
-			"title": "Etang Sale Les Hauts Marche"
+			"title": "Marche, Etang Sale Les Hauts"
 		},
 		{
 			"src": "https://bafybeiek7jugunq3aornur4vhgzlzrl2n2qfsw3rn7rgpcr47eglralax4.ipfs.w3s.link/IMG_0662.mov",
 			"type": "video/mp4",
 			"poster": "IMG_0461.png",
-			"title": "Grand Anse Marche"
+			"title": "Marche, Grand Anse"
 		},
 		{
 			"src": "https://ipfs.filebase.io/ipfs/QmQ8W9hdookPK4e7fCGzx84g2QhE9EPU9KiTnC22tiLTEQ",
 			"type": "video/mp4",
 			"poster": "IMG_0461.png",
-			"title": "St Leu Dogs"
+			"title": "Plage de St Leu"
 		},
 		{
 			"src": "https://ipfs.filebase.io/ipfs/QmQ8W9hdookPK4e7fCGzx84g2QhE9EPU9KiTnC22tiLTEQ",
 			"type": "video/mp4",
 			"poster": "IMG_0461.png",
-			"title": "St Gilles Carrefour supermarket"
+			"title": "Carrefour, St Gilles"
 		}
 	]
 }
