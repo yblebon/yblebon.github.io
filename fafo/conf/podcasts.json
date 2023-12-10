@@ -10,13 +10,37 @@
         "src": "https://ipfs.filebase.io/ipfs/QmW2ynAhZxaUetmCfd1XxTPEbosj5pYmxjCWby62xTugYo",
         "type": "audio/m4a",
         "poster": "IMG_0461.png",
-        "title": "promenade du balzac, Toulouse"
+        "title": "10-12-23 promenade du balzac, Toulouse"
+      },
+      {
+        "src": "https://ipfs.filebase.io/ipfs/QmaebmMj3hcpzVzwDwXiP7Wzfd9EV2gqF5v8hBqgRxzLdX",
+        "type": "audio/m4a",
+        "poster": "IMG_0461.png",
+        "title": "14-11-23 beast guest, Noordwijk"
+      },
+    {
+        "src": "https://ipfs.filebase.io/ipfs/QmaSpKYYiUEijpY2xNt5idMd5RAWsEz3bahm84g82TR8h8",
+        "type": "audio/m4a",
+        "poster": "IMG_0461.png",
+        "title": "13-10-23 night out, Amsterdam"
       },
     {
         "src": "https://ipfs.filebase.io/ipfs/QmSJMAHdbZKqMkXnPaiPV4x7ETq64xyF8wLHiyMnrLeyL1",
         "type": "audio/m4a",
         "poster": "IMG_0461.png",
-        "title": "night out, Rembrandtplein"
+        "title": "12-10-23 night out, Rembrandtplein"
+      },
+          {
+        "src": "https://ipfs.filebase.io/ipfs/Qma6FD9RNNqri8DN6jDgqokofzfCbzbk9DdwZmutgcqEyZ",
+        "type": "audio/m4a",
+        "poster": "IMG_0461.png",
+        "title": "04-10-23 place du pont neuf, Paris"
+      },
+        {
+        "src": "https://ipfs.filebase.io/ipfs/QmTXYrroVeVmBVPbXJLZzyMTfyD7jBJPTR1uYip4gfpXnk",
+        "type": "audio/m4a",
+        "poster": "IMG_0461.png",
+        "title": "28-09-23 port de plaisance, St Gilles, Reunion"
       }
     ]
 }
