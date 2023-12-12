@@ -45,55 +45,46 @@
       
       <script>
 
-     $('#content').load("fafo/home.html");
+      let selectedContent = "home";
+
+      function loadContent(contentId){
+         selectedContent = contentId;
+         console.log(`Selected content ${contentId}`);
+         $('#content').load(`fafo/${contentId}.html`);
+      }
+
+
+
+    loadContent(selectedContent);
     
-    $('#home').click(function () {
-      console.log("home");
-               console.log( $(this) );
-      
-   $('#content').load("fafo/home.html");
-    });
-$('#podcasts').click(function () {
-      console.log("podcasts");
-               console.log( $(this) );
-      
-   $('#content').load("fafo/podcasts.html");
+    $('#home').click(function (e){
+       loadContent(this.id);
     });
 
-    $('#x-posts').click(function () {
-      $('#content').load("fafo/x-posts.html", function(response, status, xhr) {
-      console.log("x-posts loaded");
-     });
-    
-    
-    });
-   $('#videos').click(function () {
-       $('#content').load("fafo/videos.html", function(response, status, xhr) {
-      console.log("x-posts loaded");
-      });
-      
-      
+        $('#podcasts').click(function (e){
+       loadContent(this.id);
     });
 
-       $('#articles').click(function () {
-      console.log("articles");
-               console.log( $(this) );
-      
-   $('#content').load("fafo/articles.html");
+        $('#x-posts').click(function (e){
+       loadContent(this.id);
     });
 
-   $('#sources').click(function () {
-      console.log("loading data sources page");
-      $('#content').load("fafo/data-sources.html");
-   });
-    
-       $('#contact').click(function () {
-       $('#content').load("contact.html", function(response, status, xhr) {
-      console.log("contact loaded");
-      });
-      
-      
+        $('#videos').click(function (e){
+       loadContent(this.id);
     });
+
+        $('#articles').click(function (e){
+       loadContent(this.id);
+    });
+
+        $('#sources').click(function (e){
+       loadContent(this.id);
+    });
+
+        $('#contact').click(function (e){
+       loadContent(this.id);
+    });
+
     
     
   </script>
