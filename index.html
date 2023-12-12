@@ -15,25 +15,32 @@
    
 <div class="m-0">
 
-         <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
+       <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
             <div class="container-fluid">
                <a href="#" class="navbar-brand fw-bold fs-2 ">Yasser Lebon</a>
-               <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+               <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav-bar">
                <span class="navbar-toggler-icon"></span>
                </button>
-               <div class="collapse navbar-collapse" id="navbarCollapse">
+               <div class="collapse navbar-collapse" id="nav-bar">
                   <div class="navbar-nav">
-                     <a id="home"  href="#" class="nav-item nav-link  active"><button type="button" class="btn text-uppercase fw-bolder btn-info">Home</button></a>
-             <a id="x-posts" href="#" class="nav-item fw-bolder text-uppercase nav-link">X posts</a>
-                     <a id="videos" href="#" class="nav-item fw-bolder text-uppercase nav-link">Videos</a>
-                     <a id="podcasts" href="#" class="nav-item fw-bolder text-uppercase nav-link">Podcasts</a>
-                     <a id="articles" href="#" class="nav-item fw-bolder text-uppercase nav-link">Articles</a>
+
+                     <a id="home"  href="#" class="nav-item nav-link"><button type="button" class="btn text-uppercase fw-bolder text-white btn-info">Home</button></a>
+
+                     <a id="x-posts" href="#" class="nav-item nav-link"><button type="button" class="btn text-white text-uppercase">X posts</button></a>
+
+                     <a id="videos" href="#" class="nav-item nav-link"><button type="button" class="btn text-uppercase text-white">Videos</button></a>
+
+                     <a id="podcasts" href="#" class="nav-item nav-link"><button type="button" class="btn text-white text-uppercase">Podcasts</button></a>
+
+                     <a id="articles" href="#" class="nav-item nav-link"><button type="button" class="btn text-white text-uppercase">Articles</button></a>
+
+                     <a id="sources" href="#" class="nav-item nav-link"><button type="button" class="btn text-white text-uppercase">Sources</button></a>
+
+                     <a id="contact" href="#" class="nav-item nav-link"><button type="button" class="btn text-white text-uppercase">Contact</button></a>
+
                   </div>
                   
-                  <div class="navbar-nav ms-auto">
-                     <a id="sources" href="#" class="nav-item fw-bolder text-uppercase nav-link">Sources</a>
-                     <a id="contact" href="#" class="nav-item nav-link">Contact</a>
-                  </div>
+                
                </div>
             </div>
          </nav>
@@ -47,6 +54,12 @@
 
       let selectedContent = "home";
 
+      function loadMenu(contentId){
+        $(`#nav-bar button`).removeClass( "fw-bolder btn-info");
+        $(`#${contentId} button`).addClass( "fw-bolder btn-info");
+
+      }
+
       function loadContent(contentId){
          selectedContent = contentId;
          console.log(`Selected content ${contentId}`);
@@ -58,30 +71,38 @@
     loadContent(selectedContent);
     
     $('#home').click(function (e){
+       loadMenu(this.id);
        loadContent(this.id);
     });
 
         $('#podcasts').click(function (e){
+              loadMenu(this.id);
        loadContent(this.id);
     });
 
         $('#x-posts').click(function (e){
+       loadMenu(this.id);
        loadContent(this.id);
     });
 
         $('#videos').click(function (e){
+               loadMenu(this.id);
        loadContent(this.id);
     });
 
         $('#articles').click(function (e){
+              loadMenu(this.id);
        loadContent(this.id);
     });
 
         $('#sources').click(function (e){
+                     loadMenu(this.id);
+              
        loadContent(this.id);
     });
 
         $('#contact').click(function (e){
+                           loadMenu(this.id);
        loadContent(this.id);
     });
 
