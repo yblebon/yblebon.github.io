@@ -12,6 +12,6 @@ RUN curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/truste
 
 COPY . .
 
-EXPOSE 8501
+EXPOSE 80
 
-ENTRYPOINT ["ngrok", "http", "8501"]
+ENTRYPOINT ["ngrok", "http", "80"]
