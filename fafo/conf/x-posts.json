@@ -1,8 +1,9 @@
 {
   
   "x-posts": [
-  {
-    "src": "https://ipfs.filebase.io/ipfs/QmUGvZFv6qS5RPivqSc488CjKWFoNsw1bmivHsbnWtPbLK",
+      {
+    "src": "filebase",
+    "id": "QmUGvZFv6qS5RPivqSc488CjKWFoNsw1bmivHsbnWtPbLK",
     "tags": ["toulouse", "pont neuf"]
   },
             {
