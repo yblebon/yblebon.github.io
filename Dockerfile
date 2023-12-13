@@ -14,4 +14,4 @@ COPY . .
 
 EXPOSE 80
 
-ENTRYPOINT ["ngrok", "http", "."]
+ENTRYPOINT ["ngrok", "http", "file:///app"]
