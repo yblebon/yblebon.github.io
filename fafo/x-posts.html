@@ -45,6 +45,11 @@
 } 
            }
           
+          if (xpost["date"] !== undefined) {
+               tagsHtml += `<span class="me-2 badge bg-dark float-end">${xpost["date"]}</span>`;
+          }
+       
+          
           console.log(tags);
           let html = `
           <div class="card mt-2" >
