@@ -18,6 +18,9 @@
 
   $(function() {
     console.log("videos body ready");
+    
+    const filebaseBase = "https://ipfs.filebase.io/ipfs";
+    
       
     $.getJSON('./fafo/conf/videos.json', function(data) {         
         console.log(data);
@@ -32,7 +35,12 @@
           let title = vid['title'];
           let src = vid['src'];
           
-          let tagsHtml = `<span class="me-2 badge bg-dark">${title}</span>`
+          if (src == "filebase") {
+            let id = vid["id"];
+            src = `${filebaseBase}/${id}`;
+          }
+          
+          let tagsHtml = `<span class="me-2 rounded-pill badge bg-dark">${title}</span>`
           
           if (vid["date"] !== undefined) {
                tagsHtml += `<span class="me-2 badge bg-dark float-end">${vid["date"]}</span>`;
