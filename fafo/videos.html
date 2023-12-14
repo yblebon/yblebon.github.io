@@ -34,6 +34,10 @@
           
           let tagsHtml = `<span class="me-2 badge bg-dark">${title}</span>`
           
+          if (vid["date"] !== undefined) {
+               tagsHtml += `<span class="me-2 badge bg-dark float-end">${vid["date"]}</span>`;
+          }
+          
           let html = `
           <div class="card mx-2 mt-2" >
           <div class="ms-4 pt-2">

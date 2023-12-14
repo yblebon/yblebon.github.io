@@ -7,7 +7,8 @@
        <img id="podcast-poster-img" class="mx-auto img-fluid" src="https://ipfs.filebase.io/ipfs/Qmcrww6uA7cWJAenhRwXWFJQkcCNAoMhntMCkue8aitoEV"/>
        </div>
        <div class="card-footer bg-light">
-          <p class="card-text"><span id="title" class="me-2 badge bg-dark"></span></p>
+          <span id="title" class="me-2 badge bg-dark"></span>
+           <span id="date" class="me-2 badge float-end bg-dark"></span>
        </div>
 
      </div>
@@ -60,7 +61,17 @@
        let podPoster = pod["poster"]
        let podcastStopImg = "https://ipfs.filebase.io/ipfs/Qmcrww6uA7cWJAenhRwXWFJQkcCNAoMhntMCkue8aitoEV";
        
+       if (pod["date"] !== undefined) {
+           $("#date").text(pod["date"]);
+       }
+       else {
+          $("#date").empty()
+       }
+       
        $("#title").text(podTitle);
+       
+
+       
 
        let podExt = podSrc.split('.').pop();
        console.log("podcast selected: "+podSrc);
