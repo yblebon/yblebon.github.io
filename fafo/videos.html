@@ -18,6 +18,9 @@
 
   $(function() {
     console.log("videos body ready");
+    
+    const filebaseBase = "https://ipfs.filebase.io/ipfs";
+    
       
     $.getJSON('./fafo/conf/videos.json', function(data) {         
         console.log(data);
@@ -31,6 +34,11 @@
           let poster = vid['poster'];
           let title = vid['title'];
           let src = vid['src'];
+          
+          if (src == "filebase") {
+            let id = vid["id"];
+            src = `${filebaseBase}/${id}`;
+          }
           
           let tagsHtml = `<span class="me-2 badge bg-dark">${title}</span>`
           
