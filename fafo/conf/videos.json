@@ -2,6 +2,14 @@
 	"videos": [
 		{
 			"src": "filebase",
+			"id":"QmSnLuzgbSSkeLzTSZzSxnRxrzUgJizqSRyetEfa68nRzH",
+		    "type": "video/mp4",
+			"poster": "IMG_0461.png",
+			"title": "Quick running session after workout, Toulouse",
+			"date": "15-12-2023"
+			},
+		{
+			"src": "filebase",
 			"id":"QmVg5c8PgocazgXssgveteTUYtrPU7Z1QQ9GBH7FEVgwRu",
 		    "type": "video/mp4",
 			"poster": "IMG_0461.png",
