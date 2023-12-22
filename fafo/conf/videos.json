@@ -2,6 +2,14 @@
 	"videos": [
 		{
 			"src": "filebase",
+			"id":"QmXUbu4HRotmzLtWbc41bMtf5yFYfh4Ma7twaxu2LjUSMG",
+		    "type": "video/mp4",
+			"poster": "https://ipfs.filebase.io/ipfs/QmXUbu4HRotmzLtWbc41bMtf5yFYfh4Ma7twaxu2LjUSMG",
+			"title": "Quick workout listening to BBC radio live, Toulouse",
+			"date": "22-12-2023"
+			},
+		{
+			"src": "filebase",
 			"id":"QmSnLuzgbSSkeLzTSZzSxnRxrzUgJizqSRyetEfa68nRzH",
 		    "type": "video/mp4",
 			"poster": "IMG_0461.png",
