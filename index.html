@@ -48,7 +48,6 @@
             max-width: 300px;
             margin: 10px;
             padding: 15px;
-            background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             border: 2px solid;
@@ -59,25 +58,33 @@
             transform: translateY(-5px);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
+        /* Unique background, border, and heading colors for each category */
         .category:nth-child(1) {
+            background-color: #e8f5e9; /* Light green for Logs */
             border-color: #48c774;
         }
         .category:nth-child(2) {
+            background-color: #fffde7; /* Light yellow for Journal */
             border-color: #ffca28;
         }
         .category:nth-child(3) {
+            background-color: #fce4ec; /* Light pink for Podcasts */
             border-color: #f06292;
         }
         .category:nth-child(4) {
+            background-color: #e1f5fe; /* Light blue for Carre */
             border-color: #4fc3f7;
         }
         .category:nth-child(5) {
+            background-color: #f3e5f5; /* Light purple for Book from the Books */
             border-color: #ab47bc;
         }
         .category:nth-child(6) {
+            background-color: #fff3e0; /* Light orange for Coins */
             border-color: #ffa726;
         }
         .category:nth-child(7) {
+            background-color: #e0f7fa; /* Light cyan for Top50songs */
             border-color: #26c6da;
         }
         .category:nth-child(8) {
@@ -96,26 +103,17 @@
             background-color: #f1f8e9; /* Light mint for Quicknotes */
             border-color: #9ccc65;
         }
-
         .category:nth-child(12) {
             background-color: #eceff1; /* Light gray for This and That */
             border-color: #78909c;
         }
-        .category:nth-child(11) h2 {
-            color: #9ccc65; /* Mint for Quicknotes */
-        }
-
-      .category:nth-child(13) {
+        .category:nth-child(13) {
             background-color: #e0f2f1; /* Light teal for Jsonformatter */
             border-color: #26a69a;
         }
-
-        .category:nth-child(13) h2 {
-            color: #26a69a; /* Teal for Jsonformatter */
-        }
-
-       .category:nth-child(12) h2 {
-            color: #78909c; /* Gray for This and That */
+        .category:nth-child(14) {
+            background-color: #ffebee; /* Light red for Dictionary */
+            border-color: #ef5350;
         }
         .category h2 {
             color: #333;
@@ -149,13 +147,25 @@
             color: #26c6da;
         }
         .category:nth-child(8) h2 {
-            color: #d4e157; /* Lime for Momjokes */
+            color: #d4e157;
         }
         .category:nth-child(9) h2 {
-            color: #8d6e63; /* Brown for Food */
+            color: #8d6e63;
         }
         .category:nth-child(10) h2 {
-            color: #5c6bc0; /* Indigo for Events */
+            color: #5c6bc0;
+        }
+        .category:nth-child(11) h2 {
+            color: #9ccc65;
+        }
+        .category:nth-child(12) h2 {
+            color: #78909c;
+        }
+        .category:nth-child(13) h2 {
+            color: #26a69a;
+        }
+        .category:nth-child(14) h2 {
+            color: #ef5350;
         }
         .category p {
             font-size: 0.9rem;
@@ -188,71 +198,75 @@
     </header>
 
     <div class="categories-container">
-        <a href="https://yblebon.github.io/logs" class="category">
+        <a href="https://yblebon.github.io/logs" class="category" target="_blank" rel="noopener noreferrer">
             <h2><i class="fas fa-file-alt"></i> Logs</h2>
-            <p>Track events as personal logs.</p>
+            <p>Track my progress, updates, and technical notes in my personal logs.</p>
         </a>
 
-        <a href="https://yblebon.github.io/journal" class="category">
+        <a href="https://yblebon.github.io/journal" class="category" target="_blank" rel="noopener noreferrer">
             <h2><i class="fas fa-book"></i> Journal</h2>
             <p>Read my thoughts, experiences, and reflections in my daily journal.</p>
         </a>
 
-        <a href="https://yblebon.github.io/podcasts" class="category">
+        <a href="https://yblebon.github.io/podcasts" class="category" target="_blank" rel="noopener noreferrer">
             <h2><i class="fas fa-podcast"></i> Podcasts</h2>
-            <p>Listen to my discussions, interviews, and stories on various topics.</p>
+            <p>Listen to my favorite discussions, interviews, and stories on various topics.</p>
         </a>
 
-        <a href="https://yblebon.github.io/carre" class="category">
+        <a href="https://yblebon.github.io/carre" class="category" target="_blank" rel="noopener noreferrer">
             <h2><i class="fas fa-square"></i> Carre</h2>
-            <p>Explore a simple game generated with Grok.</p>
+            <p>Explore my projects, ideas, and creative works in the Carre space.</p>
         </a>
 
-        <a href="https://yblebon.github.io/thebook" class="category">
+        <a href="https://yblebon.github.io/thebook" class="category" target="_blank" rel="noopener noreferrer">
             <h2><i class="fas fa-book-open"></i> Book from the Books</h2>
-            <p>Discover random page picked from random books.</p>
+            <p>Discover my reviews, summaries, and insights from the books I’ve read.</p>
         </a>
 
-        <a href="https://yblebon.github.io/coins" class="category">
-            <h2><i class="fas fa-square"></i>Coins volatility</h2>
-            <p>Discover the 10 most volatile coins in 24 hours.</p>
+        <a href="https://yblebon.github.io/coins" class="category" target="_blank" rel="noopener noreferrer">
+            <h2><i class="fas fa-coins"></i> Coins</h2>
+            <p>Check out my collection, insights, and updates on coins and currency.</p>
         </a>
 
-        <a href="https://yblebon.github.io/top50songs" class="category">
-            <h2><i class="fas fa-book-open"></i>Top Songs</h2>
-            <p>Discover the top 50 songs this week.</p>
+        <a href="https://yblebon.github.io/top50songs" class="category" target="_blank" rel="noopener noreferrer">
+            <h2><i class="fas fa-music"></i> Top50songs</h2>
+            <p>Explore my curated list of the top 50 songs I’m listening to right now.</p>
         </a>
 
-        <a href="https://yblebon.github.io/food" class="category">
-            <h2><i class="fas fa-square"></i>Food</h2>
-            <p>Healthy food planner</p>
+        <a href="https://yblebon.github.io/momjokes" class="category" target="_blank" rel="noopener noreferrer">
+            <h2><i class="fas fa-laugh"></i> Momjokes</h2>
+            <p>Enjoy a collection of lighthearted mom jokes to brighten your day.</p>
         </a>
 
-        <a href="https://yblebon.github.io/quicknotes" class="category">
-            <h2><i class="fas fa-square"></i>Quick notes</h2>
-            <p>Quick notes</p>
+        <a href="https://yblebon.github.io/food" class="category" target="_blank" rel="noopener noreferrer">
+            <h2><i class="fas fa-utensils"></i> Food</h2>
+            <p>Discover my favorite recipes, cooking tips, and food adventures.</p>
         </a>
 
-        <a href="https://yblebon.github.io/momjokes" class="category">
-            <h2><i class="fas fa-book-open"></i>Mom Jokes</h2>
-            <p>Discover a mom joke.</p>
+        <a href="https://yblebon.github.io/events" class="category" target="_blank" rel="noopener noreferrer">
+            <h2><i class="fas fa-calendar-alt"></i> Events</h2>
+            <p>Stay updated on upcoming events, meetups, and activities I’m attending or hosting.</p>
         </a>
 
-        <a href="https://yblebon.github.io/events" class="category">
-            <h2><i class="fas fa-book-open"></i>Events</h2>
-            <p>Events.</p>
+        <a href="https://yblebon.github.io/quicknotes" class="category" target="_blank" rel="noopener noreferrer">
+            <h2><i class="fas fa-sticky-note"></i> Quicknotes</h2>
+            <p>Jot down and share my quick thoughts, ideas, and reminders on the go.</p>
         </a>
 
-        <a href="https://yblebon.github.io/thisandthat" class="category">
-            <h2><i class="fas fa-book-open"></i>This & That</h2>
-            <p>This and That conversations</p>
+        <a href="https://yblebon.github.io/thisandthat" class="category" target="_blank" rel="noopener noreferrer">
+            <h2><i class="fas fa-ellipsis-h"></i> This and That</h2>
+            <p>Find a mix of random thoughts, ideas, and miscellaneous content.</p>
         </a>
 
-        <a href="https://yblebon.github.io/jsonformatter" class="category">
-            <h2><i class="fas fa-book-open"></i>JSON Formatter</h2>
-            <p>JSON Formatter</p>
+        <a href="https://yblebon.github.io/jsonformatter" class="category" target="_blank" rel="noopener noreferrer">
+            <h2><i class="fas fa-code"></i> Jsonformatter</h2>
+            <p>Use my tool to format, validate, and beautify JSON data effortlessly.</p>
         </a>
-        
+
+        <a href="https://yblebon.github.io/dictionary" class="category" target="_blank" rel="noopener noreferrer">
+            <h2><i class="fas fa-book"></i> Dictionary</h2>
+            <p>Explore my collection of words, definitions, and linguistic insights.</p>
+        </a>
     </div>
 </body>
 </html>
