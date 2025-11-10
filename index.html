@@ -102,6 +102,24 @@
     <script>
         // JSON data for categories
         const categoriesData = [
+              {
+                name: "YouTube",
+                link: "https://yblebon.github.io/youtube",
+                icon: "fab fa-youtube",
+                description: "Access my favorite YouTube videos and channels.",
+                backgroundColor: "#e8f5e9",
+                borderColor: "#66bb6a",
+                headingColor: "#66bb6a"
+            },
+            {
+                name: "Dictionary",
+                link: "https://yblebon.github.io/dictionary",
+                icon: "fas fa-book",
+                description: "Explore my collection of words, definitions, and linguistic insights.",
+               backgroundColor: "#e8f5e9",
+                borderColor: "#66bb6a",
+                headingColor: "#66bb6a"
+            },
             {
                 name: "Weather",
                 link: "https://yblebon.github.io/weather",
@@ -210,15 +228,7 @@
                 borderColor: "#5c6bc0",
                 headingColor: "#5c6bc0"
             },
-            {
-                name: "YouTube",
-                link: "https://yblebon.github.io/youtube",
-                icon: "fab fa-youtube",
-                description: "Access my favorite YouTube videos and channels.",
-                backgroundColor: "#ffebee",
-                borderColor: "#ef5350",
-                headingColor: "#ef5350"
-            },
+          
             {
                 name: "Momjokes",
                 link: "https://yblebon.github.io/momjokes",
@@ -246,88 +256,16 @@
               backgroundColor: "#ffebee",
                 borderColor: "#ef5350",
                 headingColor: "#ef5350"
-            },
-            {
-                name: "Events",
-                link: "https://yblebon.github.io/events",
-                icon: "fas fa-calendar-alt",
-                description: "Stay updated on upcoming events, meetups, and activities I’m attending or hosting.",
-              backgroundColor: "#ffebee",
-                borderColor: "#ef5350",
-                headingColor: "#ef5350"
-            },
-            {
-                name: "Coins",
-                link: "https://yblebon.github.io/coins",
-                icon: "fas fa-coins",
-                description: "Check out my collection, insights, and updates on coins and currency.",
-                backgroundColor: "#fff3e0",
-                borderColor: "#ffa726",
-                headingColor: "#ffa726"
-            },
-            {
-                name: "Daily_workout",
-                link: "https://yblebon.github.io/daily_workout",
-                icon: "fas fa-dumbbell",
-                description: "Daily exercise routines and fitness tips.",
-                backgroundColor: "#e8f5e9",
-                borderColor: "#66bb6a",
-                headingColor: "#66bb6a"
-            },
-            {
-                name: "Food",
-                link: "https://yblebon.github.io/food",
-                icon: "fas fa-utensils",
-                description: "Discover my favorite recipes, cooking tips, and food adventures.",
-                backgroundColor: "#e8f5e9",
-                borderColor: "#66bb6a",
-                headingColor: "#66bb6a"
-            },
-            {
+            }, {
                 name: "Manymen",
                 link: "https://yblebon.github.io/manymen",
                 icon: "fas fa-users",
                 description: "Insights and content about many men and their stories.",
-                backgroundColor: "#fffde7",
-                borderColor: "#ffca28",
-                headingColor: "#ffca28"
-            },
-            {
-                name: "Dictionary",
-                link: "https://yblebon.github.io/dictionary",
-                icon: "fas fa-book",
-                description: "Explore my collection of words, definitions, and linguistic insights.",
-                backgroundColor: "#ffebee",
+           backgroundColor: "#ffebee",
                 borderColor: "#ef5350",
                 headingColor: "#ef5350"
             },
-            {
-                name: "Electricity",
-                link: "https://yblebon.github.io/electricity",
-                icon: "fas fa-bolt",
-                description: "Electricity",
-                backgroundColor: "#e8f5e9",
-                borderColor: "#66bb6a",
-                headingColor: "#66bb6a"
-            },
-            {
-                name: "Transport",
-                link: "https://yblebon.github.io/transport",
-                icon: "fas fa-car",
-                description: "Explore information on transportation, routes, and travel tips.",
-                backgroundColor: "#e8f5e9",
-                borderColor: "#66bb6a",
-                headingColor: "#66bb6a"
-            },
-            {
-                name: "IP",
-                link: "https://yblebon.github.io/ip",
-                icon: "fas fa-server",
-                description: "Display IP information",
-                backgroundColor: "#e0f2f1",
-                borderColor: "#26a69a",
-                headingColor: "#26a69a"
-            },
+
             {
                 name: "Image Uploader",
                 link: "https://yblebon.github.io/image_uploader/",
@@ -381,7 +319,71 @@
                 backgroundColor: "#efebe9",
                 borderColor: "#8d6e63",
                 headingColor: "#8d6e63"
-            }
+            },
+            {
+                name: "Events",
+                link: "https://yblebon.github.io/events",
+                icon: "fas fa-calendar-alt",
+                description: "Stay updated on upcoming events, meetups, and activities I’m attending or hosting.",
+                backgroundColor: "#fff3e0",
+                borderColor: "#ffa726",
+                headingColor: "#ffa726"
+            },
+            {
+                name: "Coins",
+                link: "https://yblebon.github.io/coins",
+                icon: "fas fa-coins",
+                description: "Check out my collection, insights, and updates on coins and currency.",
+                backgroundColor: "#fff3e0",
+                borderColor: "#ffa726",
+                headingColor: "#ffa726"
+            },
+            {
+                name: "Daily_workout",
+                link: "https://yblebon.github.io/daily_workout",
+                icon: "fas fa-dumbbell",
+                description: "Daily exercise routines and fitness tips.",
+                backgroundColor: "#fff3e0",
+                borderColor: "#ffa726",
+                headingColor: "#ffa726"
+            },
+            {
+                name: "Food",
+                link: "https://yblebon.github.io/food",
+                icon: "fas fa-utensils",
+                description: "Discover my favorite recipes, cooking tips, and food adventures.",
+                backgroundColor: "#fff3e0",
+                borderColor: "#ffa726",
+                headingColor: "#ffa726"
+            },
+            {
+                name: "Electricity",
+                link: "https://yblebon.github.io/electricity",
+                icon: "fas fa-bolt",
+                description: "Electricity",
+                backgroundColor: "#fff3e0",
+                borderColor: "#ffa726",
+                headingColor: "#ffa726"
+            },
+            {
+                name: "Transport",
+                link: "https://yblebon.github.io/transport",
+                icon: "fas fa-car",
+                description: "Explore information on transportation, routes, and travel tips.",
+                backgroundColor: "#fff3e0",
+                borderColor: "#ffa726",
+                headingColor: "#ffa726"
+            },
+            {
+                name: "IP",
+                link: "https://yblebon.github.io/ip",
+                icon: "fas fa-server",
+                description: "Display IP information",
+                backgroundColor: "#fff3e0",
+                borderColor: "#ffa726",
+                headingColor: "#ffa726"
+            },
+            
         ];
 
         // Function to dynamically generate categories
