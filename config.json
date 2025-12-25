@@ -1,0 +1,5 @@
+{
+    "api_auth_url": "https://app-blue-kappa.vercel.app/api/auth/login",
+    "environment": "production",
+    "version": "1.0.0"
+}

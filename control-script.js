@@ -1,46 +1,111 @@
-// --- AUTHENTICATION ---
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const user = document.getElementById('username').value;
-    const pass = document.getElementById('password').value;
+/**
+ * control-script.js
+ * Handles Admin Authentication via external API and content rendering.
+ */
 
-    // Hardcoded credentials (admin / password123)
-    if (user === "admin" && pass === "password123") {
-        document.getElementById('authOverlay').style.display = 'none';
-        sessionStorage.setItem('isControlAuthenticated', 'true');
-    } else {
-        document.getElementById('authError').style.display = 'block';
+// --- GLOBAL STATE ---
+let CONFIG = {};
+let favorites = JSON.parse(localStorage.getItem('controlFavs')) || [];
+
+const menuData = [
+    { name: "API Feed", cat: "Datasources", link: "#", icon: "fas fa-database", description: "Primary data endpoints.", color: "#5c97bd" },
+    { name: "System Logs", cat: "Datasources", link: "#", icon: "fas fa-terminal", description: "Raw system output.", color: "#2d3436" },
+    { name: "Summer 2024", cat: "Albums", link: "#", icon: "fas fa-images", description: "Holiday photographs storage.", color: "#e67e22" },
+    { name: "Theme Toggle", cat: "Settings", link: "#", icon: "fas fa-paint-brush", description: "Switch between UI modes.", color: "#9b59b6" },
+    { name: "User Profile", cat: "Settings", link: "#", icon: "fas fa-user-cog", description: "Manage admin account settings.", color: "#26a69a" },
+    { name: "Backup Data", cat: "Settings", link: "javascript:exportConfig()", icon: "fas fa-download", description: "Export workspace favorites.", color: "#8d6e63" }
+];
+
+// --- INITIALIZATION ---
+
+/**
+ * Loads the external configuration file.
+ */
+async function loadConfig() {
+    try {
+        const response = await fetch('config.json');
+        if (!response.ok) throw new Error("Config file not found");
+        CONFIG = await response.json();
+        console.log("Config loaded successfully.");
+    } catch (err) {
+        console.error("Critical Error: Could not load config.json", err);
+        const errorMsg = document.getElementById('authError');
+        if (errorMsg) {
+            errorMsg.innerText = "System Error: config.json missing.";
+            errorMsg.style.display = 'block';
+        }
+    }
+}
+
+// --- AUTHENTICATION ---
+
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const errorMsg = document.getElementById('authError');
+    const submitBtn = e.target.querySelector('button');
+
+    // Ensure config is available
+    if (!CONFIG.api_auth_url) {
+        await loadConfig();
+    }
+
+    // UI Feedback
+    submitBtn.innerText = "Authenticating...";
+    submitBtn.disabled = true;
+    errorMsg.style.display = 'none';
+
+    try {
+        const response = await fetch(CONFIG.api_auth_url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.token) {
+            // Success: Store JWT and session flag
+            sessionStorage.setItem('jwt_token', data.token);
+            sessionStorage.setItem('isControlAuthenticated', 'true');
+            
+            document.getElementById('authOverlay').style.display = 'none';
+            render(); 
+        } else {
+            // API Error
+            errorMsg.innerText = data.message || "Invalid credentials";
+            errorMsg.style.display = 'block';
+        }
+    } catch (error) {
+        // Network Error
+        console.error("Fetch error:", error);
+        errorMsg.innerText = "Connection failed to Auth Server.";
+        errorMsg.style.display = 'block';
+    } finally {
+        submitBtn.innerText = "Sign In";
+        submitBtn.disabled = false;
     }
 });
 
-// LOGOUT FUNCTION
+/**
+ * Clears the session and reloads the page.
+ */
 function logout() {
+    sessionStorage.removeItem('jwt_token');
     sessionStorage.removeItem('isControlAuthenticated');
-    location.reload(); // Refresh the page to show the login overlay
+    location.reload();
 }
 
-// Session check on load
-window.onload = function() {
-    if (sessionStorage.getItem('isControlAuthenticated') === 'true') {
-        document.getElementById('authOverlay').style.display = 'none';
-    }
-}
-
-// --- CONTENT MANAGEMENT ---
-const menuData = [
-    { name: "API Primary", cat: "Datasources", link: "#", icon: "fas fa-database", description: "Main data feed management.", color: "#5c97bd" },
-    { name: "System Logs", cat: "Datasources", link: "#", icon: "fas fa-terminal", description: "Raw system output.", color: "#2d3436" },
-    { name: "Holiday 2024", cat: "Albums", link: "#", icon: "fas fa-images", description: "Trip photos storage.", color: "#e67e22" },
-    { name: "Theme Settings", cat: "Settings", link: "javascript:alert('Theme feature coming soon!')", icon: "fas fa-paint-brush", description: "UI Customization.", color: "#9b59b6" },
-    { name: "User Profile", cat: "Settings", link: "#", icon: "fas fa-user-cog", description: "Manage admin account.", color: "#26a69a" },
-    { name: "Backup Data", cat: "Settings", link: "javascript:alert('Data backed up!')", icon: "fas fa-download", description: "Export workspace data.", color: "#8d6e63" }
-];
-
-let favorites = JSON.parse(localStorage.getItem('controlFavs')) || [];
+// --- RENDERING LOGIC ---
 
 function toggleFavorite(name) {
-    if (favorites.includes(name)) favorites = favorites.filter(f => f !== name);
-    else favorites.push(name);
+    if (favorites.includes(name)) {
+        favorites = favorites.filter(f => f !== name);
+    } else {
+        favorites.push(name);
+    }
     localStorage.setItem('controlFavs', JSON.stringify(favorites));
     render();
 }
@@ -63,11 +128,15 @@ function createCardHTML(item, isFav) {
 }
 
 function render() {
-    const query = document.getElementById('searchInput').value.toLowerCase();
+    const query = (document.getElementById('searchInput')?.value || '').toLowerCase();
     const container = document.getElementById('mainContainer');
+    if (!container) return;
     container.innerHTML = '';
     
-    const filtered = menuData.filter(i => i.name.toLowerCase().includes(query) || i.description.toLowerCase().includes(query));
+    const filtered = menuData.filter(i => 
+        i.name.toLowerCase().includes(query) || 
+        i.description.toLowerCase().includes(query)
+    );
 
     const categories = ["Datasources", "Albums", "Settings"];
     
@@ -83,8 +152,39 @@ function render() {
         }
     });
 
-    document.getElementById('noResults').style.display = filtered.length === 0 ? 'block' : 'none';
+    const noResults = document.getElementById('noResults');
+    if (noResults) {
+        noResults.style.display = filtered.length === 0 ? 'block' : 'none';
+    }
 }
 
-document.getElementById('searchInput').addEventListener('input', render);
-render();
+/**
+ * Simple export function for the "Backup Data" card
+ */
+function exportConfig() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(favorites));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "workspace_favs.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+}
+
+// --- BOOTSTRAP ---
+
+window.onload = async function() {
+    await loadConfig();
+    
+    // Check if user is already logged in
+    if (sessionStorage.getItem('isControlAuthenticated') === 'true') {
+        const overlay = document.getElementById('authOverlay');
+        if (overlay) overlay.style.display = 'none';
+        render();
+    }
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', render);
+    }
+};
