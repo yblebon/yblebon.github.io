@@ -3,474 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>yblebon.github.io</title>
-    <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>My Hub | Full Workspace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --bg-color: #f0f4f8;
+            --nav-bg: #ffffff;
+            --text-dark: #2d3436;
+            --text-muted: #636e72;
+            --accent-teal: #55d1cf;
+        }
+
+        * { box-sizing: border-box; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-color);
             margin: 0;
-            padding: 0;
-            background-color: #e6f0fa;
-            text-align: center;
+            color: var(--text-dark);
         }
+
         header {
-            background-color: #ff6f61;
-            color: #fff;
-            padding: 20px;
-        }
-        h1 {
-            margin: 0;
-            font-size: 2rem;
-        }
-        .social-links {
-            margin-top: 10px;
-        }
-        .social-links a {
-            color: #fff;
-            font-size: 1.5rem;
-            margin: 0 10px;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        .social-links a:hover {
-            color: #ffd1cc;
-        }
-        .categories-container {
+            background: var(--nav-bg);
+            padding: 1rem 5%;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
             flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            padding: 15px;
         }
-        .category {
-            flex: 1 1 200px;
-            max-width: 300px;
-            margin: 10px;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            border: 2px solid;
-            text-decoration: none;
-            transition: transform 0.2s, box-shadow 0.2s;
+
+        .brand-group { display: flex; align-items: center; gap: 15px; }
+        .brand { background: var(--accent-teal); color: white; padding: 8px 20px; border-radius: 25px; font-weight: 800; font-size: 0.8rem; }
+        
+        .clear-btn { 
+            background: #dfe6e9; border: none; padding: 8px 15px; border-radius: 20px; 
+            font-size: 0.75rem; cursor: pointer; color: var(--text-muted); 
         }
-        .category:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        .clear-btn:hover { background: #fab1a0; color: #d63031; }
+
+        .search-wrapper { position: relative; flex: 1; max-width: 500px; min-width: 250px; }
+        .search-wrapper i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+
+        #searchInput {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid #dfe6e9;
+            border-radius: 10px;
+            outline: none;
+            font-size: 1rem;
         }
-        .category h2 {
-            font-size: 1.2rem;
-            margin: 0 0 10px 0;
+
+        #searchInput:focus { border-color: var(--accent-teal); }
+
+        main { padding: 1rem 5%; max-width: 1600px; margin: 0 auto; }
+
+        .section-label {
+            font-weight: 700;
+            color: var(--text-muted);
+            margin: 2rem 0 1rem 0;
             display: flex;
             align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
         }
-        .category h2 i {
-            margin-right: 8px;
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
         }
-        .category p {
-            font-size: 0.9rem;
-            margin: 0;
-            color: #555;
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.04);
         }
-        @media (max-width: 600px) {
-            .category {
-                flex: 1 1 100%;
-                max-width: 100%;
-            }
-            h1 {
-                font-size: 1.5rem;
-            }
-            .social-links a {
-                font-size: 1.2rem;
-                margin: 0 8px;
-            }
+
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        .card-link {
+            text-decoration: none;
+            color: white;
+            flex: 1;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
         }
+
+        .card-icon { font-size: 1.6rem; margin-bottom: 8px; }
+        .card-name { font-weight: 700; font-size: 1rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-desc { font-size: 0.75rem; opacity: 0.9; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        .card-footer {
+            background: rgba(0,0,0,0.1);
+            padding: 6px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fav-btn {
+            background: none; border: none; color: rgba(255,255,255,0.6);
+            cursor: pointer; font-size: 1rem; padding: 0;
+        }
+
+        .fav-btn.is-active { color: #ffeb3b; }
+
+        #noResults { display: none; text-align: center; padding: 3rem; color: var(--text-muted); }
+
     </style>
 </head>
 <body>
-    <header>
-        <h1>yblebon.github.io</h1>
-        <div class="social-links">
-            <a href="https://www.linkedin.com/in/yasserlebon/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            <a href="https://x.com/yasserlebon" target="_blank" title="X"><i class="fab fa-x-twitter"></i></a>
-            <a href="https://github.com/yblebon" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
-        </div>
-    </header>
 
-    <div class="categories-container" id="categories-container"></div>
+<header>
+    <div class="brand-group">
+        <div class="brand">Control Center</div>
+        <button class="clear-btn" onclick="clearAllFavs()">Clear Favorites</button>
+    </div>
+    <div class="search-wrapper">
+        <i class="fa fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search 36 applications...">
+    </div>
+</header>
 
-    <script>
-        // JSON data for categories
-        const categoriesData = [
-              {
-                name: "YouTube",
-                link: "https://yblebon.github.io/youtube",
-                icon: "fab fa-youtube",
-                description: "Access my favorite YouTube videos and channels.",
-                backgroundColor: "#e8f5e9",
-                borderColor: "#66bb6a",
-                headingColor: "#66bb6a"
-            },
-            {
-                name: "Dictionary",
-                link: "https://yblebon.github.io/dictionary",
-                icon: "fas fa-book",
-                description: "Words play an enormous part in our lives and are therefore deserving of the closest study.",
-               backgroundColor: "#e8f5e9",
-                borderColor: "#66bb6a",
-                headingColor: "#66bb6a"
-            },
-            {
-                name: "Weather",
-                link: "https://yblebon.github.io/weather",
-                icon: "fas fa-cloud-sun",
-                description: "An economist is an expert who will know tomorrow why the things he predicted yesterday didn't happen today.",
-                backgroundColor: "#e3f2fd",
-                borderColor: "#42a5f5",
-                headingColor: "#42a5f5"
-            },
-            {
-                name: "News",
-                link: "https://yblebon.github.io/news",
-                icon: "fas fa-newspaper",
-                description: "Self knowledge is always bad news.",
-               backgroundColor: "#e3f2fd",
-                borderColor: "#42a5f5",
-                headingColor: "#42a5f5"
-            },
-            {
-                name: "Stocks",
-                link: "https://yblebon.github.io/stocks",
-                icon: "fas fa-money-bill-trend-up",
-                description: "Don’t let the bastards get you down.",
-                backgroundColor: "#e3f2fd",
-                borderColor: "#42a5f5",
-                headingColor: "#42a5f5"
-            },
-            {
-                name: "Top50songs",
-                link: "https://yblebon.github.io/top50songs",
-                icon: "fas fa-music",
-                description: "Explore my curated list of the top 50 songs I’m listening to right now.",
-               backgroundColor: "#e3f2fd",
-                borderColor: "#42a5f5",
-                headingColor: "#42a5f5"
-            },
-            {
-                name: "Moon",
-                link: "https://yblebon.github.io/moon",
-                icon: "fas fa-moon",
-                description: "Explore lunar phases, data, and moon-related information.",
-               backgroundColor: "#e3f2fd",
-                borderColor: "#42a5f5",
-                headingColor: "#42a5f5"
-            },
-            {
-                name: "Journal",
-                link: "https://yblebon.github.io/journal",
-                icon: "fas fa-book",
-                description: "Read my thoughts, experiences, and reflections in my daily journal.",
-              backgroundColor: "#e0f2f1",
-                borderColor: "#26a69a",
-                headingColor: "#26a69a"
-            },
-            {
-                name: "Podcasts",
-                link: "https://yblebon.github.io/podcasts",
-                icon: "fas fa-podcast",
-                description: "Listen to my favorite discussions, interviews, and stories on various topics.",
-              backgroundColor: "#e0f2f1",
-                borderColor: "#26a69a",
-                headingColor: "#26a69a"
-            },
-            {
-                name: "This and that",
-                link: "https://yblebon.github.io/thisandthat",
-                icon: "fas fa-ellipsis-h",
-                description: "Find a mix of random thoughts, ideas, and miscellaneous content.",
-              backgroundColor: "#e0f2f1",
-                borderColor: "#26a69a",
-                headingColor: "#26a69a"
-            },
-            {
-                name: "Logs",
-                link: "https://yblebon.github.io/logs",
-                icon: "fas fa-file-alt",
-                description: "Track my progress, updates, and technical notes in my personal logs.",
-              backgroundColor: "#e0f2f1",
-                borderColor: "#26a69a",
-                headingColor: "#26a69a"
-            },
-            {
-                name: "Quicknotes",
-                link: "https://yblebon.github.io/quicknotes",
-                icon: "fas fa-sticky-note",
-                description: "Jot down and share my quick thoughts, ideas, and reminders on the go.",
-                backgroundColor: "#e8eaf6",
-                borderColor: "#5c6bc0",
-                headingColor: "#5c6bc0"
-            },
-            {
-                name: "Bookmarks",
-                link: "https://yblebon.github.io/bookmarks",
-                icon: "fas fa-bookmark",
-                description: "Access my collection of saved links and favorite resources.",
-                backgroundColor: "#e8eaf6",
-                borderColor: "#5c6bc0",
-                headingColor: "#5c6bc0"
-            },
-            {
-                name: "Book from the books",
-                link: "https://yblebon.github.io/thebook",
-                icon: "fas fa-book-open",
-                description: "Discover my reviews, summaries, and insights from the books I’ve read.",
-                backgroundColor: "#e8eaf6",
-                borderColor: "#5c6bc0",
-                headingColor: "#5c6bc0"
-            },
-            {
-                name: "Videos",
-                link: "https://yblebon.github.io/videos",
-                icon: "fas fa-video",
-                description: "Watch my collection of videos, tutorials, and creative content.",
-                backgroundColor: "#e8eaf6",
-                borderColor: "#5c6bc0",
-                headingColor: "#5c6bc0"
-            },
-             {
-                name: "Momjokes",
-                link: "https://yblebon.github.io/momjokes",
-                icon: "fas fa-face-grin-tongue-wink",
-                description: "100 millions pour jouer au ballon.",
-              backgroundColor: "#ffebee",
-                borderColor: "#ef5350",
-                headingColor: "#ef5350"
-            },{
-                name: "Hardtarget",
-                link: "https://yblebon.github.io/hardtarget",
-                icon: "fas fa-sun-plant-wilt",
-                description: "Marie: You seem to have a real talent, Mr. Boudreaux, for attracting violence. Chance Boudreaux: Does that make me a bad person?",
-                backgroundColor: "#ffebee",
-                borderColor: "#ef5350",
-                headingColor: "#ef5350"
-            },
-            {
-                name: "Hahaha",
-                link: "https://yblebon.github.io/hahaha",
-                icon: "fas fa-laugh-beam",
-                description: "Dive into a collection of hilarious jokes and funny moments.",
-              backgroundColor: "#ffebee",
-                borderColor: "#ef5350",
-                headingColor: "#ef5350"
-            }
-                ,
-            {
-                name: "Carre",
-                link: "https://yblebon.github.io/carre",
-                icon: "fas fa-square",
-                description: "Explore my projects, ideas, and creative works in the Carre space.",
-              backgroundColor: "#ffebee",
-                borderColor: "#ef5350",
-                headingColor: "#ef5350"
-            }   ,
-            {
-                name: "Arcade",
-                link: "https://yblebon.github.io/arcade",
-                icon: "fas fa-gamepad",
-                description: "Brain training arcade",
-              backgroundColor: "#ffebee",
-                borderColor: "#ef5350",
-                headingColor: "#ef5350"
-            }, {
-                name: "Manymen",
-                link: "https://yblebon.github.io/manymen",
-                icon: "fas fa-users",
-                description: "Insights and content about many men and their stories.",
-           backgroundColor: "#ffebee",
-                borderColor: "#ef5350",
-                headingColor: "#ef5350"
-            },
-            {
-                name: "Crookentials",
-                link: "https://yblebon.github.io/crookentials/",
-                icon: "fas fa-camera-retro",
-                description: "You dont need to think hard to get it",
-                backgroundColor: "#efebe9",
-                borderColor: "#8d6e63",
-                headingColor: "#8d6e63"
-            },
-            {
-                name: "Image Uploader",
-                link: "https://yblebon.github.io/image_uploader/",
-                icon: "fas fa-camera-retro",
-                description: "Image uploader.",
-                backgroundColor: "#efebe9",
-                borderColor: "#8d6e63",
-                headingColor: "#8d6e63"
-            },
-            {
-                name: "Text To PDF",
-                link: "https://yblebon.github.io/text_2_pdf/",
-                icon: "fas fa-file-pdf",
-                description: "Transform text to pdf.",
-                backgroundColor: "#efebe9",
-                borderColor: "#8d6e63",
-                headingColor: "#8d6e63"
-            },
-            {
-                name: "Jsonformatter",
-                link: "https://yblebon.github.io/jsonformatter",
-                icon: "fas fa-code",
-                description: "Use my tool to format, validate, and beautify JSON data effortlessly.",
-                backgroundColor: "#efebe9",
-                borderColor: "#8d6e63",
-                headingColor: "#8d6e63"
-            },
-            {
-                name: "Color picker",
-                link: "https://yblebon.github.io/color_picker",
-                icon: "fas fa-palette",
-                description: "Select and generate custom colors for your projects.",
-              backgroundColor: "#efebe9",
-                borderColor: "#8d6e63",
-                headingColor: "#8d6e63"
-            },
-            {
-                name: "Rest debug",
-                link: "https://yblebon.github.io/rest_debug",
-                icon: "fas fa-bug",
-                description: "Debugging tools and resources for REST API development.",
-                backgroundColor: "#efebe9",
-                borderColor: "#8d6e63",
-                headingColor: "#8d6e63"
-            },
-            {
-                name: "Password Generator",
-                link: "https://yblebon.github.io/password_generator",
-                icon: "fas fa-key",
-                description: "Password Generator.",
-                backgroundColor: "#efebe9",
-                borderColor: "#8d6e63",
-                headingColor: "#8d6e63"
-            },
-            {
-                name: "Webench",
-                link: "https://yblebon.github.io/webench",
-                icon: "fas fa-laptop-code",
-                description: "Benchmarking and performance tools for web development.",
-                backgroundColor: "#efebe9",
-                borderColor: "#8d6e63",
-                headingColor: "#8d6e63"
-            },
-            {
-                name: "Events",
-                link: "https://yblebon.github.io/events",
-                icon: "fas fa-calendar-alt",
-                description: "Stay updated on upcoming events, meetups, and activities I’m attending or hosting.",
-                backgroundColor: "#fff3e0",
-                borderColor: "#ffa726",
-                headingColor: "#ffa726"
-            },
-            {
-                name: "Coins",
-                link: "https://yblebon.github.io/coins",
-                icon: "fas fa-coins",
-                description: "Check out my collection, insights, and updates on coins and currency.",
-                backgroundColor: "#fff3e0",
-                borderColor: "#ffa726",
-                headingColor: "#ffa726"
-            },
-            {
-                name: "Daily_workout",
-                link: "https://yblebon.github.io/daily_workout",
-                icon: "fas fa-dumbbell",
-                description: "Daily exercise routines and fitness tips.",
-                backgroundColor: "#fff3e0",
-                borderColor: "#ffa726",
-                headingColor: "#ffa726"
-            },
-            {
-                name: "Food",
-                link: "https://yblebon.github.io/food",
-                icon: "fas fa-utensils",
-                description: "Discover my favorite recipes, cooking tips, and food adventures.",
-                backgroundColor: "#fff3e0",
-                borderColor: "#ffa726",
-                headingColor: "#ffa726"
-            },
-            {
-                name: "Electricity",
-                link: "https://yblebon.github.io/electricity",
-                icon: "fas fa-bolt",
-                description: "Electricity",
-                backgroundColor: "#fff3e0",
-                borderColor: "#ffa726",
-                headingColor: "#ffa726"
-            },
-            {
-                name: "Transport",
-                link: "https://yblebon.github.io/transport",
-                icon: "fas fa-car",
-                description: "Explore information on transportation, routes, and travel tips.",
-                backgroundColor: "#fff3e0",
-                borderColor: "#ffa726",
-                headingColor: "#ffa726"
-            },
-            {
-                name: "IP",
-                link: "https://yblebon.github.io/ip",
-                icon: "fas fa-server",
-                description: "Display IP information",
-                backgroundColor: "#fff3e0",
-                borderColor: "#ffa726",
-                headingColor: "#ffa726"
-            },
-            
-        ];
+<main>
+    <div id="favoritesSection">
+        <div class="section-label"><i class="fas fa-star" style="color:#fdcb6e"></i> Favorites</div>
+        <div class="grid" id="favoritesGrid"></div>
+    </div>
 
-        // Function to dynamically generate categories
-        function generateCategories() {
-            const container = document.getElementById('categories-container');
-            categoriesData.forEach(category => {
-                // Create the anchor element
-                const categoryLink = document.createElement('a');
-                categoryLink.href = category.link;
-                categoryLink.className = 'category';
-                categoryLink.target = '_blank';
-                categoryLink.rel = 'noopener noreferrer';
+    <div id="allSection">
+        <div class="section-label">All Applications</div>
+        <div class="grid" id="allGrid"></div>
+    </div>
 
-                // Apply styles dynamically
-                categoryLink.style.backgroundColor = category.backgroundColor;
-                categoryLink.style.borderColor = category.borderColor;
+    <div id="noResults">No items match your search.</div>
+</main>
 
-                // Create the heading
-                const heading = document.createElement('h2');
-                heading.style.color = category.headingColor;
+<script>
+    const menuData = [
+        { name: "YouTube", link: "https://yblebon.github.io/youtube", icon: "fab fa-youtube", description: "Access my favorite YouTube videos and channels.", color: "#e74c3c" },
+        { name: "Dictionary", link: "https://yblebon.github.io/dictionary", icon: "fas fa-book", description: "Words play an enormous part in our lives.", color: "#5c97bd" },
+        { name: "Weather", link: "https://yblebon.github.io/weather", icon: "fas fa-cloud-sun", description: "Economic and meteorological forecasts.", color: "#1abc9c" },
+        { name: "News", link: "https://yblebon.github.io/news", icon: "fas fa-newspaper", description: "Self knowledge is always bad news.", color: "#9b59b6" },
+        { name: "Stocks", link: "https://yblebon.github.io/stocks", icon: "fas fa-money-bill-trend-up", description: "Don’t let the bastards get you down.", color: "#27ae60" },
+        { name: "Top50songs", link: "https://yblebon.github.io/top50songs", icon: "fas fa-music", description: "Curated list of the top 50 songs.", color: "#e67e22" },
+        { name: "Moon", link: "https://yblebon.github.io/moon", icon: "fas fa-moon", description: "Explore lunar phases and data.", color: "#34495e" },
+        { name: "Journal", link: "https://yblebon.github.io/journal", icon: "fas fa-book", description: "Daily thoughts and reflections.", color: "#26a69a" },
+        { name: "Podcasts", link: "https://yblebon.github.io/podcasts", icon: "fas fa-podcast", description: "Favorite discussions and stories.", color: "#26a69a" },
+        { name: "This and that", link: "https://yblebon.github.io/thisandthat", icon: "fas fa-ellipsis-h", description: "Random thoughts and ideas.", color: "#26a69a" },
+        { name: "Logs", link: "https://yblebon.github.io/logs", icon: "fas fa-file-alt", description: "Technical notes and progress.", color: "#26a69a" },
+        { name: "Quicknotes", link: "https://yblebon.github.io/quicknotes", icon: "fas fa-sticky-note", description: "Jot down quick thoughts.", color: "#5c6bc0" },
+        { name: "Bookmarks", link: "https://yblebon.github.io/bookmarks", icon: "fas fa-bookmark", description: "Saved links and resources.", color: "#5c6bc0" },
+        { name: "Book from the books", link: "https://yblebon.github.io/thebook", icon: "fas fa-book-open", description: "Summaries and insights.", color: "#5c6bc0" },
+        { name: "Videos", link: "https://yblebon.github.io/videos", icon: "fas fa-video", description: "Tutorials and creative content.", color: "#5c6bc0" },
+        { name: "Momjokes", link: "https://yblebon.github.io/momjokes", icon: "fas fa-face-grin-tongue-wink", description: "100 millions pour jouer au ballon.", color: "#ef5350" },
+        { name: "Hardtarget", link: "https://yblebon.github.io/hardtarget", icon: "fas fa-sun-plant-wilt", description: "Chance Boudreaux classic quotes.", color: "#ef5350" },
+        { name: "Hahaha", link: "https://yblebon.github.io/hahaha", icon: "fas fa-laugh-beam", description: "Hilarious jokes and moments.", color: "#ef5350" },
+        { name: "Carre", link: "https://yblebon.github.io/carre", icon: "fas fa-square", description: "Projects and creative works.", color: "#ef5350" },
+        { name: "Arcade", link: "https://yblebon.github.io/arcade", icon: "fas fa-gamepad", description: "Brain training arcade.", color: "#ef5350" },
+        { name: "Manymen", link: "https://yblebon.github.io/manymen", icon: "fas fa-users", description: "Insights and stories about men.", color: "#ef5350" },
+        { name: "Crookentials", link: "https://yblebon.github.io/crookentials/", icon: "fas fa-camera-retro", description: "Simple insights.", color: "#8d6e63" },
+        { name: "Image Uploader", link: "https://yblebon.github.io/image_uploader/", icon: "fas fa-camera-retro", description: "Simple image uploader.", color: "#8d6e63" },
+        { name: "Text To PDF", link: "https://yblebon.github.io/text_2_pdf/", icon: "fas fa-file-pdf", description: "Transform text to pdf.", color: "#8d6e63" },
+        { name: "Jsonformatter", link: "https://yblebon.github.io/jsonformatter", icon: "fas fa-code", description: "Format and beautify JSON.", color: "#8d6e63" },
+        { name: "Color picker", link: "https://yblebon.github.io/color_picker", icon: "fas fa-palette", description: "Generate custom colors.", color: "#8d6e63" },
+        { name: "Rest debug", link: "https://yblebon.github.io/rest_debug", icon: "fas fa-bug", description: "REST API development tools.", color: "#8d6e63" },
+        { name: "Password Generator", link: "https://yblebon.github.io/password_generator", icon: "fas fa-key", description: "Security tool.", color: "#8d6e63" },
+        { name: "Webench", link: "https://yblebon.github.io/webench", icon: "fas fa-laptop-code", description: "Benchmarking tools.", color: "#8d6e63" },
+        { name: "Events", link: "https://yblebon.github.io/events", icon: "fas fa-calendar-alt", description: "Upcoming meetups and activities.", color: "#ffa726" },
+        { name: "Coins", link: "https://yblebon.github.io/coins", icon: "fas fa-coins", description: "Insights on currency.", color: "#ffa726" },
+        { name: "Daily_workout", link: "https://yblebon.github.io/daily_workout", icon: "fas fa-dumbbell", description: "Exercise routines.", color: "#ffa726" },
+        { name: "Food", link: "https://yblebon.github.io/food", icon: "fas fa-utensils", description: "Recipes and food adventures.", color: "#ffa726" },
+        { name: "Electricity", link: "https://yblebon.github.io/electricity", icon: "fas fa-bolt", description: "Electricity tracking.", color: "#ffa726" },
+        { name: "Transport", link: "https://yblebon.github.io/transport", icon: "fas fa-car", description: "Routes and travel tips.", color: "#ffa726" },
+        { name: "IP", link: "https://yblebon.github.io/ip", icon: "fas fa-server", description: "Display IP information.", color: "#ffa726" }
+    ];
 
-                // Create the icon
-                const icon = document.createElement('i');
-                icon.className = category.icon;
-                heading.appendChild(icon);
+    let favorites = JSON.parse(localStorage.getItem('myHubFavs')) || [];
 
-                // Add the category name
-                const headingText = document.createTextNode(` ${category.name}`);
-                heading.appendChild(headingText);
+    function toggleFavorite(name) {
+        if (favorites.includes(name)) favorites = favorites.filter(f => f !== name);
+        else favorites.push(name);
+        localStorage.setItem('myHubFavs', JSON.stringify(favorites));
+        render();
+    }
 
-                // Create the description
-                const description = document.createElement('p');
-                description.textContent = category.description;
+    function clearAllFavs() {
+        favorites = [];
+        localStorage.removeItem('myHubFavs');
+        render();
+    }
 
-                // Append elements to the category link
-                categoryLink.appendChild(heading);
-                categoryLink.appendChild(description);
+    function render() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = menuData.filter(i => i.name.toLowerCase().includes(query) || i.description.toLowerCase().includes(query));
+        
+        const favs = filtered.filter(i => favorites.includes(i.name));
+        const others = query === '' ? filtered.filter(i => !favorites.includes(i.name)) : filtered;
 
-                // Append the category link to the container
-                container.appendChild(categoryLink);
-            });
-        }
+        document.getElementById('favoritesGrid').innerHTML = favs.map(i => createCardHTML(i, true)).join('');
+        document.getElementById('allGrid').innerHTML = others.map(i => createCardHTML(i, favorites.includes(i.name))).join('');
+        
+        document.getElementById('favoritesSection').style.display = (favs.length && query === '') ? 'block' : 'none';
+        document.getElementById('noResults').style.display = filtered.length === 0 ? 'block' : 'none';
+    }
 
-        // Call the function to generate categories when the page loads
-        window.onload = generateCategories;
-    </script>
+    function createCardHTML(item, isFav) {
+        return `
+            <div class="card" style="background-color: ${item.color}">
+                <a href="${item.link}" class="card-link" target="_blank">
+                    <i class="${item.icon} card-icon"></i>
+                    <div class="card-name">${item.name}</div>
+                    <div class="card-desc">${item.description}</div>
+                </a>
+                <div class="card-footer">
+                    <button class="fav-btn ${isFav ? 'is-active' : ''}" onclick="toggleFavorite('${item.name}')">
+                        <i class="fa${isFav ? 's' : 'r'} fa-star"></i>
+                    </button>
+                    <i class="fas fa-external-link-alt" style="opacity:0.5; font-size:0.7rem"></i>
+                </div>
+            </div>
+        `;
+    }
+
+    document.getElementById('searchInput').addEventListener('input', render);
+    render();
+</script>
 </body>
 </html>
