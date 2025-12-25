@@ -3,28 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Hub | Full Workspace</title>
+    <title>Dashboard | My Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<header>
-    <div class="brand-group">
-        <div class="brand">Control Center</div>
-        <button class="clear-btn" onclick="clearAllFavs()">Clear Favorites</button>
-    </div>
-    <div class="search-wrapper">
-        <i class="fa fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Search 36 applications...">
-    </div>
-</header>
-
-<main id="mainContainer">
-    </main>
-
-<div id="noResults">No items match your search.</div>
-
-<script src="script.js"></script>
+    <header>
+        <div class="brand-group">
+            <div class="brand">Control Center</div>
+            <a href="controlcenter.html" class="nav-link"><i class="fas fa-lock"></i> Admin</a>
+            <button class="clear-btn" onclick="clearAllFavs()">Clear Favorites</button>
+        </div>
+        <div class="search-wrapper">
+            <i class="fa fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search applications...">
+        </div>
+    </header>
+    <main id="mainContainer"></main>
+    <div id="noResults">No items match your search.</div>
+    <script src="index-script.js"></script>
 </body>
 </html>

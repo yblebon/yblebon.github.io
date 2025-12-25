@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="authOverlay" style="position: fixed; inset: 0; background: var(--bg-color); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 2.5rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 350px; text-align: center;">
+            <div class="brand" style="margin-bottom: 1.5rem;">Admin Access</div>
+            <form id="loginForm" style="display: flex; flex-direction: column; gap: 12px;">
+                <input type="text" id="username" placeholder="Username" style="padding: 12px; border: 2px solid #dfe6e9; border-radius: 8px; outline: none;">
+                <input type="password" id="password" placeholder="Password" style="padding: 12px; border: 2px solid #dfe6e9; border-radius: 8px; outline: none;">
+                <button type="submit" style="background: var(--accent-teal); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">Sign In</button>
+            </form>
+            <div id="authError" style="color: #e74c3c; font-size: 0.8rem; margin-top: 10px; display: none;">Invalid credentials</div>
+            <a href="index.html" style="display: block; margin-top: 15px; font-size: 0.8rem; color: var(--text-muted); text-decoration: none;">← Exit</a>
+        </div>
+    </div>
+
+    <header>
+        <div class="brand-group">
+            <div class="brand">Admin Panel</div>
+            <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+        <div class="search-wrapper">
+            <i class="fa fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search data or settings...">
+        </div>
+    </header>
+
+    <main id="mainContainer"></main>
+    <div id="noResults">No items match your search.</div>
+    <script src="control-script.js"></script>
+</body>
+</html>
