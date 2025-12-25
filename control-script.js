@@ -31,7 +31,7 @@ async function loadConfig() {
         console.error("Critical Error: Could not load config.json", err);
         const errorMsg = document.getElementById('authError');
         if (errorMsg) {
-            errorMsg.innerText = "System Error: config.json missing.";
+            errorMsg.innerText = "System Error: config.json missing or inaccessible.";
             errorMsg.style.display = 'block';
         }
     }
@@ -48,7 +48,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     const submitBtn = e.target.querySelector('button');
 
     // Ensure config is available
-    if (!CONFIG.api_auth_url) {
+    if (!CONFIG.api_host) {
         await loadConfig();
     }
 
@@ -58,7 +58,10 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     errorMsg.style.display = 'none';
 
     try {
-        const response = await fetch(CONFIG.api_auth_url, {
+        // Matches your curl: curl -X POST "$API_HOST/login" -H "Content-Type: application/json" -d "..."
+        const authUrl = `${CONFIG.api_host}/login`;
+        
+        const response = await fetch(authUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
@@ -75,13 +78,13 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             render(); 
         } else {
             // API Error
-            errorMsg.innerText = data.message || "Invalid credentials";
+            errorMsg.innerText = data.message || "Unauthorized: Invalid credentials";
             errorMsg.style.display = 'block';
         }
     } catch (error) {
         // Network Error
         console.error("Fetch error:", error);
-        errorMsg.innerText = "Connection failed to Auth Server.";
+        errorMsg.innerText = "Connection failed: API Host unreachable.";
         errorMsg.style.display = 'block';
     } finally {
         submitBtn.innerText = "Sign In";
