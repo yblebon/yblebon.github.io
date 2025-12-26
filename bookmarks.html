@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { padding: 30px; background: #fff; }
+        .bookmark-form { max-width: 650px; display: flex; flex-direction: column; gap: 20px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        label { font-weight: 700; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
+        input, textarea { 
+            padding: 12px; border: 1px solid #dfe6e9; border-radius: 8px; 
+            font-size: 14px; width: 100%; outline: none;
+        }
+        input:focus { border-color: var(--accent-teal); }
+        
+        .tag-container { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px; }
+        .tag { 
+            background: #f1f2f6; color: #2f3542; padding: 5px 12px; 
+            border-radius: 20px; font-size: 0.8rem; display: flex; align-items: center; gap: 8px;
+        }
+        .tag i { cursor: pointer; color: #ff7675; }
+        
+        .source-preview {
+            background: #f8f9fa; padding: 15px; border-radius: 8px;
+            border-left: 4px solid var(--accent-teal); font-size: 0.9rem;
+        }
+        .btn-save {
+            background: var(--accent-teal); color: white; border: none;
+            padding: 15px; border-radius: 8px; font-weight: 700; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2><i class="fas fa-bookmark"></i> Bookmark Manager</h2>
+
+    <div class="bookmark-form">
+        <div class="input-group">
+            <label>Title</label>
+            <input type="text" id="title" value="A quel âge partirez-vous vraiment ?">
+        </div>
+
+        <div class="input-group">
+            <label>URL</label>
+            <input type="url" id="url" value="https://www.pleinevie.fr/retraite-travail/retraite/retraites-le-nouveau-calendrier-apres-la-suspension-de-la-reforme-a-quel-age-partirez-vous-vraiment-181321.html">
+        </div>
+
+        <div class="input-group">
+            <label>Description</label>
+            <textarea id="description" rows="3">Alors, à quel âge pourrez-vous réellement partir ? Voici le nouveau calendrier, génération par génération, et les ajustements pour les carrières longues.</textarea>
+        </div>
+
+        <div class="input-group">
+            <label>Source & Date</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="source" value="https://www.pleinevie.fr">
+                <input type="date" id="date" value="2025-12-12">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Tags</label>
+            <div class="tag-container" id="tagList">
+                <span class="tag">culture <i class="fas fa-times"></i></span>
+                <span class="tag">retraite <i class="fas fa-times"></i></span>
+            </div>
+            <input type="text" id="tagInput" placeholder="Press Enter to add tags..." style="margin-top:10px;">
+        </div>
+
+        <div class="source-preview">
+            <i class="fas fa-link"></i> <strong>Live Preview:</strong> 
+            <a href="#" id="liveLink" target="_blank" style="color: var(--accent-teal); text-decoration: none; margin-left: 5px;">Visit Source</a>
+        </div>
+
+        <button class="btn-save" onclick="saveBookmark()">Update Bookmark Entry</button>
+    </div>
+
+    <script>
+        function saveBookmark() {
+            const data = {
+                title: document.getElementById('title').value,
+                url: document.getElementById('url').value,
+                description: document.getElementById('description').value,
+                source: document.getElementById('source').value,
+                date: document.getElementById('date').value,
+                tags: Array.from(document.querySelectorAll('.tag')).map(t => t.textContent.trim())
+            };
+            console.log("Saving Bookmark Data:", data);
+            alert("Bookmark updated in local state!");
+        }
+
+        // Simple tag removal logic
+        document.getElementById('tagList').addEventListener('click', (e) => {
+            if(e.target.classList.contains('fa-times')) {
+                e.target.parentElement.remove();
+            }
+        });
+    </script>
+</body>
+</html>

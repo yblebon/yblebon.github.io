@@ -8,6 +8,30 @@ let CONFIG = {};
 let favorites = JSON.parse(localStorage.getItem('controlFavs')) || [];
 
 const menuData = [
+    { 
+        name: "Voice notes", 
+        cat: "Datasources", 
+        link: "voice-notes.html", 
+        icon: "fas fa-microphone", 
+        description: "Record and manage voice memos.", 
+        color: "#ff7675" 
+    },
+    { 
+        name: "Bookmarks", 
+        cat: "Datasources", 
+        link: "bookmarks.html", 
+        icon: "fas fa-bookmark", 
+        description: "Manage saved web resources and articles.", 
+        color: "#f1c40f" 
+    },
+    { 
+        name: "Videos", 
+        cat: "Datasources", 
+        link: "videos.html", 
+        icon: "fas fa-video", 
+        description: "Manage video library and metadata.", 
+        color: "#f39c12" 
+    },
     { name: "API Feed", cat: "Datasources", link: "api-feed.html", icon: "fas fa-database", description: "JSON configuration viewer.", color: "#5c97bd" },
     { name: "System Logs", cat: "Datasources", link: "logs.html", icon: "fas fa-terminal", description: "Raw system output.", color: "#2d3436" },
     { name: "Summer 2024", cat: "Albums", link: "album-view.html", icon: "fas fa-images", description: "Holiday photographs storage.", color: "#e67e22" },

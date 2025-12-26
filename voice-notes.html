@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { padding: 30px; background: #fff; font-family: sans-serif; }
+        .form-container { max-width: 500px; display: flex; flex-direction: column; gap: 15px; }
+        .field-group { display: flex; flex-direction: column; gap: 5px; }
+        input, textarea { padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
+        
+        /* Audio Controls */
+        .recorder-box { 
+            background: #f8f9fa; padding: 20px; border-radius: 12px; 
+            text-align: center; border: 2px dashed #dfe6e9; 
+        }
+        .btn-record { 
+            background: #e74c3c; color: white; border: none; padding: 10px 20px; 
+            border-radius: 50px; cursor: pointer; font-weight: bold; margin-bottom: 10px;
+        }
+        .btn-record.recording { animation: pulse 1.5s infinite; background: #c0392b; }
+        
+        /* Image Preview */
+        .cover-preview { 
+            width: 100%; height: 150px; background: #eee; 
+            border-radius: 8px; object-fit: cover; display: none; margin-top: 10px;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <h2><i class="fas fa-microphone"></i> New Voice Note</h2>
+    
+    <div class="form-container">
+        <div class="field-group">
+            <label class="section-label">Title</label>
+            <input type="text" id="noteTitle" placeholder="Morning Reflection...">
+        </div>
+
+        <div class="field-group">
+            <label class="section-label">Date</label>
+            <input type="date" id="noteDate">
+        </div>
+
+        <div class="field-group">
+            <label class="section-label">Description</label>
+            <textarea id="noteDesc" rows="3" placeholder="What is this note about?"></textarea>
+        </div>
+
+        <div class="field-group">
+            <label class="section-label">Cover Image</label>
+            <input type="file" id="coverUpload" accept="image/*" onchange="previewImage(event)">
+            <img id="preview" class="cover-preview">
+        </div>
+
+        <div class="field-group">
+            <label class="section-label">Audio Recording</label>
+            <div class="recorder-box">
+                <button id="recordBtn" class="btn-record">
+                    <i class="fas fa-circle"></i> Start Recording
+                </button>
+                <div id="audioPlaybackContainer">
+                    <audio id="audioPlayback" controls style="display:none; width: 100%; margin-top: 10px;"></audio>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-record" style="background: var(--accent-teal); margin-top: 20px;">Save Note</button>
+    </div>
+
+    <script>
+        // Set default date to today
+        document.getElementById('noteDate').valueAsDate = new Date();
+
+        // Image Preview Logic
+        function previewImage(event) {
+            const preview = document.getElementById('preview');
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            preview.style.display = 'block';
+        }
+
+        // Audio Recording Logic
+        let mediaRecorder;
+        let audioChunks = [];
+        const recordBtn = document.getElementById('recordBtn');
+        const audioPlayback = document.getElementById('audioPlayback');
+
+        recordBtn.addEventListener('click', async () => {
+            if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audioPlayback.src = audioUrl;
+                    audioPlayback.style.display = 'block';
+                };
+
+                mediaRecorder.start();
+                recordBtn.classList.add('recording');
+                recordBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Recording';
+            } else {
+                mediaRecorder.stop();
+                recordBtn.classList.remove('recording');
+                recordBtn.innerHTML = '<i class="fas fa-circle"></i> Start Recording';
+            }
+        });
+    </script>
+</body>
+</html>

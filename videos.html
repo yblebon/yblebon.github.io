@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { padding: 30px; background: #fff; }
+        .video-form { max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        label { font-weight: 700; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
+        input, select { padding: 12px; border: 1px solid #dfe6e9; border-radius: 8px; font-size: 14px; outline: none; }
+        input:focus { border-color: var(--accent-teal); }
+        
+        .preview-box {
+            background: #000;
+            border-radius: 12px;
+            aspect-ratio: 16 / 9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        iframe { width: 100%; height: 100%; border: none; }
+        .btn-save {
+            background: var(--accent-teal); color: white; border: none;
+            padding: 15px; border-radius: 8px; font-weight: 700; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2><i class="fas fa-video"></i> Video Manager</h2>
+
+    <div class="video-form">
+        <div class="input-group">
+            <label>YouTube Video ID</label>
+            <input type="text" id="videoId" value="LtnuVxjwoek" oninput="updatePreview()">
+            <small style="color: var(--text-muted)">The unique string at the end of the YouTube URL</small>
+        </div>
+
+        <div class="input-group">
+            <label>Title</label>
+            <input type="text" id="videoTitle" value="Bigard : Histoire des 3 nains ou du routier">
+        </div>
+
+        <div class="input-group">
+            <label>Category Tag</label>
+            <select id="videoTag">
+                <option value="Stand Up" selected>Stand Up</option>
+                <option value="Documentary">Documentary</option>
+                <option value="Tutorial">Tutorial</option>
+                <option value="Music">Music</option>
+            </select>
+        </div>
+
+        <label>Live Preview</label>
+        <div class="preview-box">
+            <iframe id="youtubePreview" 
+                    src="https://www.youtube.com/embed/LtnuVxjwoek" 
+                    allowfullscreen>
+            </iframe>
+        </div>
+
+        <button class="btn-save" onclick="saveVideo()">Update Video Entry</button>
+    </div>
+
+    <script>
+        function updatePreview() {
+            const id = document.getElementById('videoId').value;
+            const iframe = document.getElementById('youtubePreview');
+            if(id) {
+                iframe.src = `https://www.youtube.com/embed/${id}`;
+            }
+        }
+
+        function saveVideo() {
+            const data = {
+                id: document.getElementById('videoId').value,
+                title: document.getElementById('videoTitle').value,
+                tag: document.getElementById('videoTag').value
+            };
+            console.log("Saving Video Data:", data);
+            alert("Video metadata saved successfully!");
+        }
+    </script>
+</body>
+</html>
