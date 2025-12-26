@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { padding: 30px; background: #fff; }
+        .photo-form { max-width: 700px; display: flex; flex-direction: column; gap: 20px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        label { font-weight: 700; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
+        input { padding: 12px; border: 1px solid #dfe6e9; border-radius: 8px; font-size: 14px; outline: none; }
+        input:focus { border-color: #686de0; }
+        
+        /* Photo Preview Box */
+        .photo-preview { 
+            width: 100%; min-height: 250px; background: #f1f2f6; 
+            border-radius: 12px; border: 1px solid #dfe6e9;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; margin-top: 10px;
+        }
+        .photo-preview img { max-width: 100%; max-height: 500px; object-fit: contain; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        /* Tag Cloud */
+        .tag-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .tag-pill { 
+            background: #ebf0ff; color: #4834d4; padding: 6px 15px; 
+            border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .tag-pill i { cursor: pointer; opacity: 0.6; }
+        .tag-pill i:hover { opacity: 1; color: #eb4d4b; }
+
+        .btn-save {
+            background: #686de0; color: white; border: none;
+            padding: 15px; border-radius: 8px; font-weight: 700; cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-save:hover { background: #4834d4; }
+    </style>
+</head>
+<body>
+    <h2><i class="fas fa-camera"></i> Photo Asset Manager</h2>
+
+    <div class="photo-form">
+        <div class="input-group">
+            <label>Photo Title</label>
+            <input type="text" id="photoTitle" value="English flirting joke">
+        </div>
+
+        <div class="input-group">
+            <label>Image Source (IPFS/URL)</label>
+            <input type="text" id="photoImage" 
+                   value="https://tragic-amethyst-crayfish.myfilebase.com/ipfs/QmeGyf32RLfAKLKtgbmMkzA2ums1RWn1x5KotTj5tpBwMr" 
+                   oninput="document.getElementById('imgDisplay').src=this.value">
+        </div>
+
+        <div class="photo-preview">
+            <img id="imgDisplay" src="https://tragic-amethyst-crayfish.myfilebase.com/ipfs/QmeGyf32RLfAKLKtgbmMkzA2ums1RWn1x5KotTj5tpBwMr" alt="Asset Preview">
+        </div>
+
+        <div class="input-group">
+            <label>Metadata Tags</label>
+            <div class="tag-wrap" id="tagCloud">
+                <span class="tag-pill">english <i class="fas fa-times"></i></span>
+                <span class="tag-pill">jokes <i class="fas fa-times"></i></span>
+                <span class="tag-pill">grammar <i class="fas fa-times"></i></span>
+                <span class="tag-pill">flirtig <i class="fas fa-times"></i></span>
+            </div>
+            <input type="text" id="tagInput" placeholder="Add tag and press Enter..." style="margin-top:10px;">
+        </div>
+
+        <button class="btn-save" onclick="savePhoto()">Update Photo Metadata</button>
+    </div>
+
+    <script>
+        // Tag addition logic
+        document.getElementById('tagInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && this.value.trim() !== "") {
+                const newTag = document.createElement('span');
+                newTag.className = 'tag-pill';
+                newTag.innerHTML = `${this.value.trim()} <i class="fas fa-times"></i>`;
+                document.getElementById('tagCloud').appendChild(newTag);
+                this.value = "";
+            }
+        });
+
+        // Tag removal logic
+        document.getElementById('tagCloud').addEventListener('click', function(e) {
+            if (e.target.classList.contains('fa-times')) {
+                e.target.parentElement.remove();
+            }
+        });
+
+        function savePhoto() {
+            const tags = Array.from(document.querySelectorAll('.tag-pill')).map(t => t.innerText.trim());
+            const data = {
+                title: document.getElementById('photoTitle').value,
+                image: document.getElementById('photoImage').value,
+                tags: tags
+            };
+            console.log("Saving Photo Data:", data);
+            alert("Photo entry successfully updated in the master repository!");
+        }
+    </script>
+</body>
+</html>

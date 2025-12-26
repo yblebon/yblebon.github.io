@@ -48,6 +48,14 @@ const menuData = [
         description: "Manage visual jokes and comic content.", 
         color: "#fd9644" 
     },
+    { 
+        name: "Photos", 
+        cat: "Albums", 
+        link: "photos.html", 
+        icon: "fas fa-camera", 
+        description: "Manage high-resolution photography and assets.", 
+        color: "#686de0" 
+    },
     { name: "API Feed", cat: "Datasources", link: "api-feed.html", icon: "fas fa-database", description: "JSON configuration viewer.", color: "#5c97bd" },
     { name: "System Logs", cat: "Datasources", link: "logs.html", icon: "fas fa-terminal", description: "Raw system output.", color: "#2d3436" },
     { name: "Summer 2024", cat: "Albums", link: "album-view.html", icon: "fas fa-images", description: "Holiday photographs storage.", color: "#e67e22" },
@@ -165,7 +173,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     submitBtn.disabled = true;
 
     try {
-        const response = await fetch(`${CONFIG.api_host}/login`, {
+        const response = await fetch(`${CONFIG.api_host}/api/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
