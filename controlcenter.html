@@ -6,6 +6,7 @@
     <title>Admin Panel | Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin-style.css">
 </head>
 <body>
     <div id="authOverlay" style="position: fixed; inset: 0; background: var(--bg-color); z-index: 9999; display: flex; align-items: center; justify-content: center;">
@@ -29,12 +30,29 @@
         </div>
         <div class="search-wrapper">
             <i class="fa fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Search data or settings...">
+            <input type="text" id="searchInput" placeholder="Search admin tools...">
         </div>
     </header>
 
-    <main id="mainContainer"></main>
-    <div id="noResults">No items match your search.</div>
+    
+    <main class="admin-split-view">
+        <section class="master-pane">
+            <div id="mainContainer" class="grid"></div>
+            <div id="noResults" style="display:none; text-align: center; padding: 20px; color: var(--text-muted);">
+                No items match your search.
+            </div>
+        </section>
+
+        <section class="detail-pane">
+            <div id="detailPlaceholder">
+                <i class="fas fa-arrow-left" style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--accent-teal);"></i>
+                <h3>Control Center Workspace</h3>
+                <p>Select a tool from the sidebar to view details</p>
+            </div>
+            <iframe id="detailFrame"></iframe>
+        </section>
+    </main>
+
     <script src="control-script.js"></script>
 </body>
 </html>
