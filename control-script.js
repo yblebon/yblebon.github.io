@@ -32,6 +32,22 @@ const menuData = [
         description: "Manage video library and metadata.", 
         color: "#f39c12" 
     },
+    { 
+        name: "Books", 
+        cat: "Datasources", 
+        link: "books.html", 
+        icon: "fas fa-book-open", 
+        description: "Manage library entries and book excerpts.", 
+        color: "#6c5ce7" 
+    },
+    { 
+        name: "Jokes", 
+        cat: "Datasources", 
+        link: "jokes.html", 
+        icon: "fas fa-laugh-squint", 
+        description: "Manage visual jokes and comic content.", 
+        color: "#fd9644" 
+    },
     { name: "API Feed", cat: "Datasources", link: "api-feed.html", icon: "fas fa-database", description: "JSON configuration viewer.", color: "#5c97bd" },
     { name: "System Logs", cat: "Datasources", link: "logs.html", icon: "fas fa-terminal", description: "Raw system output.", color: "#2d3436" },
     { name: "Summer 2024", cat: "Albums", link: "album-view.html", icon: "fas fa-images", description: "Holiday photographs storage.", color: "#e67e22" },

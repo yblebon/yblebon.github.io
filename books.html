@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { padding: 30px; background: #fff; }
+        .book-form { max-width: 650px; display: flex; flex-direction: column; gap: 20px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        label { font-weight: 700; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
+        input, textarea { 
+            padding: 12px; border: 1px solid #dfe6e9; border-radius: 8px; 
+            font-size: 14px; outline: none;
+        }
+        input:focus, textarea:focus { border-color: #6c5ce7; }
+        
+        .book-preview-layout { display: flex; gap: 20px; align-items: flex-start; }
+        .cover-display { 
+            width: 180px; height: 260px; background: #f1f2f6; 
+            border-radius: 8px; object-fit: cover; border: 1px solid #ddd;
+        }
+        .extrait-box { 
+            background: #f9f9f9; padding: 15px; border-radius: 8px; 
+            border-left: 4px solid #6c5ce7; font-style: italic; color: #2d3436;
+        }
+        .btn-save {
+            background: #6c5ce7; color: white; border: none;
+            padding: 15px; border-radius: 8px; font-weight: 700; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2><i class="fas fa-book-open"></i> Book Manager</h2>
+
+    <div class="book-form">
+        <div class="book-preview-layout">
+            <img id="coverPreview" src="https://tragic-amethyst-crayfish.myfilebase.com/ipfs/QmWmg2JAfrvvkBht8CaYFd9CzzcoH9yjy6iekuerkV61sY" class="cover-display">
+            
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 15px;">
+                <div class="input-group">
+                    <label>Book Title</label>
+                    <input type="text" id="bookTitle" value="Je vois la nuit, Qui suis je?">
+                </div>
+                <div class="input-group">
+                    <label>Author(s)</label>
+                    <input type="text" id="bookAuthor" value="Moira Butterfield, Wayne Ford">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Date Added</label>
+                        <input type="date" id="bookDate" value="2025-11-29">
+                    </div>
+                    <div class="input-group" style="width: 80px;">
+                        <label>Index #</label>
+                        <input type="number" id="bookNumber" value="0">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Cover Image URL</label>
+            <input type="text" id="bookImage" value="https://tragic-amethyst-crayfish.myfilebase.com/ipfs/QmWmg2JAfrvvkBht8CaYFd9CzzcoH9yjy6iekuerkV61sY" oninput="document.getElementById('coverPreview').src=this.value">
+        </div>
+
+        <div class="input-group">
+            <label>Extrait (Excerpt)</label>
+            <textarea id="bookExtrait" rows="4">Quand je suis perchée, j'aggripe mes serres autour de la branche. Je peux rester postée longtemps, sans bouger</textarea>
+        </div>
+
+        <div class="extrait-box">
+            <strong>Live Preview:</strong><br>
+            <span id="previewText">"Quand je suis perchée, j'aggripe mes serres autour de la branche..."</span>
+        </div>
+
+        <button class="btn-save" onclick="saveBook()">Update Library Entry</button>
+    </div>
+
+    <script>
+        document.getElementById('bookExtrait').addEventListener('input', function(e) {
+            document.getElementById('previewText').textContent = `"${e.target.value}"`;
+        });
+
+        function saveBook() {
+            const data = {
+                title: document.getElementById('bookTitle').value,
+                date: document.getElementById('bookDate').value,
+                number: parseInt(document.getElementById('bookNumber').value),
+                author: document.getElementById('bookAuthor').value,
+                extrait: document.getElementById('bookExtrait').value,
+                image: document.getElementById('bookImage').value
+            };
+            console.log("Saving Book Data:", data);
+            alert("Book entry updated!");
+        }
+    </script>
+</body>
+</html>

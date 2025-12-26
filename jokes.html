@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { padding: 30px; background: #fff; }
+        .joke-form { max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        label { font-weight: 700; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
+        input { padding: 12px; border: 1px solid #dfe6e9; border-radius: 8px; font-size: 14px; outline: none; }
+        input:focus { border-color: #fd9644; }
+        
+        /* Image Preview Box */
+        .joke-preview { 
+            width: 100%; min-height: 200px; background: #f8f9fa; 
+            border-radius: 12px; border: 2px dashed #dfe6e9;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; margin-top: 10px;
+        }
+        .joke-preview img { max-width: 100%; max-height: 400px; object-fit: contain; }
+
+        /* Tag Cloud */
+        .tag-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .tag-pill { 
+            background: #fff3e0; color: #e67e22; padding: 6px 15px; 
+            border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .tag-pill i { cursor: pointer; opacity: 0.7; }
+        .tag-pill i:hover { opacity: 1; color: #d35400; }
+
+        .btn-save {
+            background: #fd9644; color: white; border: none;
+            padding: 15px; border-radius: 8px; font-weight: 700; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2><i class="fas fa-laugh-squint"></i> Joke Manager</h2>
+
+    <div class="joke-form">
+        <div class="input-group">
+            <label>Joke Title</label>
+            <input type="text" id="jokeTitle" value="English flirting joke">
+        </div>
+
+        <div class="input-group">
+            <label>Image URL (IPFS)</label>
+            <input type="text" id="jokeImage" 
+                   value="https://tragic-amethyst-crayfish.myfilebase.com/ipfs/QmeGyf32RLfAKLKtgbmMkzA2ums1RWn1x5KotTj5tpBwMr" 
+                   oninput="document.getElementById('imgDisplay').src=this.value">
+        </div>
+
+        <div class="joke-preview">
+            <img id="imgDisplay" src="https://tragic-amethyst-crayfish.myfilebase.com/ipfs/QmeGyf32RLfAKLKtgbmMkzA2ums1RWn1x5KotTj5tpBwMr">
+        </div>
+
+        <div class="input-group">
+            <label>Tags</label>
+            <div class="tag-wrap" id="tagCloud">
+                <span class="tag-pill">english <i class="fas fa-times"></i></span>
+                <span class="tag-pill">jokes <i class="fas fa-times"></i></span>
+                <span class="tag-pill">grammar <i class="fas fa-times"></i></span>
+                <span class="tag-pill">flirtig <i class="fas fa-times"></i></span>
+            </div>
+            <input type="text" id="tagInput" placeholder="Add a tag and press Enter..." style="margin-top:10px;">
+        </div>
+
+        <button class="btn-save" onclick="saveJoke()">Update Joke Database</button>
+    </div>
+
+    <script>
+        // Tag addition logic
+        document.getElementById('tagInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && this.value.trim() !== "") {
+                const newTag = document.createElement('span');
+                newTag.className = 'tag-pill';
+                newTag.innerHTML = `${this.value.trim()} <i class="fas fa-times"></i>`;
+                document.getElementById('tagCloud').appendChild(newTag);
+                this.value = "";
+            }
+        });
+
+        // Tag removal logic
+        document.getElementById('tagCloud').addEventListener('click', function(e) {
+            if (e.target.classList.contains('fa-times')) {
+                e.target.parentElement.remove();
+            }
+        });
+
+        function saveJoke() {
+            const tags = Array.from(document.querySelectorAll('.tag-pill')).map(t => t.innerText.trim());
+            const data = {
+                title: document.getElementById('jokeTitle').value,
+                image: document.getElementById('jokeImage').value,
+                tags: tags
+            };
+            console.log("Saving Joke Data:", data);
+            alert("Joke entry updated successfully!");
+        }
+    </script>
+</body>
+</html>
