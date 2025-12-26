@@ -9,6 +9,14 @@ let favorites = JSON.parse(localStorage.getItem('controlFavs')) || [];
 
 const menuData = [
     { 
+        name: "Tasks", 
+        cat: "Datasources", 
+        link: "tasks.html", 
+        icon: "fas fa-tasks", 
+        description: "Track project milestones and daily to-dos.", 
+        color: "#2ecc71" 
+    },
+    { 
         name: "Voice notes", 
         cat: "Datasources", 
         link: "voice-notes.html", 

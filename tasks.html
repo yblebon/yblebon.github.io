@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { padding: 30px; background: #fff; }
+        .task-form { max-width: 650px; display: flex; flex-direction: column; gap: 20px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        label { font-weight: 700; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
+        input, select, textarea { padding: 12px; border: 1px solid #dfe6e9; border-radius: 8px; font-size: 14px; outline: none; }
+        
+        /* Status Colors */
+        #statusSelect.idle { border-left: 5px solid #bdc3c7; }
+        #statusSelect.ongoing { border-left: 5px solid #3498db; }
+        #statusSelect.complete { border-left: 5px solid #2ecc71; }
+        #statusSelect.canceled { border-left: 5px solid #e74c3c; }
+
+        .tag-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px; }
+        .tag-pill { background: #e8f5e9; color: #2e7d32; padding: 5px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .tag-pill i { cursor: pointer; }
+
+        .btn-save { background: #2ecc71; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2><i class="fas fa-check-circle"></i> Task Manager</h2>
+
+    <div class="task-form">
+        <div class="input-group">
+            <label>Description</label>
+            <textarea id="taskDesc" rows="3" placeholder="What needs to be done?"></textarea>
+        </div>
+
+        <div style="display: flex; gap: 15px;">
+            <div class="input-group" style="flex: 1;">
+                <label>Created Date</label>
+                <input type="datetime-local" id="taskDate">
+            </div>
+            <div class="input-group" style="flex: 1;">
+                <label>Expiration Date</label>
+                <input type="datetime-local" id="expDate">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Current Status</label>
+            <select id="statusSelect" onchange="this.className=this.value">
+                <option value="idle">Idle</option>
+                <option value="ongoing">Ongoing</option>
+                <option value="complete">Complete</option>
+                <option value="canceled">Canceled</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Tags</label>
+            <div class="tag-wrap" id="tagCloud"></div>
+            <input type="text" id="tagInput" placeholder="Add tag (e.g. Work, Urgent) and press Enter">
+        </div>
+
+        <button class="btn-save" onclick="saveTask()">Create Task Entry</button>
+    </div>
+
+    <script>
+        // Set current date and time on load
+        window.onload = () => {
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('taskDate').value = now.toISOString().slice(0, 16);
+        };
+
+        // Tag Logic
+        document.getElementById('tagInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && this.value.trim() !== "") {
+                const pill = document.createElement('span');
+                pill.className = 'tag-pill';
+                pill.innerHTML = `${this.value.trim()} <i class="fas fa-times" onclick="this.parentElement.remove()"></i>`;
+                document.getElementById('tagCloud').appendChild(pill);
+                this.value = "";
+            }
+        });
+
+        async function saveTask() {
+            const tags = Array.from(document.querySelectorAll('.tag-pill')).map(t => t.innerText.trim());
+            const data = {
+                description: document.getElementById('taskDesc').value,
+                date: document.getElementById('taskDate').value,
+                expiration_date: document.getElementById('expDate').value,
+                status: document.getElementById('statusSelect').value,
+                tags: tags
+            };
+
+            console.log("Saving Task Data:", data);
+            
+            // Integrate your REST API logic here
+            alert("Task saved locally (check console). Add your fetch() call here.");
+        }
+    </script>
+</body>
+</html>
