@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { padding: 30px; background: #1e1e1e; color: #dcdcdc; font-family: 'Courier New', monospace; }
+        .log-entry { margin-bottom: 8px; border-left: 3px solid #55d1cf; padding-left: 10px; }
+        .timestamp { color: #888; margin-right: 10px; }
+        .status-ok { color: #2ecc71; }
+    </script>
+</head>
+<body>
+    <h3>System Event Log</h3>
+    <div id="logBox">
+        <div class="log-entry"><span class="timestamp">[12:00:01]</span> AUTH_SUCCESS: User admin logged in.</div>
+        <div class="log-entry"><span class="timestamp">[12:05:42]</span> <span class="status-ok">FETCH_OK:</span> config.json loaded successfully.</div>
+    </div>
+</body>
+</html>

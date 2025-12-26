@@ -37,7 +37,8 @@
     
     <main class="admin-split-view">
         <section class="master-pane">
-            <div id="mainContainer" class="grid"></div>
+            <div id="mainContainer" class="grid">
+                </div>
             <div id="noResults" style="display:none; text-align: center; padding: 20px; color: var(--text-muted);">
                 No items match your search.
             </div>
@@ -45,11 +46,11 @@
 
         <section class="detail-pane">
             <div id="detailPlaceholder">
-                <i class="fas fa-arrow-left" style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--accent-teal);"></i>
-                <h3>Control Center Workspace</h3>
-                <p>Select a tool from the sidebar to view details</p>
+                <i class="fas fa-desktop" style="font-size: 3rem; color: #dfe6e9; margin-bottom: 1rem;"></i>
+                <h3>Admin Workspace</h3>
+                <p>Select a module from the sidebar to view data and settings</p>
             </div>
-            <iframe id="detailFrame"></iframe>
+            <iframe id="detailFrame" name="detailFrame"></iframe>
         </section>
     </main>
 
