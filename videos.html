@@ -5,12 +5,12 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { padding: 30px; background: #fff; }
+        body { padding: 30px; background: #fff; font-family: sans-serif; }
         .video-form { max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
         .input-group { display: flex; flex-direction: column; gap: 8px; }
-        label { font-weight: 700; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
+        label { font-weight: 700; color: #636e72; font-size: 0.85rem; text-transform: uppercase; }
         input, select { padding: 12px; border: 1px solid #dfe6e9; border-radius: 8px; font-size: 14px; outline: none; }
-        input:focus { border-color: var(--accent-teal); }
+        input:focus { border-color: #00b894; }
         
         .preview-box {
             background: #000;
@@ -24,7 +24,7 @@
         }
         iframe { width: 100%; height: 100%; border: none; }
         .btn-save {
-            background: var(--accent-teal); color: white; border: none;
+            background: #00b894; color: white; border: none;
             padding: 15px; border-radius: 8px; font-weight: 700; cursor: pointer;
         }
         .btn-save:disabled { background: #ccc; cursor: not-allowed; }
@@ -38,7 +38,7 @@
         <div class="input-group">
             <label>YouTube Video ID</label>
             <input type="text" id="videoId" value="LtnuVxjwoek" oninput="updatePreview()">
-            <small style="color: var(--text-muted)">The unique string at the end of the YouTube URL</small>
+            <small style="color: #636e72">The unique string at the end of the YouTube URL</small>
         </div>
 
         <div class="input-group">
@@ -47,13 +47,14 @@
         </div>
 
         <div class="input-group">
-            <label>Category Tag</label>
-            <select id="videoTag">
-                <option value="Stand Up" selected>Stand Up</option>
-                <option value="Documentary">Documentary</option>
-                <option value="Tutorial">Tutorial</option>
-                <option value="Music">Music</option>
-            </select>
+            <label>Category Tag (Select or type new)</label>
+            <input type="text" id="videoTag" list="tagOptions" placeholder="Select or type a new tag...">
+            <datalist id="tagOptions">
+                <option value="Stand Up">
+                <option value="Documentary">
+                <option value="Tutorial">
+                <option value="Music">
+            </datalist>
         </div>
 
         <label>Live Preview</label>
@@ -78,72 +79,69 @@
         }
 
         async function saveVideo() {
-    const saveBtn = document.getElementById('saveBtn');
-    const statusMsg = document.getElementById('statusMsg');
-    
-    const videoId = document.getElementById('videoId').value;
-    const title = document.getElementById('videoTitle').value;
-    const tag = document.getElementById('videoTag').value;
+            const saveBtn = document.getElementById('saveBtn');
+            const statusMsg = document.getElementById('statusMsg');
+            
+            const videoId = document.getElementById('videoId').value;
+            const title = document.getElementById('videoTitle').value;
+            const tag = document.getElementById('videoTag').value; // Grabs whatever text is in the input
 
-    console.group("🚀 Preparing Video Upload");
-    
-    if (!videoId || !title) {
-        statusMsg.style.color = "red";
-        statusMsg.innerText = "Video ID and Title are required.";
-        console.groupEnd();
-        return;
-    }
+            console.group("🚀 Preparing Video Upload");
+            
+            if (!videoId || !title || !tag) {
+                statusMsg.style.color = "red";
+                statusMsg.innerText = "All fields (ID, Title, and Tag) are required.";
+                console.groupEnd();
+                return;
+            }
 
-    const formData = new FormData();
-    formData.append('id', videoId);
-    formData.append('title', title);
-    formData.append('tags', tag);
+            const formData = new FormData();
+            formData.append('id', videoId);
+            formData.append('title', title);
+            formData.append('tags', tag);
 
-    // ✅ DEBUG: Use this to actually see what is inside the FormData
-    console.log("📝 Inspecting FormData contents:");
-    for (let [key, value] of formData.entries()) {
-        console.log(`   👉 ${key}: ${value}`);
-    }
+            console.log("📝 Inspecting FormData contents:");
+            for (let [key, value] of formData.entries()) {
+                console.log(`   👉 ${key}: ${value}`);
+            }
 
-    saveBtn.disabled = true;
-    saveBtn.innerText = "Uploading...";
+            saveBtn.disabled = true;
+            saveBtn.innerText = "Uploading...";
 
-    try {
-        const token = sessionStorage.getItem('jwt_token');
-        const baseUrl = "https://app-blue-kappa.vercel.app";
-        // Double check if your API expects 'video' or 'videos'
-        const appName = "videos"; 
-        const uploadUrl = `${baseUrl}/api/app/${appName}/upload?encrypt=false`;
+            try {
+                const token = sessionStorage.getItem('jwt_token');
+                const baseUrl = "https://app-blue-kappa.vercel.app";
+                const appName = "videos"; 
+                const uploadUrl = `${baseUrl}/api/app/${appName}/upload?encrypt=false`;
 
-        const response = await fetch(uploadUrl, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-                // DO NOT add Content-Type here
-            },
-            body: formData
-        });
+                const response = await fetch(uploadUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
 
-        if (response.ok) {
-            const result = await response.json();
-            console.log("✅ Success:", result);
-            statusMsg.style.color = "green";
-            statusMsg.innerText = "Video successfully uploaded!";
-        } else {
-            const errorText = await response.text();
-            console.error("❌ Server Error:", errorText);
-            throw new Error(`Upload failed (${response.status})`);
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log("✅ Success:", result);
+                    statusMsg.style.color = "green";
+                    statusMsg.innerText = "Video successfully uploaded!";
+                } else {
+                    const errorText = await response.text();
+                    console.error("❌ Server Error:", errorText);
+                    throw new Error(`Upload failed (${response.status})`);
+                }
+            } catch (error) {
+                console.error("🔥 Fetch Error:", error);
+                statusMsg.style.color = "red";
+                statusMsg.innerText = "Error: " + error.message;
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerText = "Upload Video Metadata";
+                console.groupEnd();
+            }
         }
-    } catch (error) {
-        console.error("🔥 Fetch Error:", error);
-        statusMsg.style.color = "red";
-        statusMsg.innerText = "Error: " + error.message;
-    } finally {
-        saveBtn.disabled = false;
-        saveBtn.innerText = "Upload Video Metadata";
-        console.groupEnd();
-    }
-}
     </script>
 </body>
 </html>
