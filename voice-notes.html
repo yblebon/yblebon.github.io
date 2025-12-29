@@ -17,15 +17,19 @@
         .btn-record.recording { animation: pulse 1.5s infinite; background: #c0392b; }
         .btn-submit { background: #26a69a; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
         
-        /* List Item Styling for New Schema */
         .voice-item { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 10px; margin-bottom: 12px; }
         .voice-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
         .voice-title { font-weight: bold; color: #2c3e50; margin: 0; font-size: 1.1rem; }
         .voice-tags { display: flex; gap: 5px; flex-wrap: wrap; margin: 5px 0; }
         .tag { background: #eceff1; color: #607d8b; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
         .audio-player { width: 100%; height: 35px; margin-top: 10px; }
-        .btn-delete { color: #bdc3c7; background: none; border: none; cursor: pointer; font-size: 1.1rem; }
+        
+        .action-btns { display: flex; gap: 10px; align-items: center; }
+        .btn-delete, .btn-listen { background: none; border: none; cursor: pointer; font-size: 1.1rem; transition: color 0.2s; }
+        .btn-delete { color: #bdc3c7; }
         .btn-delete:hover { color: #e74c3c; }
+        .btn-listen { color: #3498db; }
+        .btn-listen:hover { color: #2980b9; }
         
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); } }
         #statusMsg { font-weight: bold; padding: 10px; margin-top: 10px; }
@@ -67,6 +71,8 @@
         <div id="voiceList">Loading...</div>
     </div>
 
+    <audio id="globalPlayer" style="display:none"></audio>
+
     <script>
         let mediaRecorder, audioChunks = [], finalAudioBlob = null, baseUrl = "";
         const appName = "voices";
@@ -75,6 +81,7 @@
         const audioPlayback = document.getElementById('audioPlayback');
         const voiceList = document.getElementById('voiceList');
         const statusMsg = document.getElementById('statusMsg');
+        const globalPlayer = document.getElementById('globalPlayer');
 
         async function initApp() {
             try {
@@ -99,15 +106,10 @@
                     if (result.data.length === 0) { voiceList.innerHTML = "Empty."; return; }
 
                     voiceList.innerHTML = result.data.map(v => {
-                        // MAP TO NEW ZOD SCHEMA KEYS:
                         const title = v.title || "Untitled";
                         const description = v.desc || "";
                         const tags = Array.isArray(v.tag_list) ? v.tag_list : [];
-                        const audioId = v.attachment_audio;
                         const date = v.recorded_at ? new Date(v.recorded_at).toLocaleDateString() : '';
-
-                        // Construct stream URL for the audio attachment
-                        const streamUrl = `${baseUrl}/api/app/${appName}/file/${audioId}`;
 
                         return `
                             <div class="voice-item">
@@ -116,20 +118,49 @@
                                         <p class="voice-title">${title}</p>
                                         <small style="color:#aaa">${date}</small>
                                     </div>
-                                    <button class="btn-delete" onclick="deleteVoice('${v._id}')">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
+                                    <div class="action-btns">
+                                        <button class="btn-listen" title="Listen" onclick="listenToVoice('${v._id}')">
+                                            <i class="fas fa-play-circle"></i>
+                                        </button>
+                                        <button class="btn-delete" title="Delete" onclick="deleteVoice('${v._id}')">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="voice-tags">
                                     ${tags.map(t => `<span class="tag">#${t}</span>`).join('')}
                                 </div>
                                 ${description ? `<p style="font-size:0.85rem; color:#555">${description}</p>` : ''}
-                                <audio controls class="audio-player" src="${streamUrl}"></audio>
                             </div>
                         `;
                     }).join('');
                 }
             } catch (err) { voiceList.innerHTML = "Error loading list."; }
+        }
+
+        // Function to handle listening to the voice via the specific API endpoint
+        async function listenToVoice(id) {
+            const token = sessionStorage.getItem('jwt_token');
+            const audioUrl = `${baseUrl}/api/app/${appName}/${id}/audio`;
+            
+            try {
+                const response = await fetch(audioUrl, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!response.ok) throw new Error("Could not fetch audio");
+                
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                
+                globalPlayer.src = url;
+                globalPlayer.play();
+                
+                updateStatus("Playing voice note...", "blue");
+            } catch (err) {
+                console.error(err);
+                updateStatus("Error playing audio", "red");
+            }
         }
 
         async function saveNote() {
@@ -145,7 +176,7 @@
 
             const formData = new FormData();
             formData.append('audio', finalAudioBlob, 'recording.mp3');
-            formData.append('name', title); // Server expects 'name', transforms to 'title'
+            formData.append('name', title);
             formData.append('description', desc);
             formData.append('tags', tags);
 
