@@ -3,200 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager - Auto Expiration</title>
+    <title>Task Manager - Parse Response</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --text-muted: #636e72; --border-color: #dfe6e9; }
-        body { padding: 30px; background: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .task-form { max-width: 650px; display: flex; flex-direction: column; gap: 20px; }
-        .input-group { display: flex; flex-direction: column; gap: 8px; }
-        label { font-weight: 700; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
-        input, select, textarea { padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; outline: none; }
-        
-        #statusSelect.idle { border-left: 5px solid #bdc3c7; }
-        #statusSelect.ongoing { border-left: 5px solid #3498db; }
-        #statusSelect.complete { border-left: 5px solid #2ecc71; }
-        #statusSelect.canceled { border-left: 5px solid #e74c3c; }
-
-        .tag-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px; }
-        .tag-pill { background: #e8f5e9; color: #2e7d32; padding: 5px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-        .tag-pill i { cursor: pointer; color: #c0392b; }
-
-        .btn-save { background: #2ecc71; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
-        .btn-save:disabled { background: #95a5a6; cursor: not-allowed; }
-        
-        .row { display: flex; gap: 15px; }
-        .flex-1 { flex: 1; }
+        :root { 
+            --primary: #3498db; --success: #2ecc71; --danger: #e74c3c;
+            --text: #2d3436; --text-muted: #636e72; --bg: #f8f9fa;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
+        .container { max-width: 850px; margin: 0 auto; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .input-group { margin-bottom: 15px; display: flex; flex-direction: column; }
+        .full-width { grid-column: span 2; }
+        label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px; }
+        input, select, textarea { padding: 10px; border: 1px solid #dfe6e9; border-radius: 6px; font-size: 14px; }
+        .btn { padding: 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; }
+        .btn-primary { background: var(--success); color: white; }
+        .tag-pill { background: #ebf5ff; color: #007bff; padding: 4px 10px; border-radius: 20px; font-size: 12px; margin-right: 5px; display: inline-flex; align-items: center; gap: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; font-size: 12px; color: var(--text-muted); border-bottom: 2px solid #eee; padding: 10px; }
+        td { padding: 12px 10px; border-bottom: 1px solid #f1f1f1; font-size: 14px; }
+        #configBadge { font-size: 10px; padding: 2px 6px; border-radius: 4px; background: #eee; margin-left: 10px; vertical-align: middle; }
     </style>
 </head>
 <body>
-    <h2><i class="fas fa-check-circle"></i> Task Manager</h2>
 
-    <div class="task-form">
-        <div class="input-group">
-            <label>Description (Max 100 chars)</label>
-            <textarea id="taskDesc" rows="3" maxlength="100" placeholder="What needs to be done?"></textarea>
-        </div>
+<div class="container">
+    <h2>
+        <i class="fas fa-tasks"></i> Task Dashboard 
+        <span id="configBadge">Loading Host...</span>
+    </h2>
 
-        <div class="row">
-            <div class="input-group flex-1">
+    <div class="card">
+        <div class="grid">
+            <div class="input-group full-width">
+                <label>Task Description</label>
+                <textarea id="taskDesc" rows="2" placeholder="What needs doing?"></textarea>
+            </div>
+            <div class="input-group">
                 <label>Created Date</label>
                 <input type="datetime-local" id="taskDate">
             </div>
-            <div class="input-group flex-1">
-                <label>Quick Expiration</label>
-                <select id="quickExp" onchange="setQuickExpiration(this.value)">
-                    <option value="none">Manual / None</option>
-                    <option value="1">Tomorrow (+1 Day)</option>
-                    <option value="3">Next 3 Days</option>
-                    <option value="7" selected>Default (+7 Days)</option>
-                    <option value="30">Next Month (+30 Days)</option>
+            <div class="input-group">
+                <label>Expiration (Shortcut)</label>
+                <select id="quickExp" onchange="handleQuickExp(this.value)">
+                    <option value="none">Manual</option>
+                    <option value="1">1 Day</option>
+                    <option value="7" selected>7 Days</option>
                 </select>
             </div>
+            <div class="input-group">
+                <label>Deadline</label>
+                <input type="datetime-local" id="expDate">
+            </div>
+            <div class="input-group">
+                <label>Status</label>
+                <select id="statusSelect">
+                    <option value="idle">Idle</option>
+                    <option value="ongoing">Ongoing</option>
+                    <option value="complete">Complete</option>
+                </select>
+            </div>
+            <div class="input-group full-width">
+                <label>Tags (Press Enter)</label>
+                <div id="tagCloud" style="margin-bottom: 8px;"></div>
+                <input type="text" id="tagInput" placeholder="Add a tag...">
+            </div>
         </div>
-
-        <div class="input-group">
-            <label>Expiration Date (Optional)</label>
-            <input type="datetime-local" id="expDate">
-        </div>
-
-        <div class="input-group">
-            <label>Current Status</label>
-            <select id="statusSelect" class="idle" onchange="this.className=this.value">
-                <option value="idle">idle</option>
-                <option value="ongoing">ongoing</option>
-                <option value="complete">complete</option>
-                <option value="canceled">canceled</option>
-            </select>
-        </div>
-
-        <div class="input-group">
-            <label>Tags</label>
-            <div class="tag-wrap" id="tagCloud"></div>
-            <input type="text" id="tagInput" placeholder="Add tag and press Enter">
-        </div>
-
-        <button class="btn-save" onclick="saveTask()">Create Task Entry</button>
+        <button id="saveBtn" class="btn btn-primary" onclick="saveTask()">Create Task</button>
     </div>
 
-    <script>
-        const DEBUG = true;
-        function log(title, data, type = 'info') {
-            if (!DEBUG) return;
-            const colors = { info: '#3498db', success: '#2ecc71', error: '#e74c3c', warn: '#f1c40f' };
-            console.log(`%c[${title}]`, `color: white; background: ${colors[type]}; padding: 2px 5px; border-radius: 3px;`, data);
+    <div class="card">
+        <div style="display:flex; justify-content: space-between; align-items: center;">
+            <label id="taskCountLabel">Available Tasks</label>
+            <button onclick="fetchTasks()" style="background:none; border:none; color:var(--primary); cursor:pointer;"><i class="fas fa-sync"></i> Refresh</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Deadline</th>
+                    <th>Tags</th>
+                </tr>
+            </thead>
+            <tbody id="taskList"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    let API_HOST = "https://app-blue-kappa.vercel.app";
+    
+    const debug = (context, msg, type = 'info') => {
+        const colors = { info: '#3498db', error: '#e74c3c', success: '#2ecc71', warn: '#f39c12' };
+        console.log(`%c[${context}]`, `color:white; background:${colors[type]}; padding:2px 4px;`, msg);
+    };
+
+    async function loadConfig() {
+        try {
+            const response = await fetch('config.json');
+            if (response.ok) {
+                const config = await response.json();
+                API_HOST = config.api_host;
+                document.getElementById('configBadge').innerText = `HOST: ${API_HOST}`;
+                debug('CONFIG', `Loaded host: ${API_HOST}`, 'success');
+            }
+        } catch (err) {
+            document.getElementById('configBadge').innerText = `HOST: ${API_HOST} (Fallback)`;
+            debug('CONFIG', 'Using fallback host', 'warn');
         }
+    }
 
-        let appConfig = null;
+    async function apiRequest(endpoint, method = 'GET', body = null) {
+        const token = sessionStorage.getItem('jwt_token');
+        if (!token) throw new Error("No login token found.");
 
-        window.onload = async () => {
-            // Set current date
-            const now = new Date();
-            const nowString = formatLocalDatetime(now);
-            document.getElementById('taskDate').value = nowString;
+        const options = {
+            method,
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        };
+        if (body) options.body = JSON.stringify(body);
 
-            // Set default +7 days expiration
-            setQuickExpiration(7);
+        const response = await fetch(`${API_HOST}/api/app/tasks${endpoint}`, options);
+        const result = await response.json();
+        
+        if (!response.ok) throw new Error(result.message || `Server error: ${response.status}`);
+        return result;
+    }
 
-            try {
-                const configResponse = await fetch('config.json');
-                if (configResponse.ok) appConfig = await configResponse.json();
-            } catch (err) { log('Config', 'Using defaults', 'warn'); }
+    // --- UPDATED FETCH LOGIC TO PARSE NESTED DATA ---
+    async function fetchTasks() {
+        const listEl = document.getElementById('taskList');
+        const countLabel = document.getElementById('taskCountLabel');
+        listEl.innerHTML = '<tr><td colspan="4">Fetching tasks...</td></tr>';
+
+        try {
+            const res = await apiRequest('/list');
+            
+            // Check for the status pattern you provided
+            if (res.status === 'success' && Array.isArray(res.data)) {
+                const tasks = res.data;
+                countLabel.innerText = `Available Tasks (${res.count || tasks.length})`;
+                
+                listEl.innerHTML = tasks.length ? tasks.map(t => `
+                    <tr>
+                        <td><strong>${t.description || 'No Description'}</strong></td>
+                        <td><small>${t.status || 'idle'}</small></td>
+                        <td>${t.expiration_date ? new Date(t.expiration_date).toLocaleDateString() : '-'}</td>
+                        <td>${(t.tags || []).join(', ')}</td>
+                    </tr>
+                `).join('') : '<tr><td colspan="4">No tasks found in the database.</td></tr>';
+                
+                debug('FETCH', `Successfully parsed ${tasks.length} tasks`, 'success');
+            } else {
+                throw new Error("Invalid response format from server");
+            }
+        } catch (err) {
+            listEl.innerHTML = `<tr><td colspan="4" style="color:var(--danger)">Error: ${err.message}</td></tr>`;
+            debug('FETCH_ERROR', err.message, 'error');
+        }
+    }
+
+    async function saveTask() {
+        const btn = document.getElementById('saveBtn');
+        const payload = {
+            description: document.getElementById('taskDesc').value,
+            date: new Date(document.getElementById('taskDate').value).toISOString(),
+            expiration_date: document.getElementById('expDate').value ? new Date(document.getElementById('expDate').value).toISOString() : null,
+            status: document.getElementById('statusSelect').value,
+            tags: Array.from(document.querySelectorAll('.tag-pill')).map(p => p.textContent.trim())
         };
 
-        // Helper to format date for input (YYYY-MM-DDTHH:mm)
-        function formatLocalDatetime(date) {
-            const tzOffset = date.getTimezoneOffset() * 60000;
-            return new Date(date.getTime() - tzOffset).toISOString().slice(0, 16);
-        }
+        if (!payload.description) return alert("Description is required");
 
-        function setQuickExpiration(days) {
-            if (days === 'none') {
-                document.getElementById('expDate').value = "";
-                return;
-            }
-            const expDate = new Date();
-            expDate.setDate(expDate.getDate() + parseInt(days));
+        try {
+            btn.disabled = true;
+            btn.innerText = "Saving...";
+            await apiRequest('/upload?encrypt=false', 'POST', payload);
             
-            // Format to YYYY-MM-DD and force 16:00
-            const datePart = formatLocalDatetime(expDate).split('T')[0];
-            document.getElementById('expDate').value = `${datePart}T16:00`;
-            log('UI', `Expiration set to +${days} days at 16:00`);
+            document.getElementById('taskDesc').value = '';
+            document.getElementById('tagCloud').innerHTML = '';
+            await fetchTasks();
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "Create Task";
         }
+    }
 
-        // Manual date picker listener
-        document.getElementById('expDate').addEventListener('change', function() {
-            if (this.value) {
-                const datePart = this.value.split('T')[0];
-                this.value = `${datePart}T16:00`;
-                document.getElementById('quickExp').value = "none";
-            }
-        });
+    function handleQuickExp(days) {
+        if (days === 'none') return;
+        const d = new Date();
+        d.setDate(d.getDate() + parseInt(days));
+        d.setHours(16, 0, 0, 0);
+        document.getElementById('expDate').value = d.toISOString().slice(0, 16);
+    }
 
-        // Tag Logic
-        document.getElementById('tagInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && this.value.trim() !== "") {
-                const pill = document.createElement('span');
-                pill.className = 'tag-pill';
-                pill.innerHTML = `${this.value.trim()} <i class="fas fa-times" onclick="this.parentElement.remove()"></i>`;
-                document.getElementById('tagCloud').appendChild(pill);
-                this.value = "";
-            }
-        });
-
-        async function saveTask() {
-            const token = sessionStorage.getItem('jwt_token');
-            if (!token) { alert("Please log in first."); return; }
-
-            const baseUrl = appConfig ? appConfig.api_host : "https://app-blue-kappa.vercel.app";
-            const uploadUrl = `${baseUrl}/api/app/tasks/upload?encrypt=false`;
-
-            const getIsoDate = (id) => {
-                const val = document.getElementById(id).value;
-                if (!val || val.trim() === "") return null;
-                const d = new Date(val);
-                return isNaN(d.getTime()) ? null : d.toISOString();
-            };
-
-            const payload = {
-                date: getIsoDate('taskDate'),
-                expiration_date: getIsoDate('expDate'),
-                description: document.getElementById('taskDesc').value,
-                status: document.getElementById('statusSelect').value,
-                tags: Array.from(document.querySelectorAll('.tag-pill')).map(t => t.innerText.trim())
-            };
-
-            log('Saving Payload', payload);
-
-            const saveBtn = document.querySelector('.btn-save');
-            try {
-                saveBtn.disabled = true;
-                saveBtn.innerText = "Sending...";
-
-                const response = await fetch(uploadUrl, {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const result = await response.json();
-                if (response.ok) {
-                    alert("Task successfully uploaded!");
-                    document.getElementById('taskDesc').value = "";
-                    document.getElementById('tagCloud').innerHTML = "";
-                    // Reset to default expiration
-                    setQuickExpiration(7);
-                    document.getElementById('quickExp').value = "7";
-                } else {
-                    alert(`Error: ${result.message || "Validation Failed"}`);
-                }
-            } catch (error) {
-                alert("Connection failed.");
-            } finally {
-                saveBtn.disabled = false;
-                saveBtn.innerText = "Create Task Entry";
-            }
+    document.getElementById('tagInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && this.value.trim()) {
+            const span = document.createElement('span');
+            span.className = 'tag-pill';
+            span.innerHTML = `${this.value.trim()} <i class="fas fa-times" style="cursor:pointer" onclick="this.parentElement.remove()"></i>`;
+            document.getElementById('tagCloud').appendChild(span);
+            this.value = '';
         }
-    </script>
+    });
+
+    window.onload = async () => {
+        document.getElementById('taskDate').value = new Date().toISOString().slice(0, 16);
+        handleQuickExp(7);
+        await loadConfig();
+        fetchTasks();
+    };
+</script>
 </body>
 </html>
