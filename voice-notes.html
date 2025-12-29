@@ -2,210 +2,204 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Notes Manager</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { padding: 30px; background: #fff; font-family: sans-serif; }
-        .form-container { max-width: 500px; display: flex; flex-direction: column; gap: 15px; }
+        body { padding: 30px; background: #fff; font-family: sans-serif; display: flex; gap: 40px; color: #2c3e50; }
+        .form-container { flex: 1; max-width: 450px; display: flex; flex-direction: column; gap: 15px; }
+        .list-container { flex: 1.2; border-left: 1px solid #eee; padding-left: 30px; min-width: 400px; }
         .field-group { display: flex; flex-direction: column; gap: 5px; }
-        input, textarea { padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
-        
-        .recorder-box { 
-            background: #f8f9fa; padding: 20px; border-radius: 12px; 
-            text-align: center; border: 2px dashed #dfe6e9; 
-        }
-        .btn-record { 
-            background: #e74c3c; color: white; border: none; padding: 10px 20px; 
-            border-radius: 50px; cursor: pointer; font-weight: bold; margin-bottom: 10px;
-        }
+        label { font-weight: bold; font-size: 0.9rem; color: #34495e; }
+        input, textarea { padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; }
+        .recorder-box { background: #f8f9fa; padding: 20px; border-radius: 12px; text-align: center; border: 2px dashed #dfe6e9; }
+        .btn-record { background: #e74c3c; color: white; border: none; padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; }
         .btn-record.recording { animation: pulse 1.5s infinite; background: #c0392b; }
+        .btn-submit { background: #26a69a; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
         
-        .btn-submit {
-            background: #26a69a; color: white; border: none; padding: 15px; 
-            border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px;
-        }
-        .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
-
-        .cover-preview { 
-            width: 100%; height: 150px; background: #eee; 
-            border-radius: 8px; object-fit: cover; display: none; margin-top: 10px;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
+        /* List Item Styling for New Schema */
+        .voice-item { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 10px; margin-bottom: 12px; }
+        .voice-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .voice-title { font-weight: bold; color: #2c3e50; margin: 0; font-size: 1.1rem; }
+        .voice-tags { display: flex; gap: 5px; flex-wrap: wrap; margin: 5px 0; }
+        .tag { background: #eceff1; color: #607d8b; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
+        .audio-player { width: 100%; height: 35px; margin-top: 10px; }
+        .btn-delete { color: #bdc3c7; background: none; border: none; cursor: pointer; font-size: 1.1rem; }
+        .btn-delete:hover { color: #e74c3c; }
+        
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); } }
+        #statusMsg { font-weight: bold; padding: 10px; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <h2><i class="fas fa-microphone"></i> New Voice Note (Debug Mode)</h2>
-    
+
     <div class="form-container">
+        <h2><i class="fas fa-microphone"></i> New Voice Note</h2>
+        
         <div class="field-group">
-            <label class="section-label">Title (name)</label>
-            <input type="text" id="noteTitle" placeholder="Meeting_Note_20240101">
+            <label>Title</label>
+            <input type="text" id="noteTitle" placeholder="e.g., Weekly Sync">
         </div>
 
         <div class="field-group">
-            <label class="section-label">Description</label>
-            <textarea id="noteDesc" rows="3" placeholder="Test upload with tags and cover"></textarea>
+            <label>Description</label>
+            <textarea id="noteDesc" rows="2" placeholder="Summary..."></textarea>
         </div>
 
         <div class="field-group">
-            <label class="section-label">Tags (comma separated)</label>
-            <input type="text" id="noteTags" placeholder="work,meeting,important">
+            <label>Tags (comma separated)</label>
+            <input type="text" id="noteTags" placeholder="work, meeting">
         </div>
 
         <div class="field-group">
-            <label class="section-label">Cover Image</label>
-            <input type="file" id="coverUpload" accept="image/*" onchange="previewImage(event)">
-            <img id="preview" class="cover-preview">
-        </div>
-
-        <div class="field-group">
-            <label class="section-label">Audio Recording</label>
             <div class="recorder-box">
-                <button id="recordBtn" class="btn-record">
-                    <i class="fas fa-circle"></i> Start Recording
-                </button>
-                <div id="audioPlaybackContainer">
-                    <audio id="audioPlayback" controls style="display:none; width: 100%; margin-top: 10px;"></audio>
-                </div>
+                <button id="recordBtn" class="btn-record"><i class="fas fa-circle"></i> Start Recording</button>
+                <audio id="audioPlayback" controls style="display:none; width: 100%; margin-top: 10px;"></audio>
             </div>
         </div>
 
-        <button id="saveBtn" class="btn-submit" onclick="saveNote()">Upload to Server</button>
-        <div id="statusMsg" style="margin-top: 10px; font-size: 0.9rem; text-align: center;"></div>
+        <button id="saveBtn" class="btn-submit" onclick="saveNote()">Upload Note</button>
+        <div id="statusMsg"></div>
+    </div>
+
+    <div class="list-container">
+        <h3><i class="fas fa-list"></i> Your Vault</h3>
+        <div id="voiceList">Loading...</div>
     </div>
 
     <script>
-        let mediaRecorder;
-        let audioChunks = [];
-        let finalAudioBlob = null;
+        let mediaRecorder, audioChunks = [], finalAudioBlob = null, baseUrl = "";
+        const appName = "voices";
+
         const recordBtn = document.getElementById('recordBtn');
         const audioPlayback = document.getElementById('audioPlayback');
+        const voiceList = document.getElementById('voiceList');
+        const statusMsg = document.getElementById('statusMsg');
 
-        function previewImage(event) {
-            console.log("📸 Image selected:", event.target.files[0]);
-            const preview = document.getElementById('preview');
-            preview.src = URL.createObjectURL(event.target.files[0]);
-            preview.style.display = 'block';
+        async function initApp() {
+            try {
+                const res = await fetch('./config.json');
+                const config = await res.json();
+                baseUrl = config.api_host;
+                fetchVoices();
+            } catch (e) { voiceList.innerHTML = "Config error."; }
         }
 
-        recordBtn.addEventListener('click', async () => {
-            if (!mediaRecorder || mediaRecorder.state === 'inactive') {
-                try {
-                    console.log("🎤 Requesting microphone access...");
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    mediaRecorder = new MediaRecorder(stream);
-                    audioChunks = [];
-                    
-                    mediaRecorder.ondataavailable = e => {
-                        audioChunks.push(e.data);
-                        console.log("📦 Audio chunk received:", e.data.size, "bytes");
-                    };
+        async function fetchVoices() {
+            const token = sessionStorage.getItem('jwt_token');
+            if (!token) { voiceList.innerHTML = "Please log in."; return; }
 
-                    mediaRecorder.onstop = () => {
-                        finalAudioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
-                        console.log("💾 Recording stopped. Total Blob size:", finalAudioBlob.size, "bytes");
-                        audioPlayback.src = URL.createObjectURL(finalAudioBlob);
-                        audioPlayback.style.display = 'block';
-                    };
+            try {
+                const response = await fetch(`${baseUrl}/api/app/${appName}/list`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const result = await response.json();
 
-                    mediaRecorder.start();
-                    console.log("⏺ Recording started...");
-                    recordBtn.classList.add('recording');
-                    recordBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Recording';
-                } catch (err) { 
-                    console.error("❌ MediaRecorder Error:", err);
-                    alert("Microphone access denied."); 
+                if (result.status === 'success' && Array.isArray(result.data)) {
+                    if (result.data.length === 0) { voiceList.innerHTML = "Empty."; return; }
+
+                    voiceList.innerHTML = result.data.map(v => {
+                        // MAP TO NEW ZOD SCHEMA KEYS:
+                        const title = v.title || "Untitled";
+                        const description = v.desc || "";
+                        const tags = Array.isArray(v.tag_list) ? v.tag_list : [];
+                        const audioId = v.attachment_audio;
+                        const date = v.recorded_at ? new Date(v.recorded_at).toLocaleDateString() : '';
+
+                        // Construct stream URL for the audio attachment
+                        const streamUrl = `${baseUrl}/api/app/${appName}/file/${audioId}`;
+
+                        return `
+                            <div class="voice-item">
+                                <div class="voice-header">
+                                    <div>
+                                        <p class="voice-title">${title}</p>
+                                        <small style="color:#aaa">${date}</small>
+                                    </div>
+                                    <button class="btn-delete" onclick="deleteVoice('${v._id}')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                                <div class="voice-tags">
+                                    ${tags.map(t => `<span class="tag">#${t}</span>`).join('')}
+                                </div>
+                                ${description ? `<p style="font-size:0.85rem; color:#555">${description}</p>` : ''}
+                                <audio controls class="audio-player" src="${streamUrl}"></audio>
+                            </div>
+                        `;
+                    }).join('');
                 }
-            } else {
-                mediaRecorder.stop();
-                recordBtn.classList.remove('recording');
-                recordBtn.innerHTML = '<i class="fas fa-circle"></i> Start Recording';
-            }
-        });
+            } catch (err) { voiceList.innerHTML = "Error loading list."; }
+        }
 
         async function saveNote() {
-            const saveBtn = document.getElementById('saveBtn');
-            const statusMsg = document.getElementById('statusMsg');
-            
-            const name = document.getElementById('noteTitle').value;
-            const description = document.getElementById('noteDesc').value;
+            const token = sessionStorage.getItem('jwt_token');
+            const title = document.getElementById('noteTitle').value;
+            const desc = document.getElementById('noteDesc').value;
             const tags = document.getElementById('noteTags').value;
-            const coverFile = document.getElementById('coverUpload').files[0];
 
-            console.group("🚀 Preparing Upload");
-            
-            if (!name || !finalAudioBlob) {
-                console.warn("⚠️ Validation failed: Missing name or audio blob");
-                statusMsg.style.color = "red";
-                statusMsg.innerText = "Name and Audio recording are required.";
-                console.groupEnd();
+            if (!title || !finalAudioBlob) {
+                updateStatus("Title and Audio required", "red");
                 return;
             }
 
             const formData = new FormData();
-            formData.append('audio', finalAudioBlob, `recording_${Date.now()}.mp3`);
-            if (coverFile) formData.append('cover', coverFile);
-            formData.append('name', name);
-            formData.append('description', description);
+            formData.append('audio', finalAudioBlob, 'recording.mp3');
+            formData.append('name', title); // Server expects 'name', transforms to 'title'
+            formData.append('description', desc);
             formData.append('tags', tags);
 
-            // Log FormData Contents (Since FormData is opaque)
-            for (let [key, value] of formData.entries()) {
-                console.log(`🔹 FormData Key: ${key} | Value:`, value);
-            }
-
-            saveBtn.disabled = true;
-            saveBtn.innerText = "Uploading...";
-
             try {
-                const token = sessionStorage.getItem('jwt_token');
-                const baseUrl = "https://app-blue-kappa.vercel.app"; 
-                const appName = "voice-notes"; 
-                const uploadUrl = `${baseUrl}/api/app/${appName}/upload?encrypt=false`;
-
-                console.log("🌐 URL:", uploadUrl);
-                console.log("🔑 Auth Token:", token ? "Found (Truncated: " + token.substring(0, 10) + "...)" : "Not Found!");
-
-                const response = await fetch(uploadUrl, {
+                updateStatus("Saving...", "blue");
+                const res = await fetch(`${baseUrl}/api/app/${appName}/upload?encrypt=false`, {
                     method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                        // Note: Browser automatically sets multipart/form-data boundary
-                    },
+                    headers: { 'Authorization': `Bearer ${token}` },
                     body: formData
                 });
 
-                console.group("📡 Server Response");
-                console.log("Status Code:", response.status);
-                console.log("Status Text:", response.statusText);
-
-                if (response.ok) {
-                    const result = await response.json();
-                    console.log("✅ Success Data:", result);
-                    statusMsg.style.color = "green";
-                    statusMsg.innerText = "Upload successful!";
+                if (res.ok) {
+                    updateStatus("Saved!", "green");
+                    document.getElementById('noteTitle').value = "";
+                    fetchVoices();
                 } else {
-                    const errText = await response.text();
-                    console.error("❌ Server Error Payload:", errText);
-                    throw new Error(`Server returned ${response.status}: ${errText}`);
+                    updateStatus("Upload failed", "red");
                 }
-                console.groupEnd();
-
-            } catch (error) {
-                console.error("🔥 Network/Fetch Error:", error);
-                statusMsg.style.color = "red";
-                statusMsg.innerText = "Upload failed: " + error.message;
-            } finally {
-                saveBtn.disabled = false;
-                saveBtn.innerText = "Upload to Server";
-                console.groupEnd();
-            }
+            } catch (e) { updateStatus("Error", "red"); }
         }
+
+        async function deleteVoice(id) {
+            if (!confirm("Delete this?")) return;
+            const token = sessionStorage.getItem('jwt_token');
+            await fetch(`${baseUrl}/api/app/${appName}/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            fetchVoices();
+        }
+
+        recordBtn.onclick = async () => {
+            if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                mediaRecorder.onstop = () => {
+                    finalAudioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
+                    audioPlayback.src = URL.createObjectURL(finalAudioBlob);
+                    audioPlayback.style.display = 'block';
+                };
+                mediaRecorder.start();
+                recordBtn.classList.add('recording');
+                recordBtn.innerHTML = "⏹ Stop";
+            } else {
+                mediaRecorder.stop();
+                recordBtn.classList.remove('recording');
+                recordBtn.innerHTML = "⏺ Record";
+            }
+        };
+
+        function updateStatus(m, c) { statusMsg.innerText = m; statusMsg.style.color = c; }
+        window.onload = initApp;
     </script>
 </body>
 </html>
