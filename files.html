@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Center - File Upload</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-page: #f4f7f6;
+            --bg-card: #ffffff;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --accent: #0984e3;
+            --success: #00b894;
+            --danger: #d63031;
+        }
+
+        body { padding: 30px; background: var(--bg-page); font-family: 'Segoe UI', sans-serif; color: var(--text-main); }
+        
+        .header-container { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px; }
+        .host-badge { background: #dfe6e9; padding: 2px 10px; border-radius: 4px; font-family: monospace; font-size: 0.75rem; margin-left: 10px; }
+
+        /* Upload Zone Styles */
+        .upload-container {
+            background: var(--bg-card); padding: 40px; border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center;
+            border: 2px dashed #b2bec3; transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .upload-container.dragover { border-color: var(--accent); background: #f0f7ff; }
+        .upload-icon { font-size: 3rem; color: var(--accent); margin-bottom: 15px; }
+
+        /* Progress Bar */
+        .progress-wrapper { margin-top: 20px; display: none; }
+        .progress-track { width: 100%; height: 10px; background: #dfe6e9; border-radius: 5px; overflow: hidden; }
+        #progressBar { width: 0%; height: 100%; background: var(--accent); transition: width 0.2s; }
+
+        /* Result List */
+        .file-list { margin-top: 30px; }
+        .file-item {
+            background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-left: 4px solid var(--success); box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .btn-upload { background: var(--accent); color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 15px; }
+        #fileInput { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div>
+            <h2><i class="fas fa-cloud-upload-alt"></i> File Manager <span id="hostBadge" class="host-badge">...</span></h2>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">
+                Server Time: <span id="currentTime" style="font-weight: bold;">--:--:--</span> (CET)
+            </div>
+        </div>
+    </div>
+
+    <div class="upload-container" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <i class="fas fa-file-import upload-icon"></i>
+        <h3>Click or Drag & Drop File</h3>
+        <p style="color: var(--text-muted);">Max file size: 50MB</p>
+        <input type="file" id="fileInput" onchange="handleFiles(this.files)">
+        <button class="btn-upload">Select File</button>
+    </div>
+
+    <div class="progress-wrapper" id="progressWrapper">
+        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px;">
+            <span id="statusText">Uploading...</span>
+            <span id="percentText">0%</span>
+        </div>
+        <div class="progress-track"><div id="progressBar"></div></div>
+    </div>
+
+    <div class="file-list" id="fileList">
+        </div>
+
+    <script>
+        let BASE_URL = "";
+        const cetFormatter = new Intl.DateTimeFormat('en-GB', {
+            timeZone: 'Europe/Paris',
+            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+        });
+
+        // 1. Clock Sync (CET)
+        setInterval(() => {
+            document.getElementById('currentTime').innerText = cetFormatter.format(new Date());
+        }, 1000);
+
+        // 2. Load Config
+        async function loadConfig() {
+            try {
+                const res = await fetch('./config.json');
+                const config = await res.json();
+                BASE_URL = config.api_host;
+                document.getElementById('hostBadge').innerText = BASE_URL;
+            } catch (err) {
+                BASE_URL = "http://localhost:3001";
+            }
+        }
+
+        // 3. Drag and Drop Logic
+        const dropZone = document.getElementById('dropZone');
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); }, false);
+        });
+
+        dropZone.addEventListener('dragover', () => dropZone.classList.add('dragover'));
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', e => {
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        // 4. File Upload Logic
+        async function handleFiles(files) {
+            if (files.length === 0) return;
+            const file = files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const wrapper = document.getElementById('progressWrapper');
+            const bar = document.getElementById('progressBar');
+            const percentText = document.getElementById('percentText');
+            
+            wrapper.style.display = 'block';
+            bar.style.width = '0%';
+
+            try {
+                const token = sessionStorage.getItem('jwt_token');
+                const xhr = new XMLHttpRequest();
+
+                xhr.open('POST', `${BASE_URL}/api/app/files/upload`, true);
+                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+
+                // Track upload progress
+                xhr.upload.onprogress = (e) => {
+                    if (e.lengthComputable) {
+                        const percent = Math.round((e.loaded / e.total) * 100);
+                        bar.style.width = percent + '%';
+                        percentText.innerText = percent + '%';
+                    }
+                };
+
+                xhr.onload = function() {
+                    if (xhr.status === 200 || xhr.status === 201) {
+                        const response = JSON.parse(xhr.responseText);
+                        addFileToList(file.name, response);
+                        document.getElementById('statusText').innerText = "Upload Complete!";
+                    } else {
+                        alert("Upload failed: " + xhr.statusText);
+                    }
+                };
+
+                xhr.onerror = () => alert("Network Error");
+                xhr.send(formData);
+
+            } catch (err) {
+                console.error(err);
+                alert("Upload failed.");
+            }
+        }
+
+        function addFileToList(name, data) {
+            const list = document.getElementById('fileList');
+            const item = document.createElement('div');
+            item.className = 'file-item';
+            item.innerHTML = `
+                <div>
+                    <i class="fas fa-check-circle" style="color:var(--success); margin-right:10px;"></i>
+                    <strong>${name}</strong>
+                    <div style="font-size:0.75rem; color:var(--text-muted)">ID: ${data.id || 'N/A'}</div>
+                </div>
+                <div style="font-size:0.8rem; color:var(--text-muted)">
+                    ${cetFormatter.format(new Date())} CET
+                </div>
+            `;
+            list.prepend(item);
+        }
+
+        loadConfig();
+    </script>
+</body>
+</html>
