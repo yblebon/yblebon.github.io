@@ -6,33 +6,124 @@
     <title>Voice Notes Manager</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { padding: 30px; background: #fff; font-family: sans-serif; display: flex; gap: 40px; color: #2c3e50; }
+        :root {
+            --primary: #26a69a;
+            --danger: #e74c3c;
+            --dark: #2c3e50;
+            --light-bg: #f8f9fa;
+            --border: #dfe6e9;
+        }
+
+        body { 
+            padding: 30px; 
+            background: #fff; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex; 
+            gap: 40px; 
+            color: var(--dark);
+            margin: 0;
+            padding-bottom: 100px; /* Space for persistent player */
+        }
+
+        /* Layout */
         .form-container { flex: 1; max-width: 450px; display: flex; flex-direction: column; gap: 15px; }
         .list-container { flex: 1.2; border-left: 1px solid #eee; padding-left: 30px; min-width: 400px; }
+
+        /* Form Elements */
         .field-group { display: flex; flex-direction: column; gap: 5px; }
         label { font-weight: bold; font-size: 0.9rem; color: #34495e; }
-        input, textarea { padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; }
-        .recorder-box { background: #f8f9fa; padding: 20px; border-radius: 12px; text-align: center; border: 2px dashed #dfe6e9; }
-        .btn-record { background: #e74c3c; color: white; border: none; padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; }
+        input, textarea { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; transition: border 0.2s; }
+        input:focus, textarea:focus { border-color: var(--primary); }
+
+        /* Recorder Box */
+        .recorder-box { 
+            background: var(--light-bg); 
+            padding: 25px; 
+            border-radius: 12px; 
+            text-align: center; 
+            border: 2px dashed var(--border); 
+        }
+        .btn-record { 
+            background: var(--danger); 
+            color: white; 
+            border: none; 
+            padding: 12px 25px; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s;
+        }
+        .btn-record:active { transform: scale(0.95); }
         .btn-record.recording { animation: pulse 1.5s infinite; background: #c0392b; }
-        .btn-submit { background: #26a69a; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+        .btn-submit { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 15px; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        /* Recordings List */
+        .voice-item { 
+            background: #fff; 
+            border: 1px solid #eee; 
+            padding: 18px; 
+            border-radius: 12px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            transition: box-shadow 0.2s;
+        }
+        .voice-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .voice-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .voice-title { font-weight: bold; color: var(--dark); margin: 0; font-size: 1.1rem; }
         
-        .voice-item { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 10px; margin-bottom: 12px; }
-        .voice-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-        .voice-title { font-weight: bold; color: #2c3e50; margin: 0; font-size: 1.1rem; }
-        .voice-tags { display: flex; gap: 5px; flex-wrap: wrap; margin: 5px 0; }
-        .tag { background: #eceff1; color: #607d8b; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
-        .audio-player { width: 100%; height: 35px; margin-top: 10px; }
+        .voice-tags { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+        .tag { background: #e0f2f1; color: #00796b; padding: 3px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
         
-        .action-btns { display: flex; gap: 10px; align-items: center; }
-        .btn-delete, .btn-listen { background: none; border: none; cursor: pointer; font-size: 1.1rem; transition: color 0.2s; }
+        /* Action Buttons */
+        .action-btns { display: flex; gap: 12px; }
+        .btn-delete, .btn-listen { background: none; border: none; cursor: pointer; font-size: 1.2rem; transition: color 0.2s; padding: 5px; }
         .btn-delete { color: #bdc3c7; }
-        .btn-delete:hover { color: #e74c3c; }
+        .btn-delete:hover { color: var(--danger); }
         .btn-listen { color: #3498db; }
         .btn-listen:hover { color: #2980b9; }
+
+        /* Persistent Player Bar */
+        .player-bar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: var(--dark);
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            animation: slideUp 0.3s ease-out;
+        }
+        .player-info { display: flex; align-items: center; gap: 15px; flex: 1; }
+        .player-info span { font-size: 0.9rem; font-weight: 500; }
+        #globalPlayer { flex: 2; height: 35px; filter: invert(100%) hue-rotate(180deg) brightness(1.5); }
+        .btn-close-player { background: none; border: none; color: #aaa; cursor: pointer; font-size: 1.2rem; margin-left: 20px; }
+        .btn-close-player:hover { color: white; }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); opacity: 0.9; } 100% { transform: scale(1); } }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); } }
-        #statusMsg { font-weight: bold; padding: 10px; margin-top: 10px; }
+        #statusMsg { font-weight: bold; min-height: 20px; margin-top: 10px; font-size: 0.85rem; }
+
+        @media (max-width: 850px) {
+            body { flex-direction: column; padding: 20px; }
+            .list-container { border-left: none; padding-left: 0; border-top: 1px solid #eee; padding-top: 30px; }
+        }
     </style>
 </head>
 <body>
@@ -47,41 +138,56 @@
 
         <div class="field-group">
             <label>Description</label>
-            <textarea id="noteDesc" rows="2" placeholder="Summary..."></textarea>
+            <textarea id="noteDesc" rows="2" placeholder="What was discussed?"></textarea>
         </div>
 
         <div class="field-group">
             <label>Tags (comma separated)</label>
-            <input type="text" id="noteTags" placeholder="work, meeting">
+            <input type="text" id="noteTags" placeholder="work, meeting, ideas">
         </div>
 
         <div class="field-group">
             <div class="recorder-box">
-                <button id="recordBtn" class="btn-record"><i class="fas fa-circle"></i> Start Recording</button>
-                <audio id="audioPlayback" controls style="display:none; width: 100%; margin-top: 10px;"></audio>
+                <button id="recordBtn" class="btn-record">
+                    <i class="fas fa-circle"></i> Start Recording
+                </button>
+                <audio id="audioPreview" controls style="display:none; width: 100%; margin-top: 15px;"></audio>
             </div>
         </div>
 
-        <button id="saveBtn" class="btn-submit" onclick="saveNote()">Upload Note</button>
+        <button id="saveBtn" class="btn-submit" onclick="saveNote()">
+            <i class="fas fa-cloud-upload-alt"></i> Upload to Recordings
+        </button>
         <div id="statusMsg"></div>
     </div>
 
     <div class="list-container">
-        <h3><i class="fas fa-list"></i> Your Vault</h3>
-        <div id="voiceList">Loading...</div>
+        <h3><i class="fas fa-layer-group"></i> Your Recordings</h3>
+        <div id="voiceList">Initializing...</div>
     </div>
 
-    <audio id="globalPlayer" style="display:none"></audio>
+    <div id="playerBar" class="player-bar" style="display: none;">
+        <div class="player-info">
+            <i class="fas fa-play-circle"></i>
+            <span id="nowPlayingTitle">Playing...</span>
+        </div>
+        <audio id="globalPlayer" controls></audio>
+        <button class="btn-close-player" onclick="closePlayer()"><i class="fas fa-times"></i></button>
+    </div>
 
     <script>
         let mediaRecorder, audioChunks = [], finalAudioBlob = null, baseUrl = "";
+        let statusTimeout;
         const appName = "voices";
 
+        // Cache DOM
         const recordBtn = document.getElementById('recordBtn');
-        const audioPlayback = document.getElementById('audioPlayback');
+        const audioPreview = document.getElementById('audioPreview');
         const voiceList = document.getElementById('voiceList');
         const statusMsg = document.getElementById('statusMsg');
         const globalPlayer = document.getElementById('globalPlayer');
+        const playerBar = document.getElementById('playerBar');
+        const nowPlayingTitle = document.getElementById('nowPlayingTitle');
 
         async function initApp() {
             try {
@@ -89,12 +195,14 @@
                 const config = await res.json();
                 baseUrl = config.api_host;
                 fetchVoices();
-            } catch (e) { voiceList.innerHTML = "Config error."; }
+            } catch (e) { 
+                voiceList.innerHTML = "<div style='color:red'>Config error. Ensure config.json exists.</div>"; 
+            }
         }
 
         async function fetchVoices() {
             const token = sessionStorage.getItem('jwt_token');
-            if (!token) { voiceList.innerHTML = "Please log in."; return; }
+            if (!token) { voiceList.innerHTML = "<strong>Please log in to view recordings.</strong>"; return; }
 
             try {
                 const response = await fetch(`${baseUrl}/api/app/${appName}/list`, {
@@ -103,23 +211,27 @@
                 const result = await response.json();
 
                 if (result.status === 'success' && Array.isArray(result.data)) {
-                    if (result.data.length === 0) { voiceList.innerHTML = "Empty."; return; }
+                    if (result.data.length === 0) { 
+                        voiceList.innerHTML = "<p style='color:#aaa'>No recordings found. Start by creating one!</p>"; 
+                        return; 
+                    }
 
+                    // Efficient string building to reduce reflows
                     voiceList.innerHTML = result.data.map(v => {
-                        const title = v.title || "Untitled";
-                        const description = v.desc || "";
+                        const title = (v.title || v.name || "Untitled").replace(/'/g, "\\'");
+                        const description = v.description || v.desc || "";
                         const tags = Array.isArray(v.tag_list) ? v.tag_list : [];
-                        const date = v.recorded_at ? new Date(v.recorded_at).toLocaleDateString() : '';
+                        const date = v.recorded_at ? new Date(v.recorded_at).toLocaleDateString() : 'Recently';
 
                         return `
                             <div class="voice-item">
                                 <div class="voice-header">
                                     <div>
-                                        <p class="voice-title">${title}</p>
+                                        <p class="voice-title">${v.title || v.name || "Untitled"}</p>
                                         <small style="color:#aaa">${date}</small>
                                     </div>
                                     <div class="action-btns">
-                                        <button class="btn-listen" title="Listen" onclick="listenToVoice('${v._id}')">
+                                        <button class="btn-listen" title="Listen" onclick="listenToVoice('${v._id}', '${title}')">
                                             <i class="fas fa-play-circle"></i>
                                         </button>
                                         <button class="btn-delete" title="Delete" onclick="deleteVoice('${v._id}')">
@@ -128,49 +240,62 @@
                                     </div>
                                 </div>
                                 <div class="voice-tags">
-                                    ${tags.map(t => `<span class="tag">#${t}</span>`).join('')}
+                                    ${tags.map(t => `<span class="tag">#${t.trim()}</span>`).join('')}
                                 </div>
-                                ${description ? `<p style="font-size:0.85rem; color:#555">${description}</p>` : ''}
+                                ${description ? `<p style="font-size:0.85rem; color:#555; margin-top:8px">${description}</p>` : ''}
                             </div>
                         `;
                     }).join('');
                 }
-            } catch (err) { voiceList.innerHTML = "Error loading list."; }
+            } catch (err) { 
+                voiceList.innerHTML = "Error loading list."; 
+            }
         }
 
-        // Function to handle listening to the voice via the specific API endpoint
-        async function listenToVoice(id) {
+        async function listenToVoice(id, title) {
             const token = sessionStorage.getItem('jwt_token');
             const audioUrl = `${baseUrl}/api/app/${appName}/${id}/audio`;
             
             try {
+                updateStatus("Fetching audio...", "blue");
                 const response = await fetch(audioUrl, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 
-                if (!response.ok) throw new Error("Could not fetch audio");
+                if (!response.ok) throw new Error();
                 
                 const blob = await response.blob();
+                
+                // Cleanup memory
+                if (globalPlayer.src) URL.revokeObjectURL(globalPlayer.src);
+                
                 const url = URL.createObjectURL(blob);
                 
+                playerBar.style.display = 'flex';
+                nowPlayingTitle.innerText = title;
                 globalPlayer.src = url;
                 globalPlayer.play();
                 
-                updateStatus("Playing voice note...", "blue");
+                updateStatus("Playing recording", "blue");
             } catch (err) {
-                console.error(err);
-                updateStatus("Error playing audio", "red");
+                updateStatus("Error fetching audio", "red");
             }
+        }
+
+        function closePlayer() {
+            globalPlayer.pause();
+            playerBar.style.display = 'none';
+            if (globalPlayer.src) URL.revokeObjectURL(globalPlayer.src);
         }
 
         async function saveNote() {
             const token = sessionStorage.getItem('jwt_token');
-            const title = document.getElementById('noteTitle').value;
-            const desc = document.getElementById('noteDesc').value;
+            const title = document.getElementById('noteTitle').value.trim();
+            const desc = document.getElementById('noteDesc').value.trim();
             const tags = document.getElementById('noteTags').value;
 
             if (!title || !finalAudioBlob) {
-                updateStatus("Title and Audio required", "red");
+                updateStatus("Recording and Title are required!", "red");
                 return;
             }
 
@@ -181,7 +306,7 @@
             formData.append('tags', tags);
 
             try {
-                updateStatus("Saving...", "blue");
+                updateStatus("Uploading to cloud...", "blue");
                 const res = await fetch(`${baseUrl}/api/app/${appName}/upload?encrypt=false`, {
                     method: 'POST',
                     headers: { 'Authorization': `Bearer ${token}` },
@@ -189,47 +314,72 @@
                 });
 
                 if (res.ok) {
-                    updateStatus("Saved!", "green");
+                    updateStatus("Recording Saved!", "green");
+                    // Reset UI
                     document.getElementById('noteTitle').value = "";
+                    document.getElementById('noteDesc').value = "";
+                    document.getElementById('noteTags').value = "";
+                    audioPreview.style.display = 'none';
+                    if (audioPreview.src) URL.revokeObjectURL(audioPreview.src);
+                    finalAudioBlob = null;
                     fetchVoices();
                 } else {
-                    updateStatus("Upload failed", "red");
+                    updateStatus("Upload failed. Check connection.", "red");
                 }
-            } catch (e) { updateStatus("Error", "red"); }
+            } catch (e) { updateStatus("Network Error", "red"); }
         }
 
         async function deleteVoice(id) {
-            if (!confirm("Delete this?")) return;
+            if (!confirm("Permanently delete this recording?")) return;
             const token = sessionStorage.getItem('jwt_token');
-            await fetch(`${baseUrl}/api/app/${appName}/${id}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            fetchVoices();
+            try {
+                await fetch(`${baseUrl}/api/app/${appName}/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                fetchVoices();
+            } catch (e) { updateStatus("Delete failed", "red"); }
         }
 
         recordBtn.onclick = async () => {
             if (!mediaRecorder || mediaRecorder.state === 'inactive') {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                audioChunks = [];
-                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-                mediaRecorder.onstop = () => {
-                    finalAudioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
-                    audioPlayback.src = URL.createObjectURL(finalAudioBlob);
-                    audioPlayback.style.display = 'block';
-                };
-                mediaRecorder.start();
-                recordBtn.classList.add('recording');
-                recordBtn.innerHTML = "⏹ Stop";
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+                    
+                    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                    
+                    mediaRecorder.onstop = () => {
+                        // Cleanup: Stop mic tracks to turn off the hardware light
+                        stream.getTracks().forEach(track => track.stop());
+                        
+                        if (audioPreview.src) URL.revokeObjectURL(audioPreview.src);
+                        finalAudioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
+                        audioPreview.src = URL.createObjectURL(finalAudioBlob);
+                        audioPreview.style.display = 'block';
+                    };
+
+                    mediaRecorder.start();
+                    recordBtn.classList.add('recording');
+                    recordBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Recording';
+                } catch (err) {
+                    updateStatus("Microphone access denied", "red");
+                }
             } else {
                 mediaRecorder.stop();
                 recordBtn.classList.remove('recording');
-                recordBtn.innerHTML = "⏺ Record";
+                recordBtn.innerHTML = '<i class="fas fa-circle"></i> Start Recording';
             }
         };
 
-        function updateStatus(m, c) { statusMsg.innerText = m; statusMsg.style.color = c; }
+        function updateStatus(m, c) { 
+            clearTimeout(statusTimeout);
+            statusMsg.innerText = m; 
+            statusMsg.style.color = c === "green" ? "#27ae60" : (c === "blue" ? "#2980b9" : "#e74c3c"); 
+            if (c === "green") statusTimeout = setTimeout(() => statusMsg.innerText = "", 4000);
+        }
+
         window.onload = initApp;
     </script>
 </body>
