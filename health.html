@@ -2,138 +2,262 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Center - System Health</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { padding: 30px; background: #f4f7f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        
-        .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
-        .stat-item { background: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .stat-label { font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold; }
-        .stat-value { font-size: 1.1rem; color: #2d3436; font-family: monospace; }
+        :root {
+            --bg-page: #f4f7f6;
+            --bg-card: #ffffff;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --accent: #0984e3;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+        }
 
+        body { padding: 30px; background: var(--bg-page); font-family: 'Segoe UI', Tahoma, sans-serif; color: var(--text-main); }
+        
+        /* Header & Progress */
+        .header-container { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; }
+        .progress-track { width: 100%; height: 4px; background: #dfe6e9; margin-bottom: 25px; border-radius: 2px; overflow: hidden; }
+        #progressBar { width: 0%; height: 100%; background: var(--accent); transition: width 1s linear; }
+
+        /* Stats Bar */
+        .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+        .stat-item { background: var(--bg-card); padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: bold; margin-bottom: 5px; }
+        .stat-value { font-size: 1.1rem; font-family: 'Courier New', monospace; font-weight: bold; }
+
+        /* Health Cards */
         .health-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .status-card {
-            background: #fff; border-radius: 12px; padding: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-left: 6px solid #dfe6e9;
+        .status-card { 
+            background: var(--bg-card); border-radius: 12px; padding: 20px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-left: 6px solid #dfe6e9; 
             transition: transform 0.2s;
         }
         .status-card:hover { transform: translateY(-3px); }
-        
-        /* Status Colors based on your API "up" string */
-        .status-up { border-left-color: #00b894; }
-        .status-down { border-left-color: #d63031; }
+        .status-up { border-left-color: var(--success); }
+        .status-down { border-left-color: var(--danger); }
 
-        .card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-        .card-head i { font-size: 1.5rem; }
-        .card-head h3 { margin: 0; font-size: 1.1rem; color: #2d3436; }
+        /* Threshold Styles */
+        .text-nominal { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-critical { color: var(--danger); animation: pulse 2s infinite; }
 
-        .indicator { margin-left: auto; font-size: 0.8rem; padding: 4px 10px; border-radius: 20px; font-weight: bold; }
-        .bg-up { background: #e6fffb; color: #00b894; }
-        .bg-down { background: #fff1f0; color: #d63031; }
+        /* Debug Section */
+        #debugToggle { background: none; border: 1px solid #b2bec3; color: var(--text-muted); padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; margin-top: 30px; display: flex; align-items: center; gap: 8px; }
+        #debugToggle:hover { background: #eee; }
+        #rawOutput { display: none; background: #2d3436; color: #fab1a0; padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; overflow-x: auto; margin-top: 10px; white-space: pre-wrap; border: 1px solid #000; }
 
-        .metric-list { font-size: 0.85rem; border-top: 1px solid #f1f2f6; padding-top: 10px; }
-        .metric-row { display: flex; justify-content: space-between; margin-bottom: 6px; color: #636e72; }
-        .metric-val { color: #2d3436; font-weight: 500; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        @keyframes flash { 0% { color: var(--success); } 100% { color: var(--text-muted); } }
+        .flash-update { animation: flash 1s ease-out; }
 
-        .refresh-btn { 
-            background: #0984e3; color: white; border: none; padding: 10px 18px; 
-            border-radius: 6px; cursor: pointer; font-weight: 600; 
-        }
+        .refresh-btn { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .refresh-btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h2><i class="fas fa-microchip"></i> System Health <small id="version" style="font-size: 0.9rem; color: #888;"></small></h2>
+
+    <div class="header-container">
+        <div>
+            <h2><i class="fas fa-heartbeat"></i> System Monitor <small id="version" style="color:#b2bec3; font-weight: normal; font-size: 0.9rem;"></small></h2>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">
+                Last update: <span id="lastCheckTime" style="font-weight: bold;">--:--:--</span> (CET)
+            </div>
+        </div>
         <button class="refresh-btn" onclick="fetchHealth()">
-            <i class="fas fa-sync-alt" id="syncIcon"></i> Refresh
+            <i class="fas fa-sync-alt" id="syncIcon"></i> Refresh Now
         </button>
     </div>
+
+    <div class="progress-track"><div id="progressBar"></div></div>
 
     <div class="stats-bar">
         <div class="stat-item">
             <div class="stat-label">Uptime</div>
-            <div class="stat-value" id="uptime">-</div>
+            <div id="uptime" class="stat-value">-</div>
         </div>
         <div class="stat-item">
-            <div class="stat-label">Memory Used (Heap)</div>
-            <div class="stat-value" id="memory">-</div>
+            <div class="stat-label">Memory Heap</div>
+            <div id="memory" class="stat-value">-</div>
         </div>
         <div class="stat-item">
-            <div class="stat-label">CPU Load (1/5/15m)</div>
-            <div class="stat-value" id="cpu">-</div>
+            <div class="stat-label">CPU Load (1m)</div>
+            <div id="cpu" class="stat-value">-</div>
         </div>
     </div>
 
     <div class="health-grid" id="healthGrid"></div>
 
+    <button id="debugToggle" onclick="toggleDebug()">
+        <i class="fas fa-code"></i> Show Raw JSON Response
+    </button>
+    <pre id="rawOutput"></pre>
+
     <script>
+        let BASE_URL = "";
+        let CHECK_INTERVAL = 30;
+        let secondsPassed = 0;
+        let timer = null;
+
+        // Force CET Timezone formatting
+        const cetFormatter = new Intl.DateTimeFormat('en-GB', {
+            timeZone: 'Europe/Paris',
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+            hour12: false
+        });
+
+        /**
+         * Converts uptime string like "646s" into "10m 46s"
+         */
+        function formatUptime(uptimeStr) {
+            if (!uptimeStr) return "N/A";
+            const totalSeconds = parseInt(uptimeStr.replace(/\D/g, ''));
+            if (isNaN(totalSeconds)) return uptimeStr;
+
+            const h = Math.floor(totalSeconds / 3600);
+            const m = Math.floor((totalSeconds % 3600) / 60);
+            const s = totalSeconds % 60;
+
+            const parts = [];
+            if (h > 0) parts.push(`${h}h`);
+            if (m > 0 || h > 0) parts.push(`${m}m`);
+            parts.push(`${s}s`);
+            return parts.join(' ');
+        }
+
+        /**
+         * logic for color thresholds
+         */
+        function getThresholdClass(val, type) {
+            if (type === 'cpu') {
+                const n = parseFloat(val);
+                return n > 2.0 ? 'text-critical' : (n > 1.0 ? 'text-warning' : 'text-nominal');
+            }
+            if (type === 'latency') {
+                const ms = parseInt(val);
+                return ms > 1500 ? 'text-critical' : (ms > 500 ? 'text-warning' : 'text-nominal');
+            }
+            return '';
+        }
+
+        async function loadConfig() {
+            try {
+                const res = await fetch('./config.json');
+                const config = await res.json();
+                BASE_URL = config.api_host;
+                CHECK_INTERVAL = config.check_interval || 30;
+            } catch (err) {
+                console.error("Config load failed, using fallbacks");
+                BASE_URL = "http://localhost:3001";
+            }
+        }
+
         async function fetchHealth() {
             const syncIcon = document.getElementById('syncIcon');
+            const timeDisplay = document.getElementById('lastCheckTime');
             syncIcon.classList.add('fa-spin');
+            secondsPassed = 0; // Reset countdown
             
             try {
                 const token = sessionStorage.getItem('jwt_token');
-                const baseUrl = "https://app-blue-kappa.vercel.app";
-                const response = await fetch(`${baseUrl}/api/system/health`, {
+                const res = await fetch(`${BASE_URL}/api/system/health`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
-                const data = await response.json();
                 
-                renderSystemStats(data);
-                renderDependencies(data.dependencies);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                
+                // Update Main Stats
+                document.getElementById('version').innerText = `v${data.version}`;
+                document.getElementById('uptime').innerText = formatUptime(data.uptime);
+                document.getElementById('memory').innerText = data.process.memory.heapUsed;
+                
+                const cpuVal = data.process.cpuLoad[0];
+                const cpuEl = document.getElementById('cpu');
+                cpuEl.innerText = cpuVal;
+                cpuEl.className = `stat-value ${getThresholdClass(cpuVal, 'cpu')}`;
+                
+                // Update Time in CET
+                timeDisplay.innerText = cetFormatter.format(new Date());
+                timeDisplay.classList.add('flash-update');
+                setTimeout(() => timeDisplay.classList.remove('flash-update'), 1000);
+
+                // Update Raw Output
+                document.getElementById('rawOutput').innerText = JSON.stringify(data, null, 4);
+                
+                renderDeps(data.dependencies);
             } catch (err) {
-                console.error("Health Check Error:", err);
-                document.getElementById('healthGrid').innerHTML = `<p style="color:red">Failed to reach health API.</p>`;
+                console.error(err);
+                document.getElementById('healthGrid').innerHTML = `
+                    <div class="status-card status-down" style="grid-column: 1/-1; text-align: center;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger); margin-bottom: 10px;"></i>
+                        <h3>API Connection Failed</h3>
+                        <p>${err.message}</p>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Checked at: ${cetFormatter.format(new Date())} CET</p>
+                    </div>`;
             } finally {
                 syncIcon.classList.remove('fa-spin');
             }
         }
 
-        function renderSystemStats(data) {
-            document.getElementById('version').innerText = `v${data.version}`;
-            document.getElementById('uptime').innerText = data.uptime;
-            document.getElementById('memory').innerText = data.process.memory.heapUsed;
-            document.getElementById('cpu').innerText = data.process.cpuLoad.join(' / ');
-        }
-
-        function renderDependencies(deps) {
+        function renderDeps(deps) {
             const grid = document.getElementById('healthGrid');
             grid.innerHTML = '';
+            
+            const icons = { database: 'fa-database', mongodb: 'fa-leaf', externalApi: 'fa-network-wired' };
 
-            const icons = {
-                database: 'fa-database',
-                mongodb: 'fa-leaf',
-                externalApi: 'fa-project-diagram'
-            };
-
-            for (const [key, details] of Object.entries(deps)) {
-                const isUp = details.status === 'up';
-                const card = document.createElement('div');
-                card.className = `status-card ${isUp ? 'status-up' : 'status-down'}`;
+            Object.entries(deps).forEach(([name, details]) => {
+                const isUp = details.status === 'up' || details.status === 'ok';
+                const latClass = getThresholdClass(details.latency, 'latency');
                 
-                let extraMetrics = '';
-                if (details.latency) extraMetrics += `<div class="metric-row"><span>Latency</span><span class="metric-val">${details.latency}</span></div>`;
-                if (details.pool) extraMetrics += `<div class="metric-row"><span>Connections</span><span class="metric-val">${details.pool.totalConnections}</span></div>`;
-
-                card.innerHTML = `
-                    <div class="card-head">
-                        <i class="fas ${icons[key] || 'fa-plug'}"></i>
-                        <h3>${key.charAt(0).toUpperCase() + key.slice(1)}</h3>
-                        <span class="indicator ${isUp ? 'bg-up' : 'bg-down'}">${details.status.toUpperCase()}</span>
-                    </div>
-                    <div class="metric-list">
-                        ${extraMetrics || '<div class="metric-row"><span>Status</span><span class="metric-val">Connected</span></div>'}
-                    </div>
-                `;
-                grid.appendChild(card);
-            }
+                grid.innerHTML += `
+                    <div class="status-card ${isUp ? 'status-up' : 'status-down'}">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+                            <h3 style="margin:0; text-transform:capitalize;"><i class="fas ${icons[name] || 'fa-plug'}" style="margin-right:8px; opacity:0.5;"></i>${name}</h3>
+                            <span style="font-size:0.7rem; padding:4px 12px; border-radius:20px; font-weight:bold; background:${isUp?'#e6fffb':'#fff1f0'}; color:${isUp?'#00b894':'#d63031'}">
+                                ${details.status.toUpperCase()}
+                            </span>
+                        </div>
+                        <div style="font-size: 0.9rem; color: var(--text-muted);">
+                            Latency: <span class="${latClass}" style="font-family:monospace; font-weight:bold;">${details.latency || 'N/A'}</span>
+                        </div>
+                    </div>`;
+            });
         }
 
-        // Initial fetch and auto-refresh
-        fetchHealth();
-        setInterval(fetchHealth, 30000);
+        function toggleDebug() {
+            const out = document.getElementById('rawOutput');
+            const isHidden = out.style.display === 'none' || out.style.display === '';
+            out.style.display = isHidden ? 'block' : 'none';
+            document.getElementById('debugToggle').innerHTML = isHidden ? 
+                '<i class="fas fa-times"></i> Hide Raw JSON Response' : 
+                '<i class="fas fa-code"></i> Show Raw JSON Response';
+        }
+
+        function startTimer() {
+            if (timer) clearInterval(timer);
+            timer = setInterval(() => {
+                secondsPassed++;
+                const progress = (secondsPassed / CHECK_INTERVAL) * 100;
+                document.getElementById('progressBar').style.width = `${progress}%`;
+                
+                if (secondsPassed >= CHECK_INTERVAL) {
+                    fetchHealth();
+                }
+            }, 1000);
+        }
+
+        // Initialize
+        (async () => {
+            await loadConfig();
+            fetchHealth();
+            startTimer();
+        })();
     </script>
 </body>
 </html>
