@@ -64,8 +64,15 @@ const menuData = [
         description: "Manage high-resolution photography and assets.", 
         color: "#686de0" 
     },
+    { 
+        name: "System Health", 
+        cat: "Datasources", 
+        link: "health.html", 
+        icon: "fas fa-terminal", 
+        description: "System healh.", 
+        color: "#2d3436" 
+    },
     { name: "API Feed", cat: "Datasources", link: "api-feed.html", icon: "fas fa-database", description: "JSON configuration viewer.", color: "#5c97bd" },
-    { name: "System Logs", cat: "Datasources", link: "logs.html", icon: "fas fa-terminal", description: "Raw system output.", color: "#2d3436" },
     { name: "Summer 2024", cat: "Albums", link: "album-view.html", icon: "fas fa-images", description: "Holiday photographs storage.", color: "#e67e22" },
     { name: "Theme Toggle", cat: "Settings", link: "theme-settings.html", icon: "fas fa-paint-brush", description: "Switch between UI modes.", color: "#9b59b6" },
     { name: "User Profile", cat: "Settings", link: "profile.html", icon: "fas fa-user-cog", description: "Manage admin account settings.", color: "#26a69a" },
