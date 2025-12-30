@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control Center - Bulk File Upload</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Control Center - File Manager</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -14,32 +13,51 @@
             --text-muted: #636e72;
             --accent: #0984e3;
             --success: #00b894;
+            --danger: #d63031;
+            --debug-bg: #2d3436;
         }
 
         body { padding: 30px; background: var(--bg-page); font-family: 'Segoe UI', sans-serif; color: var(--text-main); }
         .header-container { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px; }
         .host-badge { background: #dfe6e9; padding: 2px 10px; border-radius: 4px; font-family: monospace; font-size: 0.75rem; margin-left: 10px; }
 
-        /* Upload Zone */
         .upload-container {
-            background: var(--bg-card); padding: 40px; border-radius: 12px;
+            background: var(--bg-card); padding: 30px; border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center;
-            border: 2px dashed #b2bec3; transition: all 0.3s ease; cursor: pointer;
+            border: 2px dashed #b2bec3; cursor: pointer; margin-bottom: 20px;
         }
-        .upload-container.dragover { border-color: var(--accent); background: #f0f7ff; }
+
+        /* Queue & List Items */
+        .queue-item, .file-item {
+            background: #fff; border-radius: 8px; padding: 15px; margin-top: 10px;
+            display: grid; grid-template-columns: 80px 1fr 180px auto; gap: 15px; align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
         
-        /* Progress Queue */
-        .queue-container { margin-top: 20px; display: none; }
-        .file-progress-row { background: #fff; padding: 10px; border-radius: 6px; margin-bottom: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .progress-track { width: 100%; height: 6px; background: #dfe6e9; border-radius: 3px; overflow: hidden; margin-top: 5px; }
+        .preview-box { width: 80px; height: 60px; border-radius: 4px; object-fit: cover; background: #eee; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #999; }
+        
+        .rename-input { 
+            width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+            font-size: 0.9rem; margin-bottom: 5px; box-sizing: border-box;
+        }
+
+        .encrypt-opt { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; cursor: pointer; }
+
+        .progress-track { width: 100%; height: 6px; background: #dfe6e9; border-radius: 3px; overflow: hidden; }
         .progress-bar { width: 0%; height: 100%; background: var(--accent); transition: width 0.2s; }
 
-        .file-list { margin-top: 30px; }
-        .file-item {
-            background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 10px;
-            display: flex; justify-content: space-between; align-items: center;
-            border-left: 4px solid var(--success); box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        /* Debug Console */
+        .debug-console {
+            background: var(--debug-bg); color: #00ff00; padding: 15px; border-radius: 8px;
+            font-family: 'Consolas', monospace; font-size: 0.8rem; margin-top: 25px;
+            max-height: 200px; overflow-y: auto; border: 1px solid #000;
         }
+        .debug-entry { margin-bottom: 8px; border-bottom: 1px solid #3d4446; padding-bottom: 4px; }
+        .debug-label { color: #fab1a0; font-weight: bold; }
+
+        .btn-confirm { background: var(--accent); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; width: 100%; }
+        .btn-icon { background: none; border: none; cursor: pointer; color: var(--danger); padding: 5px; }
+
         #fileInput { display: none; }
     </style>
 </head>
@@ -47,37 +65,43 @@
 
     <div class="header-container">
         <div>
-            <h2><i class="fas fa-copy"></i> Multi-File Upload <span id="hostBadge" class="host-badge">...</span></h2>
-            <div style="font-size: 0.85rem; color: var(--text-muted);">
-                Server Time: <span id="currentTime" style="font-weight: bold;">--:--:--</span> (CET)
-            </div>
+            <h2><i class="fas fa-file-export"></i> File Center <span id="hostBadge" class="host-badge">...</span></h2>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">CET Time: <span id="currentTime">--:--:--</span></div>
         </div>
     </div>
 
-    <div class="upload-container" id="dropZone" onclick="document.getElementById('fileInput').click()">
-        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--accent); margin-bottom: 15px;"></i>
-        <h3>Click or Drag & Drop Multiple Files</h3>
-        <p style="color: var(--text-muted);">Maximum 50MB per file</p>
+    <div class="upload-container" onclick="document.getElementById('fileInput').click()">
+        <i class="fas fa-cloud-upload-alt" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 10px;"></i>
+        <h3>Click to Select or Drag Files</h3>
         <input type="file" id="fileInput" multiple onchange="handleFiles(this.files)">
     </div>
 
-    <div class="queue-container" id="queueContainer">
-        <h4 style="margin-bottom: 10px;">Active Uploads</h4>
-        <div id="activeQueue"></div>
+    <div id="activeQueue"></div>
+
+    <div class="debug-console" id="debugConsole">
+        <div class="debug-entry">> System initialized. Ready for upload debug logs.</div>
     </div>
 
-    <div class="file-list" id="fileList"></div>
+    <div class="file-list" id="fileList">
+        <h4 style="margin-top: 30px; margin-bottom: 15px; color: var(--text-muted)">Upload History</h4>
+    </div>
 
     <script>
         let BASE_URL = "";
         const cetFormatter = new Intl.DateTimeFormat('en-GB', {
-            timeZone: 'Europe/Paris',
-            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+            timeZone: 'Europe/Paris', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
         });
 
-        setInterval(() => {
-            document.getElementById('currentTime').innerText = cetFormatter.format(new Date());
-        }, 1000);
+        setInterval(() => document.getElementById('currentTime').innerText = cetFormatter.format(new Date()), 1000);
+
+        function logDebug(title, data) {
+            const consoleEl = document.getElementById('debugConsole');
+            const entry = document.createElement('div');
+            entry.className = 'debug-entry';
+            const timestamp = cetFormatter.format(new Date());
+            entry.innerHTML = `[${timestamp}] <span class="debug-label">${title}:</span> ${typeof data === 'object' ? JSON.stringify(data) : data}`;
+            consoleEl.prepend(entry);
+        }
 
         async function loadConfig() {
             try {
@@ -85,96 +109,113 @@
                 const config = await res.json();
                 BASE_URL = config.api_host;
                 document.getElementById('hostBadge').innerText = BASE_URL;
-            } catch (err) { BASE_URL = "http://localhost:3001"; }
+                logDebug("Config Loaded", { host: BASE_URL, interval: config.check_interval });
+            } catch (e) { 
+                BASE_URL = "http://localhost:3001";
+                logDebug("Config Error", "Using fallback localhost:3001");
+            }
         }
 
-        // Drag & Drop Listeners
-        const dropZone = document.getElementById('dropZone');
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eName => {
-            dropZone.addEventListener(eName, e => { e.preventDefault(); e.stopPropagation(); });
-        });
-        dropZone.addEventListener('dragover', () => dropZone.classList.add('dragover'));
-        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
-        dropZone.addEventListener('drop', e => {
-            dropZone.classList.remove('dragover');
-            handleFiles(e.dataTransfer.files);
-        });
-
-        /**
-         * Iterates through all selected files and uploads them
-         */
         function handleFiles(files) {
-            if (files.length === 0) return;
-            document.getElementById('queueContainer').style.display = 'block';
-
             Array.from(files).forEach(file => {
-                uploadSingleFile(file);
+                const fileId = 'id' + Math.random().toString(36).substr(2, 9);
+                logDebug("File Added", { name: file.name, size: file.size, type: file.type });
+                renderQueueItem(file, fileId);
             });
         }
 
-        function uploadSingleFile(file) {
+        function renderQueueItem(file, fileId) {
             const queue = document.getElementById('activeQueue');
-            const fileId = 'f' + Math.random().toString(36).substr(2, 9);
-            
-            // Create UI row for this specific file
-            const row = document.createElement('div');
-            row.className = 'file-progress-row';
-            row.id = fileId;
-            row.innerHTML = `
-                <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
-                    <span>${file.name}</span>
-                    <span id="pct-${fileId}">0%</span>
+            const item = document.createElement('div');
+            item.className = 'queue-item';
+            item.id = fileId;
+
+            let previewHtml = `<div class="preview-box"><i class="fas fa-file"></i></div>`;
+            if (file.type.startsWith('image/')) {
+                const url = URL.createObjectURL(file);
+                previewHtml = `<img src="${url}" class="preview-box">`;
+            }
+
+            item.innerHTML = `
+                ${previewHtml}
+                <div>
+                    <input type="text" class="rename-input" id="name-${fileId}" value="${file.name}">
+                    <div class="progress-track"><div class="progress-bar" id="bar-${fileId}"></div></div>
                 </div>
-                <div class="progress-track"><div class="progress-bar" id="bar-${fileId}"></div></div>
+                <div>
+                    <label class="encrypt-opt">
+                        <input type="checkbox" id="encrypt-${fileId}"> <i class="fas fa-lock"></i> Encrypt
+                    </label>
+                    <button class="btn-confirm" onclick="uploadFile('${fileId}', '${file.name}')" id="btn-${fileId}">Upload Now</button>
+                </div>
+                <button class="btn-icon" onclick="document.getElementById('${fileId}').remove()"><i class="fas fa-times"></i></button>
             `;
-            queue.prepend(row);
+            queue.prepend(item);
+        }
+
+        async function uploadFile(fileId, originalName) {
+            const fileInput = document.getElementById('fileInput');
+            const files = Array.from(fileInput.files);
+            const file = files.find(f => f.name === originalName);
+            
+            const newName = document.getElementById(`name-${fileId}`).value;
+            const isEncrypted = document.getElementById(`encrypt-${fileId}`).checked;
+            const endpoint = `${BASE_URL}/api/app/files/upload`;
+            const token = sessionStorage.getItem('jwt_token');
+
+            // --- DEBUG LOGGING ---
+            logDebug("SENDING REQUEST", endpoint);
+            logDebug("PAYLOAD", { filename: newName, encrypt: isEncrypted, fileSize: file.size });
+            logDebug("AUTH HEADER", token ? "Bearer " + token.substring(0, 15) + "..." : "MISSING");
+
+            const btn = document.getElementById(`btn-${fileId}`);
+            btn.disabled = true;
 
             const formData = new FormData();
             formData.append('file', file);
+            formData.append('filename', newName);
+            formData.append('encrypt', isEncrypted);
 
             const xhr = new XMLHttpRequest();
-            const token = sessionStorage.getItem('jwt_token');
-
-            xhr.open('POST', `${BASE_URL}/api/app/files/upload`, true);
+            xhr.open('POST', endpoint, true);
             xhr.setRequestHeader('Authorization', `Bearer ${token}`);
 
             xhr.upload.onprogress = (e) => {
                 if (e.lengthComputable) {
-                    const percent = Math.round((e.loaded / e.total) * 100);
-                    document.getElementById(`bar-${fileId}`).style.width = percent + '%';
-                    document.getElementById(`pct-${fileId}`).innerText = percent + '%';
+                    const pct = Math.round((e.loaded / e.total) * 100);
+                    document.getElementById(`bar-${fileId}`).style.width = pct + '%';
                 }
             };
 
             xhr.onload = function() {
+                logDebug("SERVER RESPONSE", { status: xhr.status, body: xhr.responseText });
                 if (xhr.status === 200 || xhr.status === 201) {
-                    const response = JSON.parse(xhr.responseText);
-                    row.remove(); // Remove from active queue
-                    addToFileList(file.name, response);
+                    const data = JSON.parse(xhr.responseText);
+                    document.getElementById(fileId).remove();
+                    addToFileList(newName, data, isEncrypted);
                 } else {
-                    document.getElementById(`bar-${fileId}`).style.background = 'var(--danger)';
-                    document.getElementById(`pct-${fileId}`).innerText = 'Error';
+                    alert("Upload failed. See console for details.");
+                    btn.disabled = false;
                 }
             };
-
+            
+            xhr.onerror = () => logDebug("NETWORK ERROR", "Connection failed or refused.");
             xhr.send(formData);
         }
 
-        function addToFileList(name, data) {
+        function addToFileList(name, data, encrypted) {
             const list = document.getElementById('fileList');
             const item = document.createElement('div');
             item.className = 'file-item';
             item.innerHTML = `
-                <div>
-                    <strong><i class="fas fa-file-alt"></i> ${name}</strong>
-                    <div style="font-size:0.75rem; color:var(--text-muted)">Server ID: ${data.id || 'N/A'}</div>
+                <div class="preview-box"><i class="fas fa-check" style="color:var(--success)"></i></div>
+                <div style="flex-grow:1">
+                    <strong>${name} ${encrypted ? '(Encrypted)' : ''}</strong>
+                    <div style="font-size:0.75rem; color:var(--text-muted)">ID: ${data.id || 'N/A'}</div>
                 </div>
-                <div style="font-size:0.8rem; text-align:right;">
-                    <span style="color:var(--success); font-weight:bold;">Uploaded</span><br>
-                    ${cetFormatter.format(new Date())} CET
-                </div>
+                <button class="btn-icon" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
             `;
-            list.prepend(item);
+            list.after(item);
         }
 
         loadConfig();
