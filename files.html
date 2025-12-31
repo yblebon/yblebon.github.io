@@ -3,222 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control Center - File Manager</title>
+    <title>Control Center - Bulk Upload</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --bg-page: #f4f7f6;
-            --bg-card: #ffffff;
-            --text-main: #2d3436;
-            --text-muted: #636e72;
-            --accent: #0984e3;
-            --success: #00b894;
-            --danger: #d63031;
-            --debug-bg: #2d3436;
+            --bg-page: #f4f7f6; --bg-card: #ffffff; --text-main: #2d3436;
+            --accent: #0984e3; --success: #00b894; --danger: #d63031;
         }
-
-        body { padding: 30px; background: var(--bg-page); font-family: 'Segoe UI', sans-serif; color: var(--text-main); }
-        .header-container { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px; }
-        .host-badge { background: #dfe6e9; padding: 2px 10px; border-radius: 4px; font-family: monospace; font-size: 0.75rem; margin-left: 10px; }
-
+        body { padding: 30px; background: var(--bg-page); font-family: 'Segoe UI', sans-serif; }
+        
         .upload-container {
             background: var(--bg-card); padding: 30px; border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center;
-            border: 2px dashed #b2bec3; cursor: pointer; margin-bottom: 20px;
+            border: 2px dashed #b2bec3; cursor: pointer;
         }
 
-        /* Queue & List Items */
-        .queue-item, .file-item {
-            background: #fff; border-radius: 8px; padding: 15px; margin-top: 10px;
-            display: grid; grid-template-columns: 80px 1fr 180px auto; gap: 15px; align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        .queue-item {
+            background: #fff; padding: 10px; border-radius: 8px; margin-top: 10px;
+            display: grid; grid-template-columns: 50px 1fr 120px 40px; gap: 15px; align-items: center;
+            border: 1px solid #ddd;
         }
+
+        .bulk-actions {
+            margin-top: 20px; display: none; padding: 20px;
+            background: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .btn-primary { background: var(--accent); color: white; border: none; padding: 12px 30px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
+        .progress-track { width: 100%; height: 8px; background: #dfe6e9; border-radius: 4px; overflow: hidden; margin-top: 10px; display: none; }
+        .progress-bar { width: 0%; height: 100%; background: var(--success); transition: width 0.3s; }
         
-        .preview-box { width: 80px; height: 60px; border-radius: 4px; object-fit: cover; background: #eee; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #999; }
-        
-        .rename-input { 
-            width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
-            font-size: 0.9rem; margin-bottom: 5px; box-sizing: border-box;
-        }
-
-        .encrypt-opt { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; cursor: pointer; }
-
-        .progress-track { width: 100%; height: 6px; background: #dfe6e9; border-radius: 3px; overflow: hidden; }
-        .progress-bar { width: 0%; height: 100%; background: var(--accent); transition: width 0.2s; }
-
-        /* Debug Console */
-        .debug-console {
-            background: var(--debug-bg); color: #00ff00; padding: 15px; border-radius: 8px;
-            font-family: 'Consolas', monospace; font-size: 0.8rem; margin-top: 25px;
-            max-height: 200px; overflow-y: auto; border: 1px solid #000;
-        }
-        .debug-entry { margin-bottom: 8px; border-bottom: 1px solid #3d4446; padding-bottom: 4px; }
-        .debug-label { color: #fab1a0; font-weight: bold; }
-
-        .btn-confirm { background: var(--accent); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; width: 100%; }
-        .btn-icon { background: none; border: none; cursor: pointer; color: var(--danger); padding: 5px; }
-
         #fileInput { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="header-container">
-        <div>
-            <h2><i class="fas fa-file-export"></i> File Center <span id="hostBadge" class="host-badge">...</span></h2>
-            <div style="font-size: 0.85rem; color: var(--text-muted);">CET Time: <span id="currentTime">--:--:--</span></div>
+    <h2><i class="fas fa-layer-group"></i> Single-Submit Bulk Upload</h2>
+
+    <div class="upload-container" onclick="document.getElementById('fileInput').click()">
+        <i class="fas fa-plus-circle" style="font-size: 2rem; color: var(--accent);"></i>
+        <h3>Add Files to Queue</h3>
+        <input type="file" id="fileInput" multiple onchange="addToQueue(this.files)">
+    </div>
+
+    <div id="fileQueue"></div>
+
+    <div class="bulk-actions" id="bulkActions">
+        <button class="btn-primary" onclick="uploadEverything()">
+            <i class="fas fa-cloud-upload-alt"></i> Upload All in One Request
+        </button>
+        <div class="progress-track" id="globalProgressTrack">
+            <div class="progress-bar" id="globalProgressBar"></div>
         </div>
     </div>
 
-    <div class="upload-container" onclick="document.getElementById('fileInput').click()">
-        <i class="fas fa-cloud-upload-alt" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 10px;"></i>
-        <h3>Click to Select or Drag Files</h3>
-        <input type="file" id="fileInput" multiple onchange="handleFiles(this.files)">
-    </div>
-
-    <div id="activeQueue"></div>
-
-    <div class="debug-console" id="debugConsole">
-        <div class="debug-entry">> System initialized. Ready for upload debug logs.</div>
-    </div>
-
-    <div class="file-list" id="fileList">
-        <h4 style="margin-top: 30px; margin-bottom: 15px; color: var(--text-muted)">Upload History</h4>
-    </div>
-
     <script>
-        let BASE_URL = "";
-        const cetFormatter = new Intl.DateTimeFormat('en-GB', {
-            timeZone: 'Europe/Paris', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
-        });
+        let BASE_URL = "http://localhost:3001"; // Default
+        let uploadQueue = []; // Holds the actual File objects
 
-        setInterval(() => document.getElementById('currentTime').innerText = cetFormatter.format(new Date()), 1000);
-
-        function logDebug(title, data) {
-            const consoleEl = document.getElementById('debugConsole');
-            const entry = document.createElement('div');
-            entry.className = 'debug-entry';
-            const timestamp = cetFormatter.format(new Date());
-            entry.innerHTML = `[${timestamp}] <span class="debug-label">${title}:</span> ${typeof data === 'object' ? JSON.stringify(data) : data}`;
-            consoleEl.prepend(entry);
-        }
-
-        async function loadConfig() {
-            try {
-                const res = await fetch('./config.json');
-                const config = await res.json();
-                BASE_URL = config.api_host;
-                document.getElementById('hostBadge').innerText = BASE_URL;
-                logDebug("Config Loaded", { host: BASE_URL, interval: config.check_interval });
-            } catch (e) { 
-                BASE_URL = "http://localhost:3001";
-                logDebug("Config Error", "Using fallback localhost:3001");
-            }
-        }
-
-        function handleFiles(files) {
-            Array.from(files).forEach(file => {
-                const fileId = 'id' + Math.random().toString(36).substr(2, 9);
-                logDebug("File Added", { name: file.name, size: file.size, type: file.type });
-                renderQueueItem(file, fileId);
-            });
-        }
-
-        function renderQueueItem(file, fileId) {
-            const queue = document.getElementById('activeQueue');
-            const item = document.createElement('div');
-            item.className = 'queue-item';
-            item.id = fileId;
-
-            let previewHtml = `<div class="preview-box"><i class="fas fa-file"></i></div>`;
-            if (file.type.startsWith('image/')) {
-                const url = URL.createObjectURL(file);
-                previewHtml = `<img src="${url}" class="preview-box">`;
-            }
-
-            item.innerHTML = `
-                ${previewHtml}
-                <div>
-                    <input type="text" class="rename-input" id="name-${fileId}" value="${file.name}">
-                    <div class="progress-track"><div class="progress-bar" id="bar-${fileId}"></div></div>
-                </div>
-                <div>
-                    <label class="encrypt-opt">
-                        <input type="checkbox" id="encrypt-${fileId}"> <i class="fas fa-lock"></i> Encrypt
-                    </label>
-                    <button class="btn-confirm" onclick="uploadFile('${fileId}', '${file.name}')" id="btn-${fileId}">Upload Now</button>
-                </div>
-                <button class="btn-icon" onclick="document.getElementById('${fileId}').remove()"><i class="fas fa-times"></i></button>
-            `;
-            queue.prepend(item);
-        }
-
-        async function uploadFile(fileId, originalName) {
-            const fileInput = document.getElementById('fileInput');
-            const files = Array.from(fileInput.files);
-            const file = files.find(f => f.name === originalName);
+        function addToQueue(files) {
+            const queueList = document.getElementById('fileQueue');
+            const actions = document.getElementById('bulkActions');
             
-            const newName = document.getElementById(`name-${fileId}`).value;
-            const isEncrypted = document.getElementById(`encrypt-${fileId}`).checked;
-            const endpoint = `${BASE_URL}/api/app/files/upload`;
-            const token = sessionStorage.getItem('jwt_token');
+            Array.from(files).forEach(file => {
+                const fileId = Date.now() + Math.random();
+                uploadQueue.push({ id: fileId, file: file });
 
-            // --- DEBUG LOGGING ---
-            logDebug("SENDING REQUEST", endpoint);
-            logDebug("PAYLOAD", { filename: newName, encrypt: isEncrypted, fileSize: file.size });
-            logDebug("AUTH HEADER", token ? "Bearer " + token.substring(0, 15) + "..." : "MISSING");
+                const item = document.createElement('div');
+                item.className = 'queue-item';
+                item.id = `item-${fileId}`;
+                item.innerHTML = `
+                    <i class="fas fa-file"></i>
+                    <input type="text" value="${file.name}" id="name-${fileId}" style="width:90%; padding:5px; border:1px solid #ddd;">
+                    <label><input type="checkbox" id="encrypt-${fileId}"> Encrypt</label>
+                    <button style="color:var(--danger); border:none; background:none; cursor:pointer;" onclick="removeItem(${fileId})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                queueList.appendChild(item);
+            });
 
-            const btn = document.getElementById(`btn-${fileId}`);
-            btn.disabled = true;
+            if (uploadQueue.length > 0) actions.style.display = 'block';
+        }
 
+        function removeItem(id) {
+            uploadQueue = uploadQueue.filter(item => item.id !== id);
+            document.getElementById(`item-${id}`).remove();
+            if (uploadQueue.length === 0) document.getElementById('bulkActions').style.display = 'none';
+        }
+
+        async function uploadEverything() {
             const formData = new FormData();
-            formData.append('file', file);
-            formData.append('filename', newName);
-            formData.append('encrypt', isEncrypted);
+            const endpoint = `${BASE_URL}/api/app/files/upload`;
+            
+            console.group("🚀 Bulk Upload Start");
+            console.log("Target:", endpoint);
+
+            // Add all files to the SAME formData object
+            uploadQueue.forEach(item => {
+                const customName = document.getElementById(`name-${item.id}`).value;
+                const encrypt = document.getElementById(`encrypt-${item.id}`).checked;
+                
+                // Note: The key name 'files' (plural) is often expected by backends for arrays
+                formData.append('files', item.file); 
+                
+                // Metadata arrays (optional, check if your backend supports parallel arrays)
+                formData.append('filenames[]', customName);
+                formData.append('encryptFlags[]', encrypt);
+                
+                console.log(`Adding to payload: ${customName} (Encrypt: ${encrypt})`);
+            });
+            console.groupEnd();
+
+            const track = document.getElementById('globalProgressTrack');
+            const bar = document.getElementById('globalProgressBar');
+            track.style.display = 'block';
 
             const xhr = new XMLHttpRequest();
             xhr.open('POST', endpoint, true);
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt_token')}`);
 
             xhr.upload.onprogress = (e) => {
                 if (e.lengthComputable) {
                     const pct = Math.round((e.loaded / e.total) * 100);
-                    document.getElementById(`bar-${fileId}`).style.width = pct + '%';
+                    bar.style.width = pct + '%';
                 }
             };
 
             xhr.onload = function() {
-                logDebug("SERVER RESPONSE", { status: xhr.status, body: xhr.responseText });
+                console.log("📦 Server Response:", xhr.status, xhr.responseText);
                 if (xhr.status === 200 || xhr.status === 201) {
-                    const data = JSON.parse(xhr.responseText);
-                    document.getElementById(fileId).remove();
-                    addToFileList(newName, data, isEncrypted);
+                    alert("Bulk upload successful!");
+                    location.reload(); 
                 } else {
-                    alert("Upload failed. See console for details.");
-                    btn.disabled = false;
+                    alert("Upload failed. Status: " + xhr.status);
                 }
             };
-            
-            xhr.onerror = () => logDebug("NETWORK ERROR", "Connection failed or refused.");
+
             xhr.send(formData);
         }
-
-        function addToFileList(name, data, encrypted) {
-            const list = document.getElementById('fileList');
-            const item = document.createElement('div');
-            item.className = 'file-item';
-            item.innerHTML = `
-                <div class="preview-box"><i class="fas fa-check" style="color:var(--success)"></i></div>
-                <div style="flex-grow:1">
-                    <strong>${name} ${encrypted ? '(Encrypted)' : ''}</strong>
-                    <div style="font-size:0.75rem; color:var(--text-muted)">ID: ${data.id || 'N/A'}</div>
-                </div>
-                <button class="btn-icon" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
-            `;
-            list.after(item);
-        }
-
-        loadConfig();
     </script>
 </body>
 </html>

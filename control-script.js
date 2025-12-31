@@ -19,7 +19,7 @@ const menuData = [
     { 
         name: "Voice notes", 
         cat: "Datasources", 
-        link: "voice-notes.html", 
+        link: "voices.html", 
         icon: "fas fa-microphone", 
         description: "Record and manage voice memos.", 
         color: "#ff7675" 
