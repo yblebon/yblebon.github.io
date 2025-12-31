@@ -23,7 +23,7 @@
 
         .queue-item, .file-list-item {
             background: #fff; padding: 12px; border-radius: 8px; margin-top: 10px;
-            display: grid; grid-template-columns: 40px 1fr 120px 150px; gap: 15px; align-items: center;
+            display: grid; grid-template-columns: 40px 1fr 120px 180px; gap: 15px; align-items: center;
             border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
@@ -55,10 +55,11 @@
         .btn-nav { padding: 5px 15px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; }
         .btn-nav:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .action-btns { display: flex; gap: 10px; justify-content: flex-end; }
-        .action-btns button { border: none; background: none; cursor: pointer; font-size: 1.1rem; transition: transform 0.2s; }
-        .action-btns button:hover { transform: scale(1.2); }
+        .action-btns { display: flex; gap: 8px; justify-content: flex-end; }
+        .action-btns button { border: 1px solid #eee; background: #f9f9f9; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 1rem; transition: all 0.2s; }
+        .action-btns button:hover { transform: translateY(-2px); background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .btn-dl { color: var(--accent); }
+        .btn-thumb { color: var(--success); font-size: 0.8rem !important; }
         .btn-del { color: var(--danger); }
         
         .file-icon { font-size: 1.4rem; text-align: center; }
@@ -113,6 +114,7 @@
     <div class="pagination-controls" id="paginationControls"></div>
 
     <script>
+        // CONFIGURATION
         let BASE_URL = "http://localhost:3001"; 
         let uploadQueue = []; 
         let currentPage = 1;
@@ -133,8 +135,8 @@
                 'pdf': 'fa-file-pdf', 'doc': 'fa-file-word', 'docx': 'fa-file-word',
                 'xls': 'fa-file-excel', 'xlsx': 'fa-file-excel', 'txt': 'fa-file-lines',
                 'jpg': 'fa-file-image', 'jpeg': 'fa-file-image', 'png': 'fa-file-image',
-                'zip': 'fa-file-zipper', 'rar': 'fa-file-zipper', 'js': 'fa-file-code',
-                'mp4': 'fa-file-video', 'mp3': 'fa-file-audio'
+                'webp': 'fa-file-image', 'zip': 'fa-file-zipper', 'rar': 'fa-file-zipper', 
+                'js': 'fa-file-code', 'mp4': 'fa-file-video', 'mp3': 'fa-file-audio'
             };
             const iconClass = iconMap[ext] || 'fa-file';
             return `<i class="fas ${iconClass} file-icon" style="color: var(--muted)"></i>`;
@@ -165,7 +167,7 @@
                 listContainer.innerHTML = "";
 
                 if (files.length === 0) {
-                    listContainer.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--muted);">No files found matching criteria.</div>`;
+                    listContainer.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--muted);">No files found.</div>`;
                     paginationContainer.innerHTML = "";
                     return;
                 }
@@ -174,21 +176,24 @@
                     const fileId = file._id || file.id;
                     const updateDate = file.updatedAt ? new Date(file.updatedAt).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : '---';
                     const isEnc = file.isEncrypted ? '<span class="badge badge-encrypted"><i class="fas fa-lock"></i> Encrypted</span>' : '<span class="badge">Plain</span>';
-                    
+                    const displayName = file.cleanName || file.originalName;
+
                     const item = document.createElement('div');
                     item.className = 'file-list-item';
                     item.innerHTML = `
                         ${getFileIcon(file.originalName)}
                         <div>
-                            <div style="font-weight:bold">${file.cleanName || file.originalName}</div>
+                            <div style="font-weight:bold">${displayName}</div>
                             <div style="font-size:0.75rem; color:var(--muted)">
-                                Updated: ${updateDate} | Hash: ${file.hash ? file.hash.substring(0,8) : '---'}
+                                Updated: ${updateDate} | ${(file.sizeBytes / 1024).toFixed(1)} KB
                             </div>
                         </div>
                         <div>${isEnc}</div>
                         <div class="action-btns">
-                            <span style="font-size:0.85rem; margin-right:10px;">${(file.sizeBytes / 1024).toFixed(1)} KB</span>
-                            <button class="btn-dl" title="Download" onclick="downloadFile('${fileId}', '${file.cleanName || file.originalName}')">
+                            <button class="btn-thumb" title="Download Thumbnail" onclick="downloadFile('${fileId}', '${displayName}', true)">
+                                <i class="fas fa-image"></i> Thumb
+                            </button>
+                            <button class="btn-dl" title="Download Full File" onclick="downloadFile('${fileId}', '${displayName}', false)">
                                 <i class="fas fa-download"></i>
                             </button>
                             <button class="btn-del" title="Delete" onclick="deleteFile('${fileId}')">
@@ -201,7 +206,7 @@
 
                 renderPagination(nav);
             } catch (err) {
-                listContainer.innerHTML = '<div style="color:var(--danger); text-align:center; padding:20px;">Error loading file list.</div>';
+                listContainer.innerHTML = '<div style="color:var(--danger); text-align:center; padding:20px;">Error loading list. Check console.</div>';
             }
         }
 
@@ -215,23 +220,45 @@
             `;
         }
 
-        // --- DOWNLOAD & DELETE ---
-        async function downloadFile(fileId, filename) {
+        // --- DOWNLOAD HANDLER ---
+        async function downloadFile(fileId, fallbackName, isThumbnail = false) {
             const token = sessionStorage.getItem('jwt_token');
             try {
-                const response = await fetch(`${BASE_URL}/api/app/files/download/${fileId}`, {
+                const url = `${BASE_URL}/api/app/files/download/${fileId}${isThumbnail ? '?thumbnail=true' : ''}`;
+                const response = await fetch(url, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
-                if (!response.ok) throw new Error("Download error");
+
+                if (!response.ok) throw new Error("Download failed on server");
+
+                // Get filename from header or use fallback
+                const disposition = response.headers.get('Content-Disposition');
+                let filename = isThumbnail ? `thumb-${fallbackName}` : fallbackName;
+                
+                if (disposition && disposition.includes('filename=')) {
+                    filename = disposition.split('filename=')[1].split(';')[0].replace(/"/g, '');
+                }
+
                 const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url; a.download = filename;
-                document.body.appendChild(a); a.click();
-                window.URL.revokeObjectURL(url); a.remove();
-            } catch (err) { alert("Download failed."); }
+                const downloadUrl = window.URL.createObjectURL(blob);
+                
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                
+                // Cleanup
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(downloadUrl);
+
+            } catch (err) {
+                console.error("Download Error:", err);
+                alert("Download failed: " + err.message);
+            }
         }
 
+        // --- DELETE HANDLER ---
         async function deleteFile(fileId) {
             if (!confirm("Delete this file permanently?")) return;
             const token = sessionStorage.getItem('jwt_token');
@@ -269,15 +296,17 @@
 
         function removeItem(id) {
             uploadQueue = uploadQueue.filter(i => i.id !== id);
-            document.getElementById(`item-${id}`).remove();
+            const el = document.getElementById(`item-${id}`);
+            if(el) el.remove();
             if (uploadQueue.length === 0) document.getElementById('bulkActions').style.display = 'none';
         }
 
+        // --- UPLOAD EXECUTION ---
         async function uploadEverything() {
             const formData = new FormData();
             const token = sessionStorage.getItem('jwt_token');
             
-            // Re-append items ensuring Metadata arrives BEFORE files for Busboy efficiency
+            // Append metadata first, then files
             uploadQueue.forEach(item => {
                 formData.append('filenames[]', document.getElementById(`name-${item.id}`).value);
                 formData.append('encryptFlags[]', document.getElementById(`encrypt-${item.id}`).checked);
@@ -292,9 +321,13 @@
             const xhr = new XMLHttpRequest();
             xhr.open('POST', `${BASE_URL}/api/app/files/upload`, true);
             xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            
             xhr.upload.onprogress = (e) => {
-                if (e.lengthComputable) bar.style.width = Math.round((e.loaded / e.total) * 100) + '%';
+                if (e.lengthComputable) {
+                    bar.style.width = Math.round((e.loaded / e.total) * 100) + '%';
+                }
             };
+
             xhr.onload = () => {
                 if (xhr.status === 200 || xhr.status === 201) {
                     alert("Bulk upload successful!");
@@ -302,10 +335,14 @@
                     document.getElementById('fileQueue').innerHTML = "";
                     document.getElementById('bulkActions').style.display = 'none';
                     uploadQueue = [];
-                } else { alert("Upload failed."); }
+                } else { 
+                    alert("Upload failed. Check server limits (Max 25MB total)."); 
+                }
                 document.getElementById('globalProgressTrack').style.display = 'none';
                 bar.style.width = '0%';
             };
+
+            xhr.onerror = () => alert("Network error during upload.");
             xhr.send(formData);
         }
     </script>
