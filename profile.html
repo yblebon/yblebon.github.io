@@ -3,204 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Settings - Change Password</title>
+    <title>User Settings & Activity</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --bg-page: #f0f2f5; --bg-card: #ffffff; --text-main: #1c1e21;
-            --accent: #1877f2; --danger: #fa383e; --success: #42b72a; --warning: #f7b731; --muted: #65676b;
+            --bg-page: #f4f7f6; --bg-card: #ffffff; --text-main: #2d3436;
+            --accent: #0984e3; --success: #00b894; --danger: #d63031; --warning: #fdcb6e; --muted: #636e72;
         }
-        body { background: var(--bg-page); font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        body { background: var(--bg-page); font-family: 'Segoe UI', sans-serif; padding: 20px; color: var(--text-main); }
+        .container { max-width: 800px; margin: 0 auto; }
         
-        .profile-container {
-            background: var(--bg-card); padding: 30px; border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 400px;
-        }
-        
-        h2 { margin-bottom: 20px; color: var(--text-main); font-size: 1.5rem; text-align: center; }
+        .card { background: var(--bg-card); padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        h2, h3 { margin-top: 0; display: flex; align-items: center; gap: 10px; }
+
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .info-item label { font-size: 0.8rem; color: var(--muted); display: block; }
+        .info-item span { font-weight: 600; font-size: 1.1rem; }
+
         .form-group { margin-bottom: 15px; position: relative; }
-        label { display: block; margin-bottom: 5px; font-weight: 600; color: var(--muted); font-size: 0.9rem; }
-        
-        /* Password container for the eye icon */
-        .password-input-wrapper { position: relative; display: flex; align-items: center; }
-        .password-input-wrapper input { padding-right: 40px; }
-        .toggle-password {
-            position: absolute; right: 12px; cursor: pointer; color: var(--muted);
-            transition: color 0.2s; z-index: 10;
-        }
-        .toggle-password:hover { color: var(--accent); }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        .password-wrapper { position: relative; }
+        .toggle-pw { position: absolute; right: 10px; top: 10px; cursor: pointer; color: var(--muted); }
 
-        input { 
-            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; 
-            box-sizing: border-box; font-size: 1rem;
-        }
-        input:focus { border-color: var(--accent); outline: none; }
+        .strength-meter { height: 6px; background: #eee; border-radius: 3px; margin: 8px 0; overflow: hidden; }
+        .strength-bar { height: 100%; width: 0%; transition: 0.3s; }
 
-        .strength-wrapper { margin-top: 8px; margin-bottom: 15px; }
-        .strength-bar-container { height: 6px; background: #eee; border-radius: 3px; overflow: hidden; margin-bottom: 4px; }
-        .strength-bar { height: 100%; width: 0%; transition: all 0.3s ease; }
-        #strengthText { font-size: 0.75rem; font-weight: bold; color: var(--muted); }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        th { text-align: left; color: var(--muted); border-bottom: 2px solid #eee; padding: 10px; }
+        td { padding: 10px; border-bottom: 1px solid #eee; }
+        .badge { padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
+        .badge-info { background: #e3f2fd; color: #0984e3; }
 
-        .btn-update {
-            width: 100%; padding: 12px; background: var(--accent); color: white;
-            border: none; border-radius: 6px; cursor: pointer; font-weight: bold;
-            font-size: 1rem; margin-top: 10px; transition: background 0.2s;
-        }
-        .btn-update:hover { background: #166fe5; }
-        .btn-update:disabled { background: #ccc; cursor: not-allowed; }
-
-        .alert { padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 0.85rem; display: none; }
-        .alert-error { background: #ffebe9; color: var(--danger); border: 1px solid var(--danger); }
-        .alert-success { background: #e7f3ff; color: var(--accent); border: 1px solid var(--accent); }
-
-        .back-nav { display: block; text-align: center; margin-top: 20px; text-decoration: none; color: var(--muted); font-size: 0.9rem; }
+        .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-primary { background: var(--accent); color: white; width: 100%; }
+        .btn-primary:hover { filter: brightness(1.1); }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+        .alert { padding: 10px; border-radius: 6px; margin-bottom: 15px; display: none; font-size: 0.85rem; }
     </style>
 </head>
 <body>
 
-    <div class="profile-container">
-        <h2><i class="fas fa-lock"></i> Password Security</h2>
-        
-        <div id="alertBox" class="alert"></div>
+<div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2><i class="fas fa-user-circle"></i> Account Settings</h2>
+        <a href="index.html" style="text-decoration: none; color: var(--accent); font-size: 0.9rem;"><i class="fas fa-arrow-left"></i> Gallery</a>
+    </div>
 
-        <form id="changePasswordForm">
+    <div class="card">
+        <h3><i class="fas fa-id-card"></i> Profile Overview</h3>
+        <div class="info-grid" id="profileInfo">
+            <div class="info-item"><label>Username</label><span id="u_name">Loading...</span></div>
+            <div class="info-item"><label>Account Role</label><span id="u_role">Loading...</span></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3><i class="fas fa-shield-alt"></i> Security</h3>
+        <div id="pwAlert" class="alert"></div>
+        <form id="pwForm">
             <div class="form-group">
                 <label>Current Password</label>
-                <div class="password-input-wrapper">
-                    <input type="password" id="currentPassword" required>
-                    <i class="fas fa-eye toggle-password" onclick="toggleVisibility('currentPassword', this)"></i>
+                <div class="password-wrapper">
+                    <input type="password" id="currPw" required>
+                    <i class="fas fa-eye toggle-pw" onclick="toggleVisibility('currPw', this)"></i>
                 </div>
             </div>
-            
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
 
             <div class="form-group">
                 <label>New Password</label>
-                <div class="password-input-wrapper">
-                    <input type="password" id="newPassword" required oninput="checkStrength(this.value)">
-                    <i class="fas fa-eye toggle-password" onclick="toggleVisibility('newPassword', this)"></i>
+                <div class="password-wrapper">
+                    <input type="password" id="newPw" required oninput="checkStrength(this.value); validateMatch();">
+                    <i class="fas fa-eye toggle-pw" onclick="toggleVisibility('newPw', this)"></i>
                 </div>
-                
-                <div class="strength-wrapper">
-                    <div class="strength-bar-container">
-                        <div id="strengthBar" class="strength-bar"></div>
-                    </div>
-                    <span id="strengthText">Strength: Too Short</span>
-                </div>
+                <div class="strength-meter"><div id="sBar" class="strength-bar"></div></div>
+                <small id="sText" style="color: var(--muted);">Strength: Too short</small>
             </div>
 
             <div class="form-group">
                 <label>Confirm New Password</label>
-                <div class="password-input-wrapper">
-                    <input type="password" id="confirmPassword" required>
-                    <i class="fas fa-eye toggle-password" onclick="toggleVisibility('confirmPassword', this)"></i>
+                <div class="password-wrapper">
+                    <input type="password" id="confirmPw" required oninput="validateMatch()">
+                    <i class="fas fa-eye toggle-pw" onclick="toggleVisibility('confirmPw', this)"></i>
                 </div>
+                <small id="matchText" style="color: var(--danger); display: none;">Passwords do not match</small>
             </div>
 
-            <button type="submit" class="btn-update" id="submitBtn">Update Password</button>
+            <button type="submit" class="btn btn-primary" id="pwBtn">Update Password</button>
         </form>
-
-        <a href="index.html" class="back-nav"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
     </div>
 
-    <script>
-        let CHANGE_PW_URL = "";
+    <div class="card">
+        <h3><i class="fas fa-history"></i> Recent Activity</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>IP Address</th>
+                    <th>Date/Time</th>
+                </tr>
+            </thead>
+            <tbody id="activityLog">
+                <tr><td colspan="3" style="text-align:center;">Loading activity logs...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-        async function initConfig() {
-            try {
-                const response = await fetch('config.json');
-                const config = await response.json();
-                CHANGE_PW_URL = `${config.api_host || "http://localhost:3001"}/api/auth/change-password`;
-            } catch (err) { showAlert("Error loading config.", "error"); }
-        }
+<script>
+    let API_BASE = ""; 
+    const token = sessionStorage.getItem('jwt_token');
 
-        // --- NEW: TOGGLE VISIBILITY ---
-        function toggleVisibility(inputId, iconEl) {
-            const input = document.getElementById(inputId);
-            if (input.type === "password") {
-                input.type = "text";
-                iconEl.classList.replace('fa-eye', 'fa-eye-slash');
-            } else {
-                input.type = "password";
-                iconEl.classList.replace('fa-eye-slash', 'fa-eye');
-            }
-        }
-
-        function checkStrength(pw) {
-            const bar = document.getElementById('strengthBar');
-            const text = document.getElementById('strengthText');
-            let score = 0;
-
-            if (!pw) {
-                bar.style.width = '0%';
-                text.innerText = 'Strength: Empty';
-                return;
-            }
-
-            if (pw.length >= 8) score++;
-            if (/[0-9]/.test(pw)) score++;
-            if (/[A-Z]/.test(pw)) score++;
-            if (/[^A-Za-z0-9]/.test(pw)) score++;
-
-            const states = [
-                { color: '#fa383e', width: '25%', label: 'Weak' },
-                { color: '#f7b731', width: '50%', label: 'Fair' },
-                { color: '#1877f2', width: '75%', label: 'Good' },
-                { color: '#42b72a', width: '100%', label: 'Strong' }
-            ];
-
-            const state = states[score - 1] || { color: '#eee', width: '10%', label: 'Too Short' };
+    async function init() {
+        try {
+            const res = await fetch('config.json');
+            const config = await res.json();
+            API_BASE = `${config.api_host || "http://localhost:3001"}/api/user`;
             
-            bar.style.width = state.width;
-            bar.style.backgroundColor = state.color;
-            text.innerText = `Strength: ${state.label}`;
-            text.style.color = state.color;
+            if (!token) { window.location.href = 'login.html'; return; }
+            
+            loadProfile();
+            loadActivity();
+        } catch (e) { console.error("Config load failed"); }
+    }
+
+    async function loadProfile() {
+        const res = await fetch(`${API_BASE}/profile`, { headers: { 'Authorization': `Bearer ${token}` } });
+        const result = await res.json();
+        if (result.success) {
+            document.getElementById('u_name').innerText = result.data.username;
+            document.getElementById('u_role').innerText = result.data.role_name || 'User';
+        }
+    }
+
+    async function loadActivity() {
+        const res = await fetch(`${API_BASE}/activity`, { headers: { 'Authorization': `Bearer ${token}` } });
+        const result = await res.json();
+        const tbody = document.getElementById('activityLog');
+        if (result.success && result.data.length > 0) {
+            tbody.innerHTML = result.data.map(log => `
+                <tr>
+                    <td><span class="badge badge-info">${log.action || 'Login'}</span></td>
+                    <td>${log.ip_address || 'N/A'}</td>
+                    <td>${new Date(log.created_at).toLocaleString()}</td>
+                </tr>
+            `).join('');
+        } else {
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No recent activity.</td></tr>';
+        }
+    }
+
+    function toggleVisibility(id, el) {
+        const input = document.getElementById(id);
+        const isPw = input.type === 'password';
+        input.type = isPw ? 'text' : 'password';
+        el.className = isPw ? 'fas fa-eye-slash toggle-pw' : 'fas fa-eye toggle-pw';
+    }
+
+    function checkStrength(pw) {
+        const bar = document.getElementById('sBar');
+        const txt = document.getElementById('sText');
+        let score = 0;
+        if (pw.length >= 8) score++;
+        if (/[0-9]/.test(pw)) score++;
+        if (/[A-Z]/.test(pw)) score++;
+        if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+        const levels = [
+            { c: '#ff4757', w: '25%', t: 'Weak' },
+            { c: '#ffa502', w: '50%', t: 'Fair' },
+            { c: '#1e90ff', w: '75%', t: 'Good' },
+            { c: '#2ed573', w: '100%', t: 'Strong' }
+        ];
+        const lvl = levels[score - 1] || { c: '#eee', w: '10%', t: 'Too short' };
+        bar.style.backgroundColor = lvl.c;
+        bar.style.width = lvl.w;
+        txt.innerText = `Strength: ${lvl.t}`;
+        txt.style.color = lvl.c;
+    }
+
+    // New helper: Real-time match validation
+    function validateMatch() {
+        const newPw = document.getElementById('newPw').value;
+        const confirmPw = document.getElementById('confirmPw').value;
+        const matchText = document.getElementById('matchText');
+        const btn = document.getElementById('pwBtn');
+
+        if (confirmPw.length > 0 && newPw !== confirmPw) {
+            matchText.style.display = 'block';
+            btn.disabled = true;
+        } else {
+            matchText.style.display = 'none';
+            btn.disabled = false;
+        }
+    }
+
+    document.getElementById('pwForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('pwBtn');
+        const alert = document.getElementById('pwAlert');
+        const newPw = document.getElementById('newPw').value;
+        const confirmPw = document.getElementById('confirmPw').value;
+
+        // Final safety check
+        if (newPw !== confirmPw) {
+            alert.innerText = "New passwords do not match.";
+            alert.style.display = 'block';
+            alert.className = 'alert alert-error';
+            alert.style.backgroundColor = '#ffebe9';
+            return;
         }
 
-        function showAlert(msg, type) {
-            const box = document.getElementById('alertBox');
-            box.innerText = msg; box.style.display = 'block';
-            box.className = `alert alert-${type === 'error' ? 'error' : 'success'}`;
-        }
+        btn.disabled = true;
 
-        document.getElementById('changePasswordForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const currentPassword = document.getElementById('currentPassword').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-
-            if (newPassword !== confirmPassword) {
-                showAlert("Passwords do not match.", "error");
-                return;
+        try {
+            const res = await fetch(`${API_BASE}/change-password`, {
+                method: 'PATCH',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    currentPassword: document.getElementById('currPw').value,
+                    newPassword: newPw
+                })
+            });
+            const result = await res.json();
+            alert.style.display = 'block';
+            alert.className = `alert ${result.success ? 'alert-success' : 'alert-error'}`;
+            alert.style.backgroundColor = result.success ? '#e7f3ff' : '#ffebe9';
+            alert.innerText = result.message;
+            if (result.success) {
+                e.target.reset();
+                checkStrength("");
             }
+        } catch (err) {
+            console.error(err);
+        } finally { btn.disabled = false; }
+    };
 
-            const token = sessionStorage.getItem('jwt_token');
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-
-            try {
-                const res = await fetch(CHANGE_PW_URL, {
-                    method: 'PATCH',
-                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ currentPassword, newPassword })
-                });
-
-                const result = await res.json();
-                if (res.ok) {
-                    showAlert("Success!", "success");
-                    e.target.reset();
-                    checkStrength("");
-                } else {
-                    showAlert(result.message || "Error", "error");
-                }
-            } catch (err) {
-                showAlert("Network Error", "error");
-            } finally {
-                submitBtn.disabled = false;
-            }
-        };
-
-        window.onload = initConfig;
-    </script>
+    window.onload = init;
+</script>
 </body>
 </html>
