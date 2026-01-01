@@ -3,119 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Management Console</title>
+    <title>Admin Hub | Management</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --primary: #2c3e50; --accent: #3498db; --success: #27ae60; 
             --danger: #e74c3c; --warning: #f39c12; --light: #ecf0f1; --muted: #95a5a6;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; margin: 0; display: flex; flex-direction: column; height: 100vh; color: var(--primary); }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; display: flex; flex-direction: column; height: 100vh; color: var(--primary); }
         
-        header { background: var(--primary); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-        main { display: grid; grid-template-columns: 1fr 350px; gap: 20px; padding: 20px; flex: 1; overflow: hidden; }
-        
-        /* Stats Bar */
-        .stats-bar { display: flex; gap: 20px; margin-bottom: 20px; padding: 0 20px; }
-        .stat-card { background: white; padding: 15px 25px; border-radius: 8px; flex: 1; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 15px; }
-        .stat-card i { font-size: 1.5rem; color: var(--accent); }
-        .stat-val { font-size: 1.4rem; font-weight: bold; display: block; }
-        .stat-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; }
+        header { background: var(--primary); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .tab-bar { background: white; display: flex; padding: 0 20px; border-bottom: 1px solid #ddd; }
+        .tab { padding: 15px 25px; cursor: pointer; border-bottom: 3px solid transparent; font-weight: 600; color: var(--muted); transition: 0.3s; }
+        .tab.active { border-color: var(--accent); color: var(--accent); background: #fcfcfc; }
 
-        .card { background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; overflow: hidden; }
+        main { padding: 20px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
+        .hidden { display: none !important; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        .card { background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
         .card-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-        .scroll-area { flex: 1; overflow-y: auto; }
-
+        
         table { width: 100%; border-collapse: collapse; }
         th { text-align: left; background: #fdfdfd; padding: 12px 20px; font-size: 0.75rem; color: var(--muted); text-transform: uppercase; border-bottom: 2px solid #eee; }
-        td { padding: 12px 20px; border-bottom: 1px solid #eee; }
-        tr:hover { background: #f1f7ff; cursor: pointer; }
-        .active-row { background: #e1f0ff !important; border-left: 4px solid var(--accent); }
+        td { padding: 12px 20px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-align: middle; }
 
-        .status-pill { padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
-        .status-active { background: #d4edda; color: var(--success); }
-        .status-inactive { background: #f8d7da; color: var(--danger); }
-        
-        .btn { border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; transition: 0.2s; }
-        .btn-reset { background: var(--warning); color: white; }
-        .btn-toggle { background: var(--light); color: var(--primary); }
+        .btn { border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; transition: 0.2s; font-size: 0.8rem; font-weight: 600; }
+        .btn-primary { background: var(--accent); color: white; }
         .btn-danger { background: var(--danger); color: white; }
+        .btn-toggle { background: var(--light); color: var(--primary); }
+        
+        select, input { padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; outline: none; }
+        select:focus { border-color: var(--accent); }
 
-        /* Custom Modal System */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
-        .modal-content { background: white; padding: 25px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
-        .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background: white; padding: 25px; border-radius: 12px; width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="display:flex; align-items:center; gap:15px;">
-        <i class="fas fa-user-shield fa-2x"></i>
-        <h1 style="margin:0; font-size: 1.4rem;">Admin Dashboard</h1>
+    <div style="display:flex; align-items:center; gap:12px;">
+        <i class="fas fa-shield-alt fa-lg"></i>
+        <h2 style="margin:0; font-weight: 500;">Admin Control Center</h2>
     </div>
-    <button class="btn" onclick="location.href='index.html'" style="background:rgba(255,255,255,0.1); color:white;">Exit Admin</button>
+    <button class="btn btn-toggle" onclick="location.href='index.html'">Return to Gallery</button>
 </header>
 
-<div class="stats-bar">
-    <div class="stat-card">
-        <i class="fas fa-users"></i>
-        <div><span class="stat-val" id="totalUsers">0</span><span class="stat-label">Total Users</span></div>
-    </div>
-    <div class="stat-card">
-        <i class="fas fa-check-circle" style="color: var(--success);"></i>
-        <div><span class="stat-val" id="activeUsers">0</span><span class="stat-label">Active</span></div>
-    </div>
-    <div class="stat-card">
-        <i class="fas fa-history" style="color: var(--warning);"></i>
-        <div><span class="stat-val" id="totalLogs">0</span><span class="stat-label">Actions Logged</span></div>
-    </div>
+<div class="tab-bar">
+    <div class="tab active" onclick="switchTab('users')"><i class="fas fa-users-cog"></i> Users & Roles</div>
+    <div class="tab" onclick="switchTab('apps')"><i class="fas fa-th-large"></i> App Permissions</div>
 </div>
 
-<main>
-    <section class="card">
+<main id="userTab">
+    <div class="card">
         <div class="card-header">
-            <h3>User Directory</h3>
-            <button class="btn btn-toggle" onclick="fetchUsers()"><i class="fas fa-sync"></i> Refresh</button>
+            <h3>User Management</h3>
+            <button class="btn btn-toggle" onclick="loadUserData()"><i class="fas fa-sync"></i> Refresh List</button>
         </div>
-        <div class="scroll-area">
+        <div style="overflow-x: auto;">
             <table>
                 <thead>
-                    <tr><th>User</th><th>Status</th><th>Actions</th></tr>
+                    <tr>
+                        <th>User</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Security</th>
+                        <th>Actions</th>
+                    </tr>
                 </thead>
                 <tbody id="userListBody"></tbody>
             </table>
         </div>
-    </section>
-
-    <section class="card">
-        <div class="card-header"><h3>Recent Activity</h3></div>
-        <div class="scroll-area" id="logsContainer">
-            <div style="padding:40px; text-align:center; color:var(--muted);">Select a user to view logs</div>
-        </div>
-    </section>
+    </div>
 </main>
 
-<div id="confirmModal" class="modal">
+<main id="appTab" class="hidden">
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header">
+                <h3>App Registry</h3>
+                <div style="display:flex; gap:8px;">
+                    <input type="text" id="newAppName" placeholder="app_name">
+                    <button class="btn btn-primary" onclick="handleAddApp()">Add</button>
+                </div>
+            </div>
+            <table id="appsTable">
+                <thead><tr><th>Name</th><th>Created</th></tr></thead>
+                <tbody id="appsListBody"></tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Access Matrix</h3>
+                <button class="btn btn-primary" onclick="openAssignModal()">Grant Access</button>
+            </div>
+            <table id="permsTable">
+                <thead><tr><th>Role</th><th>App</th><th>Action</th></tr></thead>
+                <tbody id="permsListBody"></tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<div id="pwModal" class="modal">
     <div class="modal-content">
-        <h3 id="confirmTitle">Confirm Action</h3>
-        <p id="confirmMessage"></p>
-        <div class="modal-footer">
+        <h3>Force Password Reset</h3>
+        <p id="pwTarget" style="color:var(--muted);"></p>
+        <input type="password" id="newPw" placeholder="New Password (min 8 chars)" style="width:100%; margin-bottom:15px;">
+        <div style="display:flex; justify-content: flex-end; gap:10px;">
             <button class="btn btn-toggle" onclick="closeModals()">Cancel</button>
-            <button id="confirmBtn" class="btn">Proceed</button>
+            <button class="btn btn-primary" onclick="submitReset()">Update Password</button>
         </div>
     </div>
 </div>
 
-<div id="resetModal" class="modal">
+<div id="assignModal" class="modal">
     <div class="modal-content">
-        <h3>Reset Password</h3>
-        <p id="resetTargetText" style="color:var(--muted); font-size:0.9rem;"></p>
-        <input type="password" id="newPasswordInput" placeholder="New Password (min 8 chars)">
-        <div class="modal-footer">
+        <h3>Assign Permission</h3>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+            <label>Role</label><select id="roleSelect"></select>
+            <label>App</label><select id="appSelect"></select>
+        </div>
+        <div style="display:flex; justify-content: flex-end; gap:10px; margin-top:20px;">
             <button class="btn btn-toggle" onclick="closeModals()">Cancel</button>
-            <button class="btn btn-reset" onclick="submitPasswordReset()">Update Password</button>
+            <button class="btn btn-primary" onclick="submitPermission()">Grant Access</button>
         </div>
     </div>
 </div>
@@ -123,115 +136,134 @@
 <script>
     let API_BASE = "";
     const token = sessionStorage.getItem('jwt_token');
-    let currentSelectedUserId = null;
-    let pendingAction = null;
+    let rolesData = []; // Store roles for dropdowns
 
     async function init() {
-        try {
-            const res = await fetch('config.json');
-            const config = await res.json();
-            API_BASE = `${config.api_host || "http://localhost:3001"}/api/admin`;
-            if (!token) { window.location.href = 'login.html'; return; }
-            fetchUsers();
-        } catch (e) { console.error("Config failed"); }
+        const configRes = await fetch('config.json');
+        const config = await configRes.json();
+        API_BASE = `${config.api_host || "http://localhost:3001"}/api/admin`;
+        
+        if (!token) { window.location.href = 'login.html'; return; }
+        
+        await loadRoles();
+        loadUserData();
     }
 
-    async function fetchUsers() {
-        const res = await fetch(`${API_BASE}/users`, { headers: { 'Authorization': `Bearer ${token}` } });
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.innerText.toLowerCase().includes(tab)));
+        document.getElementById('userTab').classList.toggle('hidden', tab !== 'users');
+        document.getElementById('appTab').classList.toggle('hidden', tab !== 'apps');
+        if(tab === 'apps') loadAppData();
+    }
+
+    // --- SHARED DATA ---
+    async function loadRoles() {
+        const res = await fetch(`${API_BASE}/roles`, { headers: {'Authorization': `Bearer ${token}`}});
         const result = await res.json();
-        if (result.success) {
-            renderUsers(result.data);
-            updateStats(result.data);
-        }
+        if(result.success) rolesData = result.data;
     }
 
-    function renderUsers(users) {
+    // --- USER MANAGEMENT ---
+    async function loadUserData() {
+        const res = await fetch(`${API_BASE}/users`, { headers: {'Authorization': `Bearer ${token}`}});
+        const result = await res.json();
+        if(!result.success) return;
+
         const body = document.getElementById('userListBody');
-        body.innerHTML = users.map(user => `
-            <tr id="row-${user.id}" onclick="viewLogs(${user.id}, '${user.username}')">
+        body.innerHTML = result.data.map(user => `
+            <tr>
                 <td><strong>${user.username}</strong><br><small style="color:var(--muted)">ID: ${user.id}</small></td>
-                <td><span class="status-pill ${user.is_active ? 'status-active' : 'status-inactive'}">${user.is_active ? 'ACTIVE' : 'LOCKED'}</span></td>
-                <td onclick="event.stopPropagation()">
-                    <button class="btn btn-reset" onclick="openResetModal(${user.id}, '${user.username}')"><i class="fas fa-key"></i></button>
-                    <button class="btn btn-toggle" onclick="askToggleStatus(${user.id}, ${user.is_active})">
-                        <i class="fas ${user.is_active ? 'fa-user-slash' : 'fa-user-check'}"></i>
+                <td>
+                    <select onchange="handleRoleChange(${user.id}, this.value)">
+                        ${rolesData.map(r => `<option value="${r.role_name}" ${user.role_name === r.role_name ? 'selected' : ''}>${r.role_name}</option>`).join('')}
+                    </select>
+                </td>
+                <td>
+                    <button class="btn ${user.is_active ? 'btn-toggle' : 'btn-danger'}" onclick="handleToggleStatus(${user.id}, ${user.is_active})">
+                        ${user.is_active ? '<i class="fas fa-check"></i> Active' : '<i class="fas fa-lock"></i> Locked'}
                     </button>
                 </td>
+                <td><button class="btn btn-reset" onclick="openPwModal(${user.id}, '${user.username}')">Reset PW</button></td>
+                <td><button class="btn btn-toggle" onclick="viewLogs(${user.id})"><i class="fas fa-history"></i> Logs</button></td>
             </tr>
         `).join('');
     }
 
-    function updateStats(users) {
-        document.getElementById('totalUsers').innerText = users.length;
-        document.getElementById('activeUsers').innerText = users.filter(u => u.is_active).length;
-    }
-
-    // --- MODAL & TOGGLE LOGIC ---
-    function askToggleStatus(id, isActive) {
-        const title = isActive ? 'Deactivate User?' : 'Activate User?';
-        const msg = `Are you sure you want to ${isActive ? 'lock' : 'unlock'} account #${id}? The user will ${isActive ? 'lose' : 'regain'} access immediately.`;
-        
-        document.getElementById('confirmTitle').innerText = title;
-        document.getElementById('confirmMessage').innerText = msg;
-        const btn = document.getElementById('confirmBtn');
-        btn.className = isActive ? 'btn btn-danger' : 'btn btn-reset';
-        btn.innerText = isActive ? 'Deactivate' : 'Activate';
-        
-        btn.onclick = () => performToggle(id, isActive);
-        document.getElementById('confirmModal').style.display = 'flex';
-    }
-
-    async function performToggle(id, currentStatus) {
-        closeModals();
-        const res = await fetch(`${API_BASE}/toggle-status`, {
+    async function handleRoleChange(userId, roleName) {
+        if(!confirm(`Change user role to ${roleName}?`)) return loadUserData();
+        const res = await fetch(`${API_BASE}/users/role`, {
             method: 'PATCH',
-            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: id, isActive: !currentStatus })
+            headers: {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'},
+            body: JSON.stringify({ userId, roleName })
         });
-        if (res.ok) fetchUsers();
-    }
-
-    function openResetModal(id, name) {
-        currentSelectedUserId = id;
-        document.getElementById('resetTargetText').innerText = `Setting new password for ${name}`;
-        document.getElementById('resetModal').style.display = 'flex';
-    }
-
-    async function submitPasswordReset() {
-        const pw = document.getElementById('newPasswordInput').value;
-        if(pw.length < 8) return alert("Min 8 chars");
-        
-        const res = await fetch(`${API_BASE}/reset-password`, {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: currentSelectedUserId, newPassword: pw })
-        });
-        if (res.ok) { alert("Password updated"); closeModals(); }
-    }
-
-    async function viewLogs(id, name) {
-        document.querySelectorAll('tr').forEach(r => r.classList.remove('active-row'));
-        document.getElementById(`row-${id}`).classList.add('active-row');
-        
-        const res = await fetch(`${API_BASE}/logs/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
         const result = await res.json();
-        const container = document.getElementById('logsContainer');
-        
-        container.innerHTML = `<div style="padding:15px; font-weight:bold; border-bottom:1px solid #eee;">Logs: ${name}</div>`;
-        container.innerHTML += result.data.map(log => `
-            <div style="padding:12px; border-bottom:1px solid #f9f9f9; font-size:0.85rem;">
-                <span style="color:var(--muted); font-size:0.7rem;">${new Date(log.created_at).toLocaleString()}</span><br>
-                <strong>${log.action}</strong> <small>(${log.ip_address || 'no-ip'})</small>
-            </div>
+        alert(result.message);
+        loadUserData();
+    }
+
+    async function handleToggleStatus(userId, isActive) {
+        if(!confirm(`Are you sure you want to ${isActive ? 'Deactivate' : 'Activate'} this user?`)) return;
+        await fetch(`${API_BASE}/toggle-status`, {
+            method: 'PATCH',
+            headers: {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'},
+            body: JSON.stringify({ userId, isActive: !isActive })
+        });
+        loadUserData();
+    }
+
+    // --- APP & PERMISSION MANAGEMENT ---
+    async function loadAppData() {
+        const [apps, perms] = await Promise.all([
+            fetch(`${API_BASE}/apps`, { headers: {'Authorization': `Bearer ${token}`}}).then(r => r.json()),
+            fetch(`${API_BASE}/permissions`, { headers: {'Authorization': `Bearer ${token}`}}).then(r => r.json())
+        ]);
+
+        document.getElementById('appsListBody').innerHTML = apps.data.map(a => `<tr><td>${a.app_name}</td><td>${new Date().toLocaleDateString()}</td></tr>`).join('');
+        document.getElementById('permsListBody').innerHTML = perms.data.map(p => `
+            <tr>
+                <td><span style="font-weight:bold; color:var(--accent)">${p.role_name}</span></td>
+                <td>${p.app_name}</td>
+                <td><button class="btn btn-danger" onclick="revokePerm('${p.role_name}', '${p.app_name}')">Revoke</button></td>
+            </tr>
         `).join('');
     }
 
-    function closeModals() {
-        document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-        document.getElementById('newPasswordInput').value = '';
+    async function revokePerm(roleName, appName) {
+        if(!confirm("Revoke access?")) return;
+        await fetch(`${API_BASE}/permissions/revoke`, {
+            method: 'DELETE',
+            headers: {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'},
+            body: JSON.stringify({ roleName, appName })
+        });
+        loadAppData();
     }
 
-    window.onclick = (e) => { if(e.target.className === 'modal') closeModals(); };
+    // Modal Helpers
+    let currentTargetId = null;
+    function openPwModal(id, name) {
+        currentTargetId = id;
+        document.getElementById('pwTarget').innerText = `Target: ${name}`;
+        document.getElementById('pwModal').style.display = 'flex';
+    }
+
+    async function submitReset() {
+        const newPassword = document.getElementById('newPw').value;
+        const res = await fetch(`${API_BASE}/reset-password`, {
+            method: 'POST',
+            headers: {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'},
+            body: JSON.stringify({ userId: currentTargetId, newPassword })
+        });
+        if(res.ok) { alert("Updated successfully"); closeModals(); }
+    }
+
+    function openAssignModal() {
+        document.getElementById('roleSelect').innerHTML = rolesData.map(r => `<option value="${r.role_name}">${r.role_name}</option>`).join('');
+        // This would ideally be populated from app list
+        document.getElementById('assignModal').style.display = 'flex';
+    }
+
+    function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
+
     window.onload = init;
 </script>
 </body>
