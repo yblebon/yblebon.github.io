@@ -82,7 +82,7 @@ const menuData = [
     },
     { name: "API Feed", cat: "Datasources", link: "api-feed.html", icon: "fas fa-database", description: "JSON configuration viewer.", color: "#5c97bd" },
     { name: "Summer 2024", cat: "Albums", link: "album-view.html", icon: "fas fa-images", description: "Holiday photographs storage.", color: "#e67e22" },
-    { name: "Theme Toggle", cat: "Settings", link: "theme-settings.html", icon: "fas fa-paint-brush", description: "Switch between UI modes.", color: "#9b59b6" },
+    { name: "Admin", cat: "Settings", link: "admin.html", icon: "fas fa-paint-brush", description: "Admin settings.", color: "#9b59b6" },
     { name: "User Profile", cat: "Settings", link: "profile.html", icon: "fas fa-user-cog", description: "Manage admin account settings.", color: "#26a69a" },
     { name: "Backup Data", cat: "Settings", link: "javascript:exportConfig()", icon: "fas fa-download", description: "Export workspace favorites.", color: "#8d6e63" }
 ];
