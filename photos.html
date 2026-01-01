@@ -82,7 +82,7 @@
             <li class="album-item active" onclick="filterByTag(null, this)">
                 <i class="fas fa-layer-group"></i> All Photos
             </li>
-            </ul>
+        </ul>
     </aside>
 
     <main class="main-content">
@@ -126,13 +126,44 @@
     </div>
 
     <script>
-        const API_PATH = "http://localhost:3001/api/app/images";
+        let API_PATH = ""; 
         let currentPage = 1;
         let searchTimeout = null;
         let activeBlobUrl = null;
-        let selectedTags = []; // Store tags to filter by
+        let selectedTags = [];
 
-        window.onload = () => { fetchPhotos(1); updateStats(); };
+        window.onload = async () => {
+            const configLoaded = await loadConfig();
+            if (configLoaded) {
+                fetchPhotos(1);
+                updateStats();
+            }
+        };
+
+        /**
+         * Loads configuration from config.json
+         * Map "api_host" from the JSON to the internal API_PATH
+         */
+        async function loadConfig() {
+            try {
+                const response = await fetch('config.json');
+                if (!response.ok) throw new Error("config.json not found");
+                
+                const config = await response.json();
+                
+                // Use api_host as requested
+                const host = config.api_host || "http://localhost:3001";
+                API_PATH = `${host}/api/app/images`;
+                
+                console.log("Config loaded. API set to:", API_PATH);
+                return true;
+            } catch (err) {
+                console.error("Config Load Error:", err);
+                document.getElementById('photoGallery').innerHTML = 
+                    `<p style="color:red; padding:20px;">Configuration Error: ${err.message}</p>`;
+                return false;
+            }
+        }
 
         function debouncedSearch() {
             clearTimeout(searchTimeout);
@@ -140,6 +171,7 @@
         }
 
         async function updateStats() {
+            if (!API_PATH) return;
             const token = sessionStorage.getItem('jwt_token');
             const headers = { 'Authorization': `Bearer ${token}` };
             try {
@@ -179,25 +211,22 @@
             if (tag === null) {
                 selectedTags = [];
             } else {
-                // Toggle tag (support for multiple selection)
                 const index = selectedTags.indexOf(tag);
                 if (index > -1) selectedTags.splice(index, 1);
                 else selectedTags.push(tag);
             }
-            
-            // Re-render sidebar to update "active" states
             updateStats(); 
             fetchPhotos(1);
         }
 
         async function fetchPhotos(page = 1) {
+            if (!API_PATH) return;
             currentPage = page;
             const container = document.getElementById('photoGallery');
             const token = sessionStorage.getItem('jwt_token');
             const sortBy = document.getElementById('sortSelect').value;
             const search = document.getElementById('searchInput').value;
             
-            // Build URL with tags if selected
             let url = `${API_PATH}/list?page=${page}&limit=20&sortBy=${sortBy}&cleanName=${search}`;
             if (selectedTags.length > 0) {
                 url += `&tags=${selectedTags.join(',')}`;
@@ -207,7 +236,7 @@
                 const res = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
                 const result = await res.json();
                 const photos = result.data || [];
-                container.innerHTML = photos.length ? "" : "<p style='color:var(--muted)'>No photos found in this album.</p>";
+                container.innerHTML = photos.length ? "" : "<p style='color:var(--muted)'>No photos found.</p>";
 
                 photos.forEach(photo => {
                     const id = photo._id || photo.id;
@@ -239,6 +268,7 @@
         }
 
         async function updateTag(id, action, tag) {
+            if (!API_PATH) return;
             const token = sessionStorage.getItem('jwt_token');
             await fetch(`${API_PATH}/${id}/tags`, {
                 method: 'PATCH',
@@ -255,6 +285,7 @@
         }
 
         async function openLightbox(id) {
+            if (!API_PATH) return;
             const token = sessionStorage.getItem('jwt_token');
             const lightbox = document.getElementById('lightbox');
             const img = document.getElementById('lightboxImg');
@@ -268,6 +299,7 @@
         }
 
         async function handleUpload(files) {
+            if (!API_PATH) return;
             const token = sessionStorage.getItem('jwt_token');
             const formData = new FormData();
             Array.from(files).forEach(file => {
@@ -279,13 +311,14 @@
         }
 
         async function deletePhoto(id) {
-            if (!confirm("Delete photo?")) return;
+            if (!API_PATH || !confirm("Delete photo?")) return;
             const token = sessionStorage.getItem('jwt_token');
             await fetch(`${API_PATH}/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
             fetchPhotos(currentPage); updateStats();
         }
 
         async function downloadPhoto(id, name) {
+            if (!API_PATH) return;
             const token = sessionStorage.getItem('jwt_token');
             const res = await fetch(`${API_PATH}/download/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
             const blob = await res.blob();

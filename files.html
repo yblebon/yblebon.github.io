@@ -114,13 +114,34 @@
     <div class="pagination-controls" id="paginationControls"></div>
 
     <script>
-        // CONFIGURATION
-        let BASE_URL = "http://localhost:3001"; 
+        let BASE_URL = ""; // Loaded from config.json
         let uploadQueue = []; 
         let currentPage = 1;
         let searchTimeout = null;
 
-        window.onload = () => fetchFileList(1);
+        // --- CONFIG LOADER ---
+        async function loadConfig() {
+            try {
+                const res = await fetch('config.json');
+                if (!res.ok) throw new Error("config.json not found");
+                const config = await res.json();
+                
+                // Map api_host as requested
+                BASE_URL = config.api_host || "http://localhost:3001";
+                console.log("Config loaded. API Host:", BASE_URL);
+                return true;
+            } catch (err) {
+                console.error("Config failed to load:", err);
+                document.getElementById('remoteFileList').innerHTML = 
+                    `<div style="color:var(--danger); text-align:center; padding:20px;">Configuration Error: Check config.json path.</div>`;
+                return false;
+            }
+        }
+
+        window.onload = async () => {
+            const ok = await loadConfig();
+            if (ok) fetchFileList(1);
+        };
 
         // --- DEBOUNCED SEARCH ---
         function debouncedSearch() {
@@ -144,6 +165,7 @@
 
         // --- FETCH & RENDER LIST ---
         async function fetchFileList(page = 1) {
+            if (!BASE_URL) return;
             currentPage = page;
             const listContainer = document.getElementById('remoteFileList');
             const paginationContainer = document.getElementById('paginationControls');
@@ -206,7 +228,7 @@
 
                 renderPagination(nav);
             } catch (err) {
-                listContainer.innerHTML = '<div style="color:var(--danger); text-align:center; padding:20px;">Error loading list. Check console.</div>';
+                listContainer.innerHTML = '<div style="color:var(--danger); text-align:center; padding:20px;">Error loading list. Check connection.</div>';
             }
         }
 
@@ -222,6 +244,7 @@
 
         // --- DOWNLOAD HANDLER ---
         async function downloadFile(fileId, fallbackName, isThumbnail = false) {
+            if (!BASE_URL) return;
             const token = sessionStorage.getItem('jwt_token');
             try {
                 const url = `${BASE_URL}/api/app/files/download/${fileId}${isThumbnail ? '?thumbnail=true' : ''}`;
@@ -231,7 +254,6 @@
 
                 if (!response.ok) throw new Error("Download failed on server");
 
-                // Get filename from header or use fallback
                 const disposition = response.headers.get('Content-Disposition');
                 let filename = isThumbnail ? `thumb-${fallbackName}` : fallbackName;
                 
@@ -248,7 +270,6 @@
                 document.body.appendChild(link);
                 link.click();
                 
-                // Cleanup
                 document.body.removeChild(link);
                 window.URL.revokeObjectURL(downloadUrl);
 
@@ -260,7 +281,7 @@
 
         // --- DELETE HANDLER ---
         async function deleteFile(fileId) {
-            if (!confirm("Delete this file permanently?")) return;
+            if (!BASE_URL || !confirm("Delete this file permanently?")) return;
             const token = sessionStorage.getItem('jwt_token');
             try {
                 const response = await fetch(`${BASE_URL}/api/app/files/${fileId}`, {
@@ -303,10 +324,10 @@
 
         // --- UPLOAD EXECUTION ---
         async function uploadEverything() {
+            if (!BASE_URL) return;
             const formData = new FormData();
             const token = sessionStorage.getItem('jwt_token');
             
-            // Append metadata first, then files
             uploadQueue.forEach(item => {
                 formData.append('filenames[]', document.getElementById(`name-${item.id}`).value);
                 formData.append('encryptFlags[]', document.getElementById(`encrypt-${item.id}`).checked);
@@ -336,7 +357,7 @@
                     document.getElementById('bulkActions').style.display = 'none';
                     uploadQueue = [];
                 } else { 
-                    alert("Upload failed. Check server limits (Max 25MB total)."); 
+                    alert("Upload failed. Check server limits."); 
                 }
                 document.getElementById('globalProgressTrack').style.display = 'none';
                 bar.style.width = '0%';
