@@ -22,6 +22,7 @@ const menuData = [
     { name: "Manymen", cat: "Media", link: "https://yblebon.github.io/manymen", icon: "fas fa-users", description: "Stories.", color: "#ef5350" },
     { name: "Crookentials", cat: "Media", link: "https://yblebon.github.io/crookentials/", icon: "fas fa-camera-retro", description: "Insights.", color: "#8d6e63" },
     { name: "Image Uploader", cat: "Tools", link: "https://yblebon.github.io/image_uploader/", icon: "fas fa-camera-retro", description: "Upload images.", color: "#8d6e63" },
+    { name: "Encryption", cat: "Tools", link: "https://yblebon.github.io/encryption/", icon: "fas fa-signature", description: "Files encryption.", color: "#8d6e63" },
     { name: "Text To PDF", cat: "Tools", link: "https://yblebon.github.io/text_2_pdf/", icon: "fas fa-file-pdf", description: "Text to PDF.", color: "#8d6e63" },
     { name: "Jsonformatter", cat: "Tools", link: "https://yblebon.github.io/jsonformatter", icon: "fas fa-code", description: "Beautify JSON.", color: "#8d6e63" },
     { name: "Color picker", cat: "Tools", link: "https://yblebon.github.io/color_picker", icon: "fas fa-palette", description: "Custom colors.", color: "#8d6e63" },
