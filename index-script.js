@@ -19,7 +19,7 @@ const menuData = [
     { name: "Hahaha", cat: "Fun", link: "https://yblebon.github.io/hahaha", icon: "fas fa-laugh-beam", description: "Funny moments.", color: "#ef5350" },
     { name: "Carre", cat: "Media", link: "https://yblebon.github.io/carre", icon: "fas fa-square", description: "Creative works.", color: "#ef5350" },
     { name: "Arcade", cat: "Fun", link: "https://yblebon.github.io/arcade", icon: "fas fa-gamepad", description: "Brain training.", color: "#ef5350" },
-    { name: "Manymen", cat: "Media", link: "https://yblebon.github.io/manymen", icon: "fas fa-users", description: "Stories.", color: "#ef5350" },
+    { name: "Influencers", cat: "Media", link: "https://yblebon.github.io/influencers", icon: "fas fa-users", description: "Influencers.", color: "#ef5350" },
     { name: "Crookentials", cat: "Media", link: "https://yblebon.github.io/crookentials/", icon: "fas fa-camera-retro", description: "Insights.", color: "#8d6e63" },
     { name: "Image Uploader", cat: "Tools", link: "https://yblebon.github.io/image_uploader/", icon: "fas fa-camera-retro", description: "Upload images.", color: "#8d6e63" },
     { name: "Encryption", cat: "Tools", link: "https://yblebon.github.io/encryption/", icon: "fas fa-signature", description: "Files encryption.", color: "#8d6e63" },
