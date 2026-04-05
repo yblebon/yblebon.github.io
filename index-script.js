@@ -4,7 +4,7 @@ const menuData = [
     { name: "Weather", cat: "Daily Essentials", link: "https://yblebon.github.io/weather", icon: "fas fa-cloud-sun", description: "Meteorological forecasts.", color: "#1abc9c" },
     { name: "News", cat: "Daily Essentials", link: "https://yblebon.github.io/news", icon: "fas fa-newspaper", description: "Daily global news updates.", color: "#9b59b6" },
     { name: "Stocks", cat: "Daily Essentials", link: "https://yblebon.github.io/stocks", icon: "fas fa-money-bill-trend-up", description: "Market data and trends.", color: "#27ae60" },
-    { name: "Music Songs", cat: "Media", link: "https://yblebon.github.io/music-songs", icon: "fas fa-music", description: "Top 50 songs list.", color: "#e67e22" },
+    { name: "Music Songs", cat: "Media", link: "https://yblebon.github.io/music-songs", icon: "fas fa-music", description: "Music & Songs.", color: "#e67e22" },
     { name: "Moon", cat: "Knowledge", link: "https://yblebon.github.io/moon", icon: "fas fa-moon", description: "Explore lunar phases.", color: "#34495e" },
     { name: "Journal", cat: "Knowledge", link: "https://yblebon.github.io/journal", icon: "fas fa-book", description: "Daily thoughts.", color: "#26a69a" },
     { name: "Podcasts", cat: "Knowledge", link: "https://yblebon.github.io/podcasts", icon: "fas fa-podcast", description: "Favorite discussions.", color: "#26a69a" },
