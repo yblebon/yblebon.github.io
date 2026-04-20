@@ -29,7 +29,7 @@ const menuData = [
     { name: "Password Generator", cat: "Tools", link: "https://yblebon.github.io/password-generator", icon: "fas fa-key", description: "Security tool.", color: "#8d6e63" },
     { name: "Webench", cat: "Tools", link: "https://yblebon.github.io/webench", icon: "fas fa-laptop-code", description: "Benchmarks.", color: "#8d6e63" },
     { name: "Storage", cat: "Tools", link: "https://yblebon.github.io/storage", icon: "fas fa-solid fa-database", description: "Database.", color: "#8d6e63" },
-    { name: "Terminal", cat: "Tools", link: "https://terminal-xvw6.onrender.com", icon: "fas fa-terminal", description: "Terminal.", color: "#8d6e63" },
+    { name: "Terminal", cat: "Tools", link: "https://terminal.yasserblebon.com", icon: "fas fa-terminal", description: "Terminal.", color: "#8d6e63" },
     { name: "Analytics", cat: "Tools", link: "https://umami-livid-five.vercel.app", icon: "fas fa-analytics", description: "Analytics.", color: "#8d6e63" },
     { name: "Events", cat: "Organization", link: "https://yblebon.github.io/events", icon: "fas fa-calendar-alt", description: "Upcoming activities.", color: "#ffa726" },
     { name: "Coins", cat: "Organization", link: "https://yblebon.github.io/coins", icon: "fas fa-coins", description: "Currency insights.", color: "#ffa726" },
