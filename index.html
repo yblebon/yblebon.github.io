@@ -1,27 +1,876 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | My Hub</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <script defer src="https://umami-livid-five.vercel.app/script.js" data-website-id="45be3790-b77f-4e77-b236-5dec5f185aff"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Dashboard" />
+  <meta name="theme-color" content="#0f0f13" />
+  <title>Dashboard</title>
+
+  <!-- PWA manifest inline -->
+  <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Dashboard%22%2C%22short_name%22%3A%22Dashboard%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f0f13%22%2C%22theme_color%22%3A%22%230f0f13%22%7D" />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap');
+
+    :root {
+      --bg: #0f0f13;
+      --surface: #17171f;
+      --surface2: #1e1e2a;
+      --border: rgba(255,255,255,0.07);
+      --accent: #e8d5b0;
+      --accent2: #7b9cff;
+      --text: #e8e8f0;
+      --text-muted: #6a6a80;
+      --radius: 14px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 16px; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      min-height: 100dvh;
+      padding-top: calc(var(--safe-top) + 0px);
+      padding-bottom: calc(var(--safe-bottom) + 24px);
+      /* subtle noise texture */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: calc(var(--safe-top) + 16px) 24px 16px;
+      background: linear-gradient(to bottom, var(--bg) 60%, transparent);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+    }
+
+    .logo span { color: var(--accent2); font-style: italic; }
+
+    /* ── SEARCH ── */
+    .search-wrap {
+      flex: 1;
+      max-width: 340px;
+      position: relative;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    #search {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      padding: 9px 12px 9px 36px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #search::placeholder { color: var(--text-muted); }
+    #search:focus { border-color: rgba(123,156,255,0.4); }
+
+    /* ── ADD BUTTON ── */
+    .btn-add {
+      background: var(--accent2);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 9px 16px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .btn-add:active { opacity: 0.8; transform: scale(0.97); }
+
+    /* ── FILTER TABS ── */
+    .filter-bar {
+      padding: 0 24px 16px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+
+    .filter-chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      color: var(--text-muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      padding: 6px 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .filter-chip.active {
+      background: var(--accent2);
+      border-color: var(--accent2);
+      color: #fff;
+    }
+
+    /* ── MAIN GRID ── */
+    main {
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+    }
+
+    /* ── GROUP HEADER ── */
+    .group-header {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      margin-bottom: 4px;
+    }
+
+    .group-label {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.05rem;
+      color: var(--accent);
+      letter-spacing: 0.01em;
+    }
+
+    .group-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .group-count {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s, border-color 0.15s, transform 0.12s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .card:hover {
+      background: var(--surface2);
+      border-color: rgba(255,255,255,0.13);
+      transform: translateY(-1px);
+    }
+
+    .card:active { transform: scale(0.98); }
+
+    .card-favicon {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .card-favicon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .card-body { flex: 1; min-width: 0; }
+
+    .card-name {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-url {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+
+    .card-desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .card:hover .card-actions { opacity: 1; }
+
+    .card-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px 6px;
+      display: flex;
+      align-items: center;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .card-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+    .card-btn.delete:hover { color: #ff6b6b; border-color: rgba(255,107,107,0.3); }
+
+    /* ── EMPTY ── */
+    .empty {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 60px 0;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+    }
+    .empty .icon { font-size: 2.5rem; margin-bottom: 12px; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius) var(--radius) 0 0;
+      padding: 24px 24px calc(var(--safe-bottom) + 24px);
+      width: 100%;
+      max-width: 560px;
+      transform: translateY(30px);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0);
+    }
+
+    .modal-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .form-row { margin-bottom: 14px; }
+
+    .form-label {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: rgba(123,156,255,0.5);
+    }
+
+    .form-select { appearance: none; cursor: pointer; }
+
+    .form-textarea { resize: vertical; min-height: 68px; }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn-cancel {
+      flex: 1;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      padding: 11px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .btn-cancel:hover { border-color: rgba(255,255,255,0.2); }
+
+    .btn-save {
+      flex: 2;
+      background: var(--accent2);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 11px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-save:hover { opacity: 0.88; }
+
+    /* ── GROUP MGMT ── */
+    .group-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .group-input-row .form-input { flex: 1; }
+    .btn-group-add {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--accent2);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      padding: 9px 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* ── EXPORT BUTTON ── */
+    .btn-export {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-muted);
+      padding: 9px 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: color 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+    .btn-export:hover { color: var(--accent); border-color: rgba(232,213,176,0.3); }
+
+    /* ── LOADING ── */
+    .loading {
+      grid-column: 1/-1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 80px 0;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+    .spinner {
+      width: 28px; height: 28px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent2);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-box {
+      grid-column: 1/-1;
+      background: rgba(255,107,107,0.08);
+      border: 1px solid rgba(255,107,107,0.2);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      color: #ff9999;
+      font-size: 0.8rem;
+      line-height: 1.7;
+    }
+    .error-box strong { color: #ff6b6b; display: block; margin-bottom: 6px; font-size: 0.85rem; }
+    .error-box code {
+      background: rgba(0,0,0,0.3);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 0.75rem;
+      color: var(--accent);
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: calc(var(--safe-bottom) + 80px);
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      color: var(--text);
+      font-size: 0.78rem;
+      padding: 10px 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 200;
+      white-space: nowrap;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (min-width: 640px) {
+      .modal-overlay { align-items: center; }
+      .modal { border-radius: var(--radius); padding-bottom: 24px; }
+    }
+
+    @media (max-width: 480px) {
+      main { padding: 0 14px; }
+      header { padding-left: 14px; padding-right: 14px; }
+      .filter-bar { padding-left: 14px; padding-right: 14px; }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="brand-group">
-            <div class="brand">Control Center</div>
-            <a href="controlcenter.html" class="nav-link"><i class="fas fa-lock"></i> Admin</a>
-            <button class="clear-btn" onclick="clearAllFavs()">Clear Favorites</button>
+
+<header>
+  <div class="logo">dash<span>.</span></div>
+  <div class="search-wrap">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input id="search" type="search" placeholder="Search links…" autocomplete="off" />
+  </div>
+  <button class="btn-add" onclick="openModal()">+ Add</button>
+  <button class="btn-export" onclick="exportJson()" title="Export links.json">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/>
+      <line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+  </button>
+</header>
+
+<div class="filter-bar" id="filterBar">
+  <button class="filter-chip active" data-group="all">All</button>
+</div>
+
+<main id="grid">
+  <div class="loading"><div class="spinner"></div>Loading links.json…</div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-title" id="modalTitle">New Link</div>
+
+    <div class="form-row">
+      <label class="form-label">Name *</label>
+      <input class="form-input" id="fName" placeholder="My App" />
+    </div>
+    <div class="form-row">
+      <label class="form-label">URL *</label>
+      <input class="form-input" id="fUrl" type="url" placeholder="https://example.com" />
+    </div>
+    <div class="form-row">
+      <label class="form-label">Description</label>
+      <textarea class="form-textarea" id="fDesc" placeholder="Optional short description…"></textarea>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Group</label>
+      <select class="form-select" id="fGroup">
+        <option value="">— None —</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Or create new group</label>
+      <div class="group-input-row">
+        <input class="form-input" id="fNewGroup" placeholder="e.g. Work, Personal…" />
+        <button class="btn-group-add" onclick="addGroupFromInput()">Create</button>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveLink()">Save Link</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  /*
+   * DATA SOURCE: links.json (must be in the same folder as this HTML file)
+   * The dashboard reads links.json on every page load.
+   * Use the ↓ export button in the header to download your current state
+   * as a new links.json to replace the file on disk.
+   */
+
+  /* ── STATE ── */
+  let state = { groups: [], links: [] };
+  let editId = null;
+  let activeGroup = 'all';
+  let searchQuery = '';
+
+  /* ── LOAD FROM JSON ── */
+  async function init() {
+    try {
+      const res = await fetch('links.json?_=' + Date.now()); // cache-bust
+      if (!res.ok) throw new Error(`HTTP ${res.status} — ${res.statusText}`);
+      const data = await res.json();
+      state.groups = Array.isArray(data.groups) ? data.groups : [];
+      state.links  = Array.isArray(data.links)  ? data.links  : [];
+      render();
+    } catch (err) {
+      renderError(err);
+    }
+  }
+
+  function renderError(err) {
+    document.getElementById('grid').innerHTML = `
+      <div class="error-box">
+        <strong>Could not load links.json</strong>
+        Make sure <code>links.json</code> is in the same folder as <code>dashboard.html</code>
+        and that you're serving the files through a local web server (not opened as a <code>file://</code> URL).<br><br>
+        <span style="color:var(--text-muted);font-size:0.72rem">${escHtml(String(err))}</span>
+      </div>
+    `;
+  }
+
+  /* ── EXPORT: download current state as links.json ── */
+  function exportJson() {
+    const json = JSON.stringify(state, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = 'links.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('links.json downloaded — replace your file!');
+  }
+
+  /* ── FAVICON ── */
+  function faviconUrl(url) {
+    try {
+      const u = new URL(url);
+      return `https://www.google.com/s2/favicons?domain=${u.hostname}&sz=64`;
+    } catch { return null; }
+  }
+
+  function faviconEl(url, name, icon) {
+    // If an explicit emoji icon is set in the JSON, use it directly
+    if (icon) return icon;
+    const src = faviconUrl(url);
+    if (src) {
+      return `<img src="${src}" onerror="this.parentElement.innerHTML='${emoji(name)}'" alt="" />`;
+    }
+    return emoji(name);
+  }
+
+  function emoji(name) {
+    const emojis = ['🔗','📎','🌐','⚡','🔧','📌','🚀','✨','📋','🎯'];
+    const i = name.charCodeAt(0) % emojis.length;
+    return emojis[i];
+  }
+
+  /* ── RENDER ── */
+  function render() {
+    renderFilterBar();
+    renderGrid();
+  }
+
+  function renderFilterBar() {
+    const bar = document.getElementById('filterBar');
+    const chips = ['all', ...state.groups];
+    bar.innerHTML = chips.map(g => `
+      <button class="filter-chip ${activeGroup === g ? 'active' : ''}"
+        data-group="${g}" onclick="setGroup('${escHtml(g)}')">
+        ${g === 'all' ? 'All' : escHtml(g)}
+      </button>
+    `).join('');
+  }
+
+  function renderGrid() {
+    const grid = document.getElementById('grid');
+    const q = searchQuery.toLowerCase();
+
+    let links = state.links.filter(l => {
+      const matchGroup = activeGroup === 'all' || l.group === activeGroup;
+      const matchSearch = !q ||
+        l.name.toLowerCase().includes(q) ||
+        l.url.toLowerCase().includes(q) ||
+        (l.desc && l.desc.toLowerCase().includes(q));
+      return matchGroup && matchSearch;
+    });
+
+    if (!links.length) {
+      grid.innerHTML = `<div class="empty"><div class="icon">🔍</div>No links found.</div>`;
+      return;
+    }
+
+    const grouped = {};
+    const ungrouped = [];
+    links.forEach(l => {
+      if (l.group) {
+        if (!grouped[l.group]) grouped[l.group] = [];
+        grouped[l.group].push(l);
+      } else {
+        ungrouped.push(l);
+      }
+    });
+
+    let html = '';
+
+    state.groups.forEach(g => {
+      if (!grouped[g]) return;
+      html += `
+        <div class="group-header">
+          <span class="group-label">${escHtml(g)}</span>
+          <span class="group-count">${grouped[g].length}</span>
+          <span class="group-line"></span>
         </div>
-        <div class="search-wrapper">
-            <i class="fa fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Search applications...">
+      `;
+      grouped[g].forEach(l => { html += cardHtml(l); });
+    });
+
+    if (ungrouped.length) {
+      if (html) html += `
+        <div class="group-header">
+          <span class="group-label" style="color:var(--text-muted)">Other</span>
+          <span class="group-count">${ungrouped.length}</span>
+          <span class="group-line"></span>
         </div>
-    </header>
-    <main id="mainContainer"></main>
-    <div id="noResults">No items match your search.</div>
-    <script src="index-script.js"></script>
+      `;
+      ungrouped.forEach(l => { html += cardHtml(l); });
+    }
+
+    grid.innerHTML = html;
+  }
+
+  function cardHtml(l) {
+    const hostname = (() => { try { return new URL(l.url).hostname; } catch { return l.url; } })();
+    return `
+      <a class="card" href="${escHtml(l.url)}" target="_blank" rel="noopener">
+        <div class="card-favicon">${faviconEl(l.url, l.name, l.icon)}</div>
+        <div class="card-body">
+          <div class="card-name">${escHtml(l.name)}</div>
+          <div class="card-url">${escHtml(hostname)}</div>
+          ${l.desc ? `<div class="card-desc">${escHtml(l.desc)}</div>` : ''}
+        </div>
+        <div class="card-actions">
+          <button class="card-btn" onclick="editLink(event,'${escHtml(l.id)}')" title="Edit">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4Z"/>
+            </svg>
+          </button>
+          <button class="card-btn delete" onclick="deleteLink(event,'${escHtml(l.id)}')" title="Delete">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+              <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+            </svg>
+          </button>
+        </div>
+      </a>
+    `;
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── FILTERS ── */
+  function setGroup(g) { activeGroup = g; render(); }
+
+  document.getElementById('search').addEventListener('input', e => {
+    searchQuery = e.target.value;
+    render();
+  });
+
+  /* ── MODAL ── */
+  function openModal(link = null) {
+    editId = link ? link.id : null;
+    document.getElementById('modalTitle').textContent = link ? 'Edit Link' : 'New Link';
+    document.getElementById('fName').value = link ? link.name : '';
+    document.getElementById('fUrl').value  = link ? link.url  : '';
+    document.getElementById('fDesc').value = link ? (link.desc || '') : '';
+    refreshGroupSelect(link ? link.group : '');
+    document.getElementById('fNewGroup').value = '';
+    document.getElementById('modalOverlay').classList.add('open');
+    setTimeout(() => document.getElementById('fName').focus(), 300);
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+
+  function refreshGroupSelect(selected = '') {
+    const sel = document.getElementById('fGroup');
+    sel.innerHTML = `<option value="">— None —</option>` +
+      state.groups.map(g =>
+        `<option value="${escHtml(g)}" ${g === selected ? 'selected' : ''}>${escHtml(g)}</option>`
+      ).join('');
+  }
+
+  function addGroupFromInput() {
+    const val = document.getElementById('fNewGroup').value.trim();
+    if (!val) return;
+    if (!state.groups.includes(val)) state.groups.push(val);
+    refreshGroupSelect(val);
+    document.getElementById('fGroup').value = val;
+    document.getElementById('fNewGroup').value = '';
+    showToast(`Group "${val}" created — export JSON to save permanently`);
+  }
+
+  function saveLink() {
+    const name  = document.getElementById('fName').value.trim();
+    const url   = document.getElementById('fUrl').value.trim();
+    const desc  = document.getElementById('fDesc').value.trim();
+    const group = document.getElementById('fGroup').value;
+
+    if (!name) { document.getElementById('fName').focus(); return; }
+    if (!url)  { document.getElementById('fUrl').focus(); return; }
+
+    let fullUrl = url;
+    if (!/^https?:\/\//i.test(fullUrl)) fullUrl = 'https://' + fullUrl;
+
+    if (editId) {
+      const idx = state.links.findIndex(l => l.id === editId);
+      if (idx !== -1) state.links[idx] = { id: editId, name, url: fullUrl, desc, group };
+    } else {
+      state.links.push({ id: Date.now().toString(), name, url: fullUrl, desc, group });
+    }
+
+    closeModal();
+    render();
+    showToast((editId ? 'Link updated' : 'Link added') + ' — export JSON to save permanently');
+  }
+
+  function editLink(e, id) {
+    e.preventDefault(); e.stopPropagation();
+    const link = state.links.find(l => l.id === id);
+    if (link) openModal(link);
+  }
+
+  function deleteLink(e, id) {
+    e.preventDefault(); e.stopPropagation();
+    state.links = state.links.filter(l => l.id !== id);
+    render();
+    showToast('Link removed — export JSON to save permanently');
+  }
+
+  /* ── OVERLAY / KEYBOARD ── */
+  document.getElementById('modalOverlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      document.getElementById('search').focus();
+    }
+  });
+
+  /* ── TOAST ── */
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  /* ── BOOT ── */
+  init();
+</script>
 </body>
 </html>

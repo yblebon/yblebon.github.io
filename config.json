@@ -1,6 +1,0 @@
-{
-    "api_host": "https://app-blue-kappa.vercel.app",
-    "environment": "production",
-    "version": "1.0.0",
-    "check_interval": 180
-}
