@@ -173,6 +173,50 @@
       gap: 12px;
       margin-top: 16px;
       margin-bottom: 4px;
+      cursor: grab;
+      border-radius: 8px;
+      padding: 4px 6px;
+      margin-left: -6px;
+      margin-right: -6px;
+      transition: background 0.15s;
+      user-select: none;
+    }
+    .group-header:hover { background: rgba(255,255,255,0.03); }
+    .group-header:active { cursor: grabbing; }
+
+    .group-drag-handle {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      letter-spacing: -1px;
+      opacity: 0;
+      transition: opacity 0.15s;
+      flex-shrink: 0;
+    }
+    .group-header:hover .group-drag-handle { opacity: 0.6; }
+
+    /* section being dragged */
+    .group-section.group-dragging {
+      opacity: 0.35;
+    }
+
+    /* drop indicator: horizontal line above/below a section */
+    .group-section.group-drop-above::before {
+      content: '';
+      display: block;
+      height: 2px;
+      background: var(--accent2);
+      border-radius: 2px;
+      margin: 0 0 8px;
+      box-shadow: 0 0 8px var(--accent2);
+    }
+    .group-section.group-drop-below::after {
+      content: '';
+      display: block;
+      height: 2px;
+      background: var(--accent2);
+      border-radius: 2px;
+      margin: 8px 0 0;
+      box-shadow: 0 0 8px var(--accent2);
     }
 
     .group-label {
@@ -804,12 +848,15 @@
       const label = groupName === ungroupedKey ? 'Other' : groupName;
       const labelStyle = groupName === ungroupedKey ? ' style="color:var(--text-muted)"' : '';
       const dataGroup = groupName === ungroupedKey ? '' : groupName;
+      const isDraggableGroup = groupName !== ungroupedKey;
 
       const section = document.createElement('div');
       section.className = 'group-section';
+      section.dataset.group = dataGroup;
 
       section.innerHTML = `
-        <div class="group-header">
+        <div class="group-header" ${isDraggableGroup ? `draggable="true" data-group="${escHtml(dataGroup)}"` : ''}>
+          ${isDraggableGroup ? '<span class="group-drag-handle">⠿</span>' : ''}
           <span class="group-label"${labelStyle}>${escHtml(label)}</span>
           <span class="group-count">${items.length}</span>
           <span class="group-line"></span>
@@ -950,6 +997,8 @@
   /* ── DRAG & DROP ── */
   let dragId = null;
   let dragSourceGroup = null;
+  let dragType = null; // 'card' | 'group'
+  let dragGroupName = null;
   const picker = document.getElementById('drag-picker');
 
   function buildPicker() {
@@ -991,6 +1040,9 @@
     document.querySelectorAll('.group-grid.drag-over').forEach(el => {
       el.classList.remove('drag-over');
     });
+    document.querySelectorAll('.group-drop-above, .group-drop-below').forEach(el => {
+      el.classList.remove('group-drop-above', 'group-drop-below');
+    });
   }
 
   // Returns {targetCard, position:'before'|'after'} for the card under cursor, or null
@@ -1022,6 +1074,7 @@
     // ── Cards: drag source ──
     document.querySelectorAll('.card[draggable="true"]').forEach(card => {
       card.addEventListener('dragstart', e => {
+        dragType = 'card';
         dragId = card.dataset.id;
         const link = state.links.find(l => l.id === dragId);
         dragSourceGroup = link ? (link.group || '') : '';
@@ -1029,7 +1082,7 @@
         setTimeout(() => card.classList.add('dragging'), 0);
         document.body.classList.add('is-dragging');
         e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', dragId);
+        e.dataTransfer.setData('text/plain', 'card:' + dragId);
         buildPicker();
         picker.classList.add('visible');
         movePicker(e.clientX, e.clientY);
@@ -1043,6 +1096,7 @@
       card.addEventListener('dragend', () => {
         dragId = null;
         dragSourceGroup = null;
+        dragType = null;
         card.classList.remove('dragging');
         document.body.classList.remove('is-dragging');
         picker.classList.remove('visible');
@@ -1054,9 +1108,10 @@
       });
     });
 
-    // ── Group grids: drop target for reorder + group change ──
+    // ── Group grids: drop target for card reorder + group change ──
     document.querySelectorAll('.group-grid').forEach(grid => {
       grid.addEventListener('dragover', e => {
+        if (dragType !== 'card') return;
         e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
 
@@ -1066,7 +1121,7 @@
 
         const insertion = getCardInsertionPoint(e, grid);
         if (insertion) {
-          grid.classList.remove('drag-over'); // card highlight is enough
+          grid.classList.remove('drag-over');
           insertion.targetCard.classList.add(
             insertion.position === 'before' ? 'drop-before' : 'drop-after'
           );
@@ -1074,6 +1129,7 @@
       });
 
       grid.addEventListener('dragleave', e => {
+        if (dragType !== 'card') return;
         if (!grid.contains(e.relatedTarget)) {
           clearDropIndicators();
           highlightPickerGroup(null);
@@ -1081,12 +1137,81 @@
       });
 
       grid.addEventListener('drop', e => {
+        if (dragType !== 'card') return;
         e.preventDefault();
-        const id = e.dataTransfer.getData('text/plain') || dragId;
+        const raw = e.dataTransfer.getData('text/plain');
+        const id = raw.startsWith('card:') ? raw.slice(5) : (dragId || raw);
         const targetGroup = grid.dataset.group;
         const insertion = getCardInsertionPoint(e, grid);
-
         applyReorder(id, targetGroup, insertion);
+        clearDropIndicators();
+      });
+    });
+
+    // ── Group headers: drag source for group reordering ──
+    document.querySelectorAll('.group-header[draggable="true"]').forEach(header => {
+      header.addEventListener('dragstart', e => {
+        dragType = 'group';
+        dragGroupName = header.dataset.group;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', 'group:' + dragGroupName);
+        setTimeout(() => {
+          const section = header.closest('.group-section');
+          if (section) section.classList.add('group-dragging');
+        }, 0);
+        // hide card picker; group drag has its own visual
+        picker.classList.remove('visible');
+      });
+
+      header.addEventListener('dragend', () => {
+        dragType = null;
+        dragGroupName = null;
+        document.querySelectorAll('.group-section.group-dragging').forEach(s =>
+          s.classList.remove('group-dragging')
+        );
+        clearDropIndicators();
+      });
+    });
+
+    // ── Group sections: drop target for group reordering ──
+    document.querySelectorAll('.group-section').forEach(section => {
+      section.addEventListener('dragover', e => {
+        if (dragType !== 'group') return;
+        const targetGroup = section.dataset.group;
+        if (targetGroup === dragGroupName) return; // same section
+
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        clearDropIndicators();
+
+        // Decide above or below based on cursor vs section midpoint
+        const rect = section.getBoundingClientRect();
+        const mid  = rect.top + rect.height / 2;
+        if (e.clientY < mid) {
+          section.classList.add('group-drop-above');
+        } else {
+          section.classList.add('group-drop-below');
+        }
+      });
+
+      section.addEventListener('dragleave', e => {
+        if (dragType !== 'group') return;
+        if (!section.contains(e.relatedTarget)) {
+          section.classList.remove('group-drop-above', 'group-drop-below');
+        }
+      });
+
+      section.addEventListener('drop', e => {
+        if (dragType !== 'group') return;
+        e.preventDefault();
+        const targetGroup = section.dataset.group;
+        if (targetGroup === dragGroupName) return;
+
+        const rect = section.getBoundingClientRect();
+        const mid  = rect.top + rect.height / 2;
+        const position = e.clientY < mid ? 'before' : 'after';
+
+        applyGroupReorder(dragGroupName, targetGroup, position);
         clearDropIndicators();
       });
     });
@@ -1137,6 +1262,23 @@
       showToast(`"${link.name}" → ${targetGroup || 'None'} — export JSON to save`);
     }
     // silent reorder (no toast needed for positional changes)
+  }
+
+  function applyGroupReorder(draggedGroup, targetGroup, position) {
+    const fromIdx = state.groups.indexOf(draggedGroup);
+    const toIdx   = state.groups.indexOf(targetGroup);
+    if (fromIdx === -1 || toIdx === -1) return;
+
+    // Remove dragged group
+    state.groups.splice(fromIdx, 1);
+
+    // Re-find target index after removal
+    const newToIdx = state.groups.indexOf(targetGroup);
+    const insertAt = position === 'before' ? newToIdx : newToIdx + 1;
+    state.groups.splice(insertAt, 0, draggedGroup);
+
+    render();
+    // silent — order is obvious visually
   }
 
   /* ── OVERLAY / KEYBOARD ── */

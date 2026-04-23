@@ -1,6 +1,7 @@
 {
   "groups": [
     "Daily Essentials",
+    "Projects",
     "Media",
     "Knowledge",
     "Organization",
@@ -49,28 +50,12 @@
       "icon": "🎵"
     },
     {
-      "id": "19",
-      "name": "Quicknotes",
-      "url": "https://yblebon.github.io/quicknotes",
-      "desc": "Quick thoughts.",
-      "group": "Daily Essentials",
-      "icon": "📝"
-    },
-    {
       "id": "5",
       "name": "Stocks",
       "url": "https://yblebon.github.io/stocks",
       "desc": "Market data and trends.",
       "group": "Daily Essentials",
       "icon": "📈"
-    },
-    {
-      "id": "7",
-      "name": "Transport",
-      "url": "https://yblebon.github.io/transport",
-      "desc": "Travel routes.",
-      "group": "Daily Essentials",
-      "icon": "🚗"
     },
     {
       "id": "8",
@@ -81,28 +66,20 @@
       "icon": "🌐"
     },
     {
-      "id": "15",
-      "name": "Journal",
-      "url": "https://yblebon.github.io/journal",
-      "desc": "Daily thoughts.",
+      "id": "21",
+      "name": "Events",
+      "url": "https://yblebon.github.io/events",
+      "desc": "Upcoming activities.",
       "group": "Daily Essentials",
-      "icon": "📓"
+      "icon": "📅"
     },
     {
-      "id": "34",
-      "name": "Terminal",
-      "url": "https://terminal.yasserblebon.com",
-      "desc": "Terminal.",
+      "id": "7",
+      "name": "Transport",
+      "url": "https://yblebon.github.io/transport",
+      "desc": "Travel routes.",
       "group": "Daily Essentials",
-      "icon": "⌨️"
-    },
-    {
-      "id": "10",
-      "name": "This and that",
-      "url": "https://yblebon.github.io/this-and-that",
-      "desc": "Random thoughts.",
-      "group": "Media",
-      "icon": "💬"
+      "icon": "🚗"
     },
     {
       "id": "11",
@@ -167,14 +144,6 @@
       "desc": "Saved resources.",
       "group": "Organization",
       "icon": "🔖"
-    },
-    {
-      "id": "21",
-      "name": "Events",
-      "url": "https://yblebon.github.io/events",
-      "desc": "Upcoming activities.",
-      "group": "Organization",
-      "icon": "📅"
     },
     {
       "id": "22",
@@ -257,14 +226,6 @@
       "icon": "💻"
     },
     {
-      "id": "33",
-      "name": "Storage",
-      "url": "https://yblebon.github.io/storage",
-      "desc": "Database.",
-      "group": "Tools",
-      "icon": "🗄️"
-    },
-    {
       "id": "35",
       "name": "Analytics",
       "url": "https://umami-livid-five.vercel.app",
@@ -311,6 +272,53 @@
       "desc": "Brain training.",
       "group": "Fun",
       "icon": "🕹️"
+    },
+    {
+      "id": "19",
+      "name": "Quicknotes",
+      "url": "https://yblebon.github.io/quicknotes",
+      "desc": "Quick thoughts.",
+      "group": "Projects",
+      "icon": "📝"
+    },
+    {
+      "id": "1776968396925",
+      "name": "GitHub",
+      "url": "https://github.com/yblebon",
+      "desc": "Github projects",
+      "group": "Projects"
+    },
+    {
+      "id": "34",
+      "name": "Terminal",
+      "url": "https://terminal.yasserblebon.com",
+      "desc": "Terminal.",
+      "group": "Projects",
+      "icon": "⌨️"
+    },
+    {
+      "id": "33",
+      "name": "Storage",
+      "url": "https://yblebon.github.io/storage",
+      "desc": "Database.",
+      "group": "Projects",
+      "icon": "🗄️"
+    },
+    {
+      "id": "15",
+      "name": "Journal",
+      "url": "https://yblebon.github.io/journal",
+      "desc": "Daily thoughts.",
+      "group": "Projects",
+      "icon": "📓"
+    },
+    {
+      "id": "10",
+      "name": "This and that",
+      "url": "https://yblebon.github.io/this-and-that",
+      "desc": "Random thoughts.",
+      "group": "Projects",
+      "icon": "💬"
     }
   ]
 }
