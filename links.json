@@ -1,44 +1,316 @@
 {
-  "groups": ["Daily Essentials", "Media", "Knowledge", "Organization", "Tools", "Fun"],
+  "groups": [
+    "Daily Essentials",
+    "Media",
+    "Knowledge",
+    "Organization",
+    "Tools",
+    "Fun"
+  ],
   "links": [
-    { "id": "1",  "name": "YouTube",           "url": "https://yblebon.github.io/youtube",           "desc": "Access my favorite YouTube videos.",  "group": "Media",           "icon": "▶️" },
-    { "id": "2",  "name": "Dictionary",         "url": "https://yblebon.github.io/dictionary",         "desc": "Words play a part in our lives.",      "group": "Knowledge",       "icon": "📖" },
-    { "id": "3",  "name": "Weather",            "url": "https://yblebon.github.io/weather",            "desc": "Meteorological forecasts.",            "group": "Daily Essentials", "icon": "⛅" },
-    { "id": "4",  "name": "News",               "url": "https://yblebon.github.io/news",               "desc": "Daily global news updates.",           "group": "Daily Essentials", "icon": "📰" },
-    { "id": "5",  "name": "Stocks",             "url": "https://yblebon.github.io/stocks",             "desc": "Market data and trends.",              "group": "Daily Essentials", "icon": "📈" },
-    { "id": "6",  "name": "Electricity",        "url": "https://yblebon.github.io/electricity",        "desc": "Electricity tracking.",                "group": "Daily Essentials", "icon": "⚡" },
-    { "id": "7",  "name": "Transport",          "url": "https://yblebon.github.io/transport",          "desc": "Travel routes.",                       "group": "Daily Essentials", "icon": "🚗" },
-    { "id": "8",  "name": "IP",                 "url": "https://yblebon.github.io/ip",                 "desc": "Display IP.",                          "group": "Daily Essentials", "icon": "🌐" },
-    { "id": "9",  "name": "Music Songs",        "url": "https://yblebon.github.io/music-songs",        "desc": "Music & Songs.",                       "group": "Media",           "icon": "🎵" },
-    { "id": "10", "name": "This and that",      "url": "https://yblebon.github.io/this-and-that",      "desc": "Random thoughts.",                     "group": "Media",           "icon": "💬" },
-    { "id": "11", "name": "Carre",              "url": "https://yblebon.github.io/carre",              "desc": "Creative works.",                      "group": "Media",           "icon": "🎨" },
-    { "id": "12", "name": "Influencers",        "url": "https://yblebon.github.io/influencers",        "desc": "Influencers.",                         "group": "Media",           "icon": "🌟" },
-    { "id": "13", "name": "Videos",             "url": "https://yblebon.github.io/videos",             "desc": "Tutorials.",                           "group": "Media",           "icon": "🎬" },
-    { "id": "14", "name": "Moon",               "url": "https://yblebon.github.io/moon",               "desc": "Explore lunar phases.",                "group": "Knowledge",       "icon": "🌙" },
-    { "id": "15", "name": "Journal",            "url": "https://yblebon.github.io/journal",            "desc": "Daily thoughts.",                      "group": "Knowledge",       "icon": "📓" },
-    { "id": "16", "name": "Podcasts",           "url": "https://yblebon.github.io/podcasts",           "desc": "Favorite discussions.",                "group": "Knowledge",       "icon": "🎙️" },
-    { "id": "17", "name": "Books",              "url": "https://yblebon.github.io/books",              "desc": "Books.",                               "group": "Knowledge",       "icon": "📚" },
-    { "id": "18", "name": "Logs",               "url": "https://yblebon.github.io/logs",               "desc": "Technical progress.",                  "group": "Organization",    "icon": "🗒️" },
-    { "id": "19", "name": "Quicknotes",         "url": "https://yblebon.github.io/quicknotes",         "desc": "Quick thoughts.",                      "group": "Organization",    "icon": "📝" },
-    { "id": "20", "name": "Bookmarks",          "url": "https://yblebon.github.io/bookmarks",          "desc": "Saved resources.",                     "group": "Organization",    "icon": "🔖" },
-    { "id": "21", "name": "Events",             "url": "https://yblebon.github.io/events",             "desc": "Upcoming activities.",                 "group": "Organization",    "icon": "📅" },
-    { "id": "22", "name": "Coins",              "url": "https://yblebon.github.io/coins",              "desc": "Currency insights.",                   "group": "Organization",    "icon": "🪙" },
-    { "id": "23", "name": "Daily Workout",      "url": "https://yblebon.github.io/daily-workout",      "desc": "Exercise routines.",                   "group": "Organization",    "icon": "🏋️" },
-    { "id": "24", "name": "Food",               "url": "https://yblebon.github.io/food",               "desc": "Recipes.",                             "group": "Organization",    "icon": "🍽️" },
-    { "id": "25", "name": "Image Uploader",     "url": "https://yblebon.github.io/image-uploader/",    "desc": "Upload images.",                       "group": "Tools",           "icon": "📷" },
-    { "id": "26", "name": "Encryption",         "url": "https://yblebon.github.io/encryption/",        "desc": "Files encryption.",                    "group": "Tools",           "icon": "🔐" },
-    { "id": "27", "name": "Text To PDF",        "url": "https://yblebon.github.io/text-2-pdf/",        "desc": "Text to PDF.",                         "group": "Tools",           "icon": "📄" },
-    { "id": "28", "name": "JSON Formatter",     "url": "https://yblebon.github.io/json-formatter",     "desc": "Beautify JSON.",                       "group": "Tools",           "icon": "🧹" },
-    { "id": "29", "name": "Color Picker",       "url": "https://yblebon.github.io/color-picker",       "desc": "Custom colors.",                       "group": "Tools",           "icon": "🎨" },
-    { "id": "30", "name": "Rest Debug",         "url": "https://yblebon.github.io/rest-debug",         "desc": "API tools.",                           "group": "Tools",           "icon": "🐛" },
-    { "id": "31", "name": "Password Generator", "url": "https://yblebon.github.io/password-generator", "desc": "Security tool.",                       "group": "Tools",           "icon": "🔑" },
-    { "id": "32", "name": "Webench",            "url": "https://yblebon.github.io/webench",            "desc": "Benchmarks.",                          "group": "Tools",           "icon": "💻" },
-    { "id": "33", "name": "Storage",            "url": "https://yblebon.github.io/storage",            "desc": "Database.",                            "group": "Tools",           "icon": "🗄️" },
-    { "id": "34", "name": "Terminal",           "url": "https://terminal.yasserblebon.com",             "desc": "Terminal.",                            "group": "Tools",           "icon": "⌨️" },
-    { "id": "35", "name": "Analytics",          "url": "https://umami-livid-five.vercel.app",           "desc": "Analytics.",                           "group": "Tools",           "icon": "📊" },
-    { "id": "36", "name": "Momjokes",           "url": "https://yblebon.github.io/momjokes",           "desc": "Jokes list.",                          "group": "Fun",             "icon": "😄" },
-    { "id": "37", "name": "Hardtarget",         "url": "https://yblebon.github.io/hardtarget",         "desc": "Movie quotes.",                        "group": "Fun",             "icon": "🎯" },
-    { "id": "38", "name": "Jokes",              "url": "https://yblebon.github.io/jokes",              "desc": "Funny moments.",                       "group": "Fun",             "icon": "😂" },
-    { "id": "39", "name": "Arcade",             "url": "https://yblebon.github.io/arcade",             "desc": "Brain training.",                      "group": "Fun",             "icon": "🕹️" }
+    {
+      "id": "1",
+      "name": "YouTube",
+      "url": "https://yblebon.github.io/youtube",
+      "desc": "Access my favorite YouTube videos.",
+      "group": "Media",
+      "icon": "▶️"
+    },
+    {
+      "id": "2",
+      "name": "Dictionary",
+      "url": "https://yblebon.github.io/dictionary",
+      "desc": "Words play a part in our lives.",
+      "group": "Knowledge",
+      "icon": "📖"
+    },
+    {
+      "id": "3",
+      "name": "Weather",
+      "url": "https://yblebon.github.io/weather",
+      "desc": "Meteorological forecasts.",
+      "group": "Daily Essentials",
+      "icon": "⛅"
+    },
+    {
+      "id": "4",
+      "name": "News",
+      "url": "https://yblebon.github.io/news",
+      "desc": "Daily global news updates.",
+      "group": "Daily Essentials",
+      "icon": "📰"
+    },
+    {
+      "id": "9",
+      "name": "Music Songs",
+      "url": "https://yblebon.github.io/music-songs",
+      "desc": "Music & Songs.",
+      "group": "Daily Essentials",
+      "icon": "🎵"
+    },
+    {
+      "id": "19",
+      "name": "Quicknotes",
+      "url": "https://yblebon.github.io/quicknotes",
+      "desc": "Quick thoughts.",
+      "group": "Daily Essentials",
+      "icon": "📝"
+    },
+    {
+      "id": "5",
+      "name": "Stocks",
+      "url": "https://yblebon.github.io/stocks",
+      "desc": "Market data and trends.",
+      "group": "Daily Essentials",
+      "icon": "📈"
+    },
+    {
+      "id": "7",
+      "name": "Transport",
+      "url": "https://yblebon.github.io/transport",
+      "desc": "Travel routes.",
+      "group": "Daily Essentials",
+      "icon": "🚗"
+    },
+    {
+      "id": "8",
+      "name": "IP",
+      "url": "https://yblebon.github.io/ip",
+      "desc": "Display IP.",
+      "group": "Daily Essentials",
+      "icon": "🌐"
+    },
+    {
+      "id": "15",
+      "name": "Journal",
+      "url": "https://yblebon.github.io/journal",
+      "desc": "Daily thoughts.",
+      "group": "Daily Essentials",
+      "icon": "📓"
+    },
+    {
+      "id": "34",
+      "name": "Terminal",
+      "url": "https://terminal.yasserblebon.com",
+      "desc": "Terminal.",
+      "group": "Daily Essentials",
+      "icon": "⌨️"
+    },
+    {
+      "id": "10",
+      "name": "This and that",
+      "url": "https://yblebon.github.io/this-and-that",
+      "desc": "Random thoughts.",
+      "group": "Media",
+      "icon": "💬"
+    },
+    {
+      "id": "11",
+      "name": "Carre",
+      "url": "https://yblebon.github.io/carre",
+      "desc": "Creative works.",
+      "group": "Media",
+      "icon": "🎨"
+    },
+    {
+      "id": "12",
+      "name": "Influencers",
+      "url": "https://yblebon.github.io/influencers",
+      "desc": "Influencers.",
+      "group": "Media",
+      "icon": "🌟"
+    },
+    {
+      "id": "13",
+      "name": "Videos",
+      "url": "https://yblebon.github.io/videos",
+      "desc": "Tutorials.",
+      "group": "Media",
+      "icon": "🎬"
+    },
+    {
+      "id": "14",
+      "name": "Moon",
+      "url": "https://yblebon.github.io/moon",
+      "desc": "Explore lunar phases.",
+      "group": "Knowledge",
+      "icon": "🌙"
+    },
+    {
+      "id": "16",
+      "name": "Podcasts",
+      "url": "https://yblebon.github.io/podcasts",
+      "desc": "Favorite discussions.",
+      "group": "Knowledge",
+      "icon": "🎙️"
+    },
+    {
+      "id": "17",
+      "name": "Books",
+      "url": "https://yblebon.github.io/books",
+      "desc": "Books.",
+      "group": "Knowledge",
+      "icon": "📚"
+    },
+    {
+      "id": "18",
+      "name": "Logs",
+      "url": "https://yblebon.github.io/logs",
+      "desc": "Technical progress.",
+      "group": "Organization",
+      "icon": "🗒️"
+    },
+    {
+      "id": "20",
+      "name": "Bookmarks",
+      "url": "https://yblebon.github.io/bookmarks",
+      "desc": "Saved resources.",
+      "group": "Organization",
+      "icon": "🔖"
+    },
+    {
+      "id": "21",
+      "name": "Events",
+      "url": "https://yblebon.github.io/events",
+      "desc": "Upcoming activities.",
+      "group": "Organization",
+      "icon": "📅"
+    },
+    {
+      "id": "22",
+      "name": "Coins",
+      "url": "https://yblebon.github.io/coins",
+      "desc": "Currency insights.",
+      "group": "Organization",
+      "icon": "🪙"
+    },
+    {
+      "id": "23",
+      "name": "Daily Workout",
+      "url": "https://yblebon.github.io/daily-workout",
+      "desc": "Exercise routines.",
+      "group": "Organization",
+      "icon": "🏋️"
+    },
+    {
+      "id": "24",
+      "name": "Food",
+      "url": "https://yblebon.github.io/food",
+      "desc": "Recipes.",
+      "group": "Organization",
+      "icon": "🍽️"
+    },
+    {
+      "id": "26",
+      "name": "Encryption",
+      "url": "https://yblebon.github.io/encryption/",
+      "desc": "Files encryption.",
+      "group": "Tools",
+      "icon": "🔐"
+    },
+    {
+      "id": "27",
+      "name": "Text To PDF",
+      "url": "https://yblebon.github.io/text-2-pdf/",
+      "desc": "Text to PDF.",
+      "group": "Tools",
+      "icon": "📄"
+    },
+    {
+      "id": "28",
+      "name": "JSON Formatter",
+      "url": "https://yblebon.github.io/json-formatter",
+      "desc": "Beautify JSON.",
+      "group": "Tools",
+      "icon": "🧹"
+    },
+    {
+      "id": "29",
+      "name": "Color Picker",
+      "url": "https://yblebon.github.io/color-picker",
+      "desc": "Custom colors.",
+      "group": "Tools",
+      "icon": "🎨"
+    },
+    {
+      "id": "30",
+      "name": "Rest Debug",
+      "url": "https://yblebon.github.io/rest-debug",
+      "desc": "API tools.",
+      "group": "Tools",
+      "icon": "🐛"
+    },
+    {
+      "id": "31",
+      "name": "Password Generator",
+      "url": "https://yblebon.github.io/password-generator",
+      "desc": "Security tool.",
+      "group": "Tools",
+      "icon": "🔑"
+    },
+    {
+      "id": "32",
+      "name": "Webench",
+      "url": "https://yblebon.github.io/webench",
+      "desc": "Benchmarks.",
+      "group": "Tools",
+      "icon": "💻"
+    },
+    {
+      "id": "33",
+      "name": "Storage",
+      "url": "https://yblebon.github.io/storage",
+      "desc": "Database.",
+      "group": "Tools",
+      "icon": "🗄️"
+    },
+    {
+      "id": "35",
+      "name": "Analytics",
+      "url": "https://umami-livid-five.vercel.app",
+      "desc": "Analytics.",
+      "group": "Tools",
+      "icon": "📊"
+    },
+    {
+      "id": "6",
+      "name": "Electricity",
+      "url": "https://yblebon.github.io/electricity",
+      "desc": "Electricity tracking.",
+      "group": "Tools",
+      "icon": "⚡"
+    },
+    {
+      "id": "36",
+      "name": "Momjokes",
+      "url": "https://yblebon.github.io/momjokes",
+      "desc": "Jokes list.",
+      "group": "Fun",
+      "icon": "😄"
+    },
+    {
+      "id": "37",
+      "name": "Hardtarget",
+      "url": "https://yblebon.github.io/hardtarget",
+      "desc": "Movie quotes.",
+      "group": "Fun",
+      "icon": "🎯"
+    },
+    {
+      "id": "38",
+      "name": "Jokes",
+      "url": "https://yblebon.github.io/jokes",
+      "desc": "Funny moments.",
+      "group": "Fun",
+      "icon": "😂"
+    },
+    {
+      "id": "39",
+      "name": "Arcade",
+      "url": "https://yblebon.github.io/arcade",
+      "desc": "Brain training.",
+      "group": "Fun",
+      "icon": "🕹️"
+    }
   ]
 }

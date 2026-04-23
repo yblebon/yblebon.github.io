@@ -143,17 +143,31 @@
       color: #fff;
     }
 
-    /* ── MAIN GRID ── */
+    /* ── MAIN LAYOUT ── */
     main {
       padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .group-section {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .group-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 12px;
+      padding: 4px 0 16px;
+      min-height: 60px; /* always droppable even when empty */
+      border-radius: var(--radius);
+      transition: background 0.15s, outline 0.15s;
     }
 
     /* ── GROUP HEADER ── */
     .group-header {
-      grid-column: 1 / -1;
       display: flex;
       align-items: center;
       gap: 12px;
@@ -288,9 +302,88 @@
     .card-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
     .card-btn.delete:hover { color: #ff6b6b; border-color: rgba(255,107,107,0.3); }
 
+    /* ── DRAG & DROP ── */
+    .card[draggable="true"] { cursor: grab; }
+    .card[draggable="true"]:active { cursor: grabbing; }
+
+    .card.dragging {
+      opacity: 0.35;
+      transform: scale(0.97);
+      border-color: var(--accent2);
+      pointer-events: none;
+    }
+
+    /* insertion indicator: a glowing line before the hovered card */
+    .card.drop-before {
+      box-shadow: -4px 0 0 0 var(--accent2), 0 0 0 1px var(--accent2);
+      border-color: var(--accent2);
+    }
+    .card.drop-after {
+      box-shadow: 4px 0 0 0 var(--accent2), 0 0 0 1px var(--accent2);
+      border-color: var(--accent2);
+    }
+
+    /* group grid highlighted as drop target */
+    .group-grid.drag-over {
+      outline: 2px dashed rgba(123,156,255,0.4);
+      background: rgba(123,156,255,0.04);
+    }
+
+    /* drag handle shown on hover */
+    .drag-handle {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      color: var(--text-muted);
+      opacity: 0;
+      transition: opacity 0.15s;
+      pointer-events: none;
+      line-height: 1;
+      font-size: 0.7rem;
+      letter-spacing: -1px;
+    }
+    .card:hover .drag-handle { opacity: 0.5; }
+
+    /* floating group picker that trails the drag */
+    #drag-picker {
+      position: fixed;
+      z-index: 300;
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      background: var(--surface2);
+      border: 1px solid rgba(123,156,255,0.25);
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+      pointer-events: none;
+      min-width: 160px;
+    }
+    #drag-picker.visible { display: flex; }
+    #drag-picker .picker-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0 4px 4px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2px;
+    }
+    #drag-picker .picker-item {
+      font-size: 0.78rem;
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 7px;
+      transition: background 0.1s;
+      pointer-events: none;
+    }
+    #drag-picker .picker-item.hover-target {
+      background: rgba(123,156,255,0.15);
+      color: var(--accent2);
+    }
+
     /* ── EMPTY ── */
     .empty {
-      grid-column: 1/-1;
       text-align: center;
       padding: 60px 0;
       color: var(--text-muted);
@@ -444,7 +537,6 @@
 
     /* ── LOADING ── */
     .loading {
-      grid-column: 1/-1;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -464,7 +556,6 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .error-box {
-      grid-column: 1/-1;
       background: rgba(255,107,107,0.08);
       border: 1px solid rgba(255,107,107,0.2);
       border-radius: var(--radius);
@@ -584,6 +675,9 @@
 </div>
 
 <div class="toast" id="toast"></div>
+<div id="drag-picker">
+  <div class="picker-label">Move to group</div>
+</div>
 
 <script>
   /*
@@ -695,49 +789,56 @@
       return;
     }
 
-    const grouped = {};
-    const ungrouped = [];
+    // Build per-group buckets preserving state.links order
+    const buckets = {}; // group -> [link]
+    const ungroupedKey = '__none__';
     links.forEach(l => {
-      if (l.group) {
-        if (!grouped[l.group]) grouped[l.group] = [];
-        grouped[l.group].push(l);
-      } else {
-        ungrouped.push(l);
-      }
+      const key = l.group || ungroupedKey;
+      if (!buckets[key]) buckets[key] = [];
+      buckets[key].push(l);
     });
 
-    let html = '';
+    grid.innerHTML = '';
 
+    const renderSection = (groupName, items) => {
+      const label = groupName === ungroupedKey ? 'Other' : groupName;
+      const labelStyle = groupName === ungroupedKey ? ' style="color:var(--text-muted)"' : '';
+      const dataGroup = groupName === ungroupedKey ? '' : groupName;
+
+      const section = document.createElement('div');
+      section.className = 'group-section';
+
+      section.innerHTML = `
+        <div class="group-header">
+          <span class="group-label"${labelStyle}>${escHtml(label)}</span>
+          <span class="group-count">${items.length}</span>
+          <span class="group-line"></span>
+        </div>
+        <div class="group-grid" data-group="${escHtml(dataGroup)}">
+          ${items.map(l => cardHtml(l)).join('')}
+        </div>
+      `;
+
+      grid.appendChild(section);
+    };
+
+    // Render in defined group order first
     state.groups.forEach(g => {
-      if (!grouped[g]) return;
-      html += `
-        <div class="group-header">
-          <span class="group-label">${escHtml(g)}</span>
-          <span class="group-count">${grouped[g].length}</span>
-          <span class="group-line"></span>
-        </div>
-      `;
-      grouped[g].forEach(l => { html += cardHtml(l); });
+      if (buckets[g]) renderSection(g, buckets[g]);
     });
 
-    if (ungrouped.length) {
-      if (html) html += `
-        <div class="group-header">
-          <span class="group-label" style="color:var(--text-muted)">Other</span>
-          <span class="group-count">${ungrouped.length}</span>
-          <span class="group-line"></span>
-        </div>
-      `;
-      ungrouped.forEach(l => { html += cardHtml(l); });
-    }
+    // Then ungrouped
+    if (buckets[ungroupedKey]) renderSection(ungroupedKey, buckets[ungroupedKey]);
 
-    grid.innerHTML = html;
+    bindDragEvents();
   }
 
   function cardHtml(l) {
     const hostname = (() => { try { return new URL(l.url).hostname; } catch { return l.url; } })();
     return `
-      <a class="card" href="${escHtml(l.url)}" target="_blank" rel="noopener">
+      <a class="card" href="${escHtml(l.url)}" target="_blank" rel="noopener"
+         draggable="true" data-id="${escHtml(l.id)}">
+        <span class="drag-handle">⠿</span>
         <div class="card-favicon">${faviconEl(l.url, l.name, l.icon)}</div>
         <div class="card-body">
           <div class="card-name">${escHtml(l.name)}</div>
@@ -844,6 +945,198 @@
     state.links = state.links.filter(l => l.id !== id);
     render();
     showToast('Link removed — export JSON to save permanently');
+  }
+
+  /* ── DRAG & DROP ── */
+  let dragId = null;
+  let dragSourceGroup = null;
+  const picker = document.getElementById('drag-picker');
+
+  function buildPicker() {
+    picker.querySelectorAll('.picker-item').forEach(e => e.remove());
+    state.groups.forEach(g => {
+      const el = document.createElement('div');
+      el.className = 'picker-item';
+      el.textContent = g;
+      el.dataset.group = g;
+      picker.appendChild(el);
+    });
+    const none = document.createElement('div');
+    none.className = 'picker-item';
+    none.textContent = '— None —';
+    none.dataset.group = '';
+    picker.appendChild(none);
+  }
+
+  function movePicker(x, y) {
+    const offset = 20;
+    let left = x + offset;
+    let top  = y + offset;
+    if (left + 180 > window.innerWidth)        left = x - 180 - offset;
+    if (top  + picker.offsetHeight > window.innerHeight) top = y - picker.offsetHeight - offset;
+    picker.style.left = left + 'px';
+    picker.style.top  = top  + 'px';
+  }
+
+  function highlightPickerGroup(group) {
+    picker.querySelectorAll('.picker-item').forEach(el => {
+      el.classList.toggle('hover-target', el.dataset.group === (group ?? '__none__match__'));
+    });
+  }
+
+  function clearDropIndicators() {
+    document.querySelectorAll('.drop-before, .drop-after').forEach(el => {
+      el.classList.remove('drop-before', 'drop-after');
+    });
+    document.querySelectorAll('.group-grid.drag-over').forEach(el => {
+      el.classList.remove('drag-over');
+    });
+  }
+
+  // Returns {targetCard, position:'before'|'after'} for the card under cursor, or null
+  function getCardInsertionPoint(e, grid) {
+    const cards = [...grid.querySelectorAll('.card:not(.dragging)')];
+    if (!cards.length) return null;
+
+    for (const card of cards) {
+      const rect = card.getBoundingClientRect();
+      const midX = rect.left + rect.width / 2;
+      const midY = rect.top  + rect.height / 2;
+
+      // Determine if we're in the left/right half (for horizontal grids)
+      if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
+        if (e.clientX >= rect.left && e.clientX <= rect.right) {
+          return { targetCard: card, position: e.clientX < midX ? 'before' : 'after' };
+        }
+      }
+    }
+    // If below all cards, insert after last
+    const last = cards[cards.length - 1];
+    const lastRect = last.getBoundingClientRect();
+    if (e.clientY > lastRect.bottom) return { targetCard: last, position: 'after' };
+
+    return null;
+  }
+
+  function bindDragEvents() {
+    // ── Cards: drag source ──
+    document.querySelectorAll('.card[draggable="true"]').forEach(card => {
+      card.addEventListener('dragstart', e => {
+        dragId = card.dataset.id;
+        const link = state.links.find(l => l.id === dragId);
+        dragSourceGroup = link ? (link.group || '') : '';
+
+        setTimeout(() => card.classList.add('dragging'), 0);
+        document.body.classList.add('is-dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', dragId);
+        buildPicker();
+        picker.classList.add('visible');
+        movePicker(e.clientX, e.clientY);
+      });
+
+      card.addEventListener('drag', e => {
+        if (e.clientX === 0 && e.clientY === 0) return;
+        movePicker(e.clientX, e.clientY);
+      });
+
+      card.addEventListener('dragend', () => {
+        dragId = null;
+        dragSourceGroup = null;
+        card.classList.remove('dragging');
+        document.body.classList.remove('is-dragging');
+        picker.classList.remove('visible');
+        clearDropIndicators();
+      });
+
+      card.addEventListener('click', e => {
+        if (document.body.classList.contains('is-dragging')) e.preventDefault();
+      });
+    });
+
+    // ── Group grids: drop target for reorder + group change ──
+    document.querySelectorAll('.group-grid').forEach(grid => {
+      grid.addEventListener('dragover', e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+
+        clearDropIndicators();
+        grid.classList.add('drag-over');
+        highlightPickerGroup(grid.dataset.group);
+
+        const insertion = getCardInsertionPoint(e, grid);
+        if (insertion) {
+          grid.classList.remove('drag-over'); // card highlight is enough
+          insertion.targetCard.classList.add(
+            insertion.position === 'before' ? 'drop-before' : 'drop-after'
+          );
+        }
+      });
+
+      grid.addEventListener('dragleave', e => {
+        if (!grid.contains(e.relatedTarget)) {
+          clearDropIndicators();
+          highlightPickerGroup(null);
+        }
+      });
+
+      grid.addEventListener('drop', e => {
+        e.preventDefault();
+        const id = e.dataTransfer.getData('text/plain') || dragId;
+        const targetGroup = grid.dataset.group;
+        const insertion = getCardInsertionPoint(e, grid);
+
+        applyReorder(id, targetGroup, insertion);
+        clearDropIndicators();
+      });
+    });
+  }
+
+  function applyReorder(id, targetGroup, insertion) {
+    const srcIdx = state.links.findIndex(l => l.id === id);
+    if (srcIdx === -1) return;
+
+    const link = state.links[srcIdx];
+    const oldGroup = link.group || '';
+    const groupChanged = oldGroup !== targetGroup;
+
+    // Update group
+    link.group = targetGroup;
+
+    // Remove from current position
+    state.links.splice(srcIdx, 1);
+
+    if (insertion) {
+      // Find the target card's link id
+      const targetId = insertion.targetCard.dataset.id;
+      if (targetId && targetId !== id) {
+        const targetIdx = state.links.findIndex(l => l.id === targetId);
+        if (targetIdx !== -1) {
+          const insertAt = insertion.position === 'before' ? targetIdx : targetIdx + 1;
+          state.links.splice(insertAt, 0, link);
+        } else {
+          state.links.push(link);
+        }
+      } else {
+        state.links.push(link);
+      }
+    } else {
+      // No specific insertion point → append to end of the group
+      // Find last item of target group
+      let lastInGroup = -1;
+      state.links.forEach((l, i) => {
+        if ((l.group || '') === targetGroup) lastInGroup = i;
+      });
+      if (lastInGroup === -1) state.links.push(link);
+      else state.links.splice(lastInGroup + 1, 0, link);
+    }
+
+    render();
+
+    if (groupChanged) {
+      showToast(`"${link.name}" → ${targetGroup || 'None'} — export JSON to save`);
+    }
+    // silent reorder (no toast needed for positional changes)
   }
 
   /* ── OVERLAY / KEYBOARD ── */
