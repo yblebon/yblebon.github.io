@@ -299,10 +299,9 @@
     {
       "id": "33",
       "name": "Storage",
-      "url": "https://yblebon.github.io/storage",
+      "url": "https://storage.yasserblebon.com/",
       "desc": "Database.",
-      "group": "Projects",
-      "icon": "🗄️"
+      "group": "Projects"
     },
     {
       "id": "15",
@@ -319,6 +318,13 @@
       "desc": "Random thoughts.",
       "group": "Projects",
       "icon": "💬"
+    },
+    {
+      "id": "1777227765656",
+      "name": "Alert",
+      "url": "https://alert.yasserblebon.com/",
+      "desc": "Personal alerting dashboard",
+      "group": "Projects"
     }
   ]
 }
