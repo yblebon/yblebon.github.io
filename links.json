@@ -77,11 +77,10 @@
     },
     {
       "id": "21",
-      "name": "Events",
-      "url": "https://yblebon.github.io/events",
+      "name": "Agenda",
+      "url": "https://yblebon.github.io/agenda",
       "desc": "Upcoming activities.",
-      "group": "Daily Essentials",
-      "icon": "📅"
+      "group": "Daily Essentials"
     },
     {
       "id": "7",
@@ -226,14 +225,6 @@
       "icon": "😄"
     },
     {
-      "id": "37",
-      "name": "Hardtarget",
-      "url": "https://yblebon.github.io/hardtarget",
-      "desc": "Movie quotes.",
-      "group": "Fun",
-      "icon": "🎯"
-    },
-    {
       "id": "38",
       "name": "Jokes",
       "url": "https://yblebon.github.io/jokes",
@@ -328,13 +319,6 @@
       "id": "1777274994406",
       "name": "Keys",
       "url": "https://yblebon.github.io/keys",
-      "desc": "",
-      "group": "Personal"
-    },
-    {
-      "id": "1777275045717",
-      "name": "Photos",
-      "url": "https://yblebon.github.io/photos",
       "desc": "",
       "group": "Personal"
     },
