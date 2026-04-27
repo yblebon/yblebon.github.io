@@ -6,9 +6,9 @@
     "Media",
     "Knowledge",
     "Organization",
+    "Health",
     "Tools",
-    "Fun",
-    "Health"
+    "Fun"
   ],
   "links": [
     {
@@ -108,6 +108,14 @@
       "icon": "💬"
     },
     {
+      "id": "16",
+      "name": "Podcasts",
+      "url": "https://yblebon.github.io/podcasts",
+      "desc": "Favorite discussions.",
+      "group": "Media",
+      "icon": "🎙️"
+    },
+    {
       "id": "14",
       "name": "Moon",
       "url": "https://yblebon.github.io/moon",
@@ -130,14 +138,6 @@
       "desc": "Saved resources.",
       "group": "Knowledge",
       "icon": "🔖"
-    },
-    {
-      "id": "16",
-      "name": "Podcasts",
-      "url": "https://yblebon.github.io/podcasts",
-      "desc": "Favorite discussions.",
-      "group": "Knowledge",
-      "icon": "🎙️"
     },
     {
       "id": "23",
