@@ -41,7 +41,7 @@
     { "id": "38",             "name": "Jokes",             "url": "https://yblebon.github.io/jokes",            "desc": "Funny moments.",                     "group": "Fun",             "icon": "😂" },
     { "id": "39",             "name": "Arcade",            "url": "https://yblebon.github.io/arcade",           "desc": "Brain training.",                    "group": "Fun",             "icon": "🕹️" },
     { "id": "11",             "name": "Carre",             "url": "https://yblebon.github.io/carre",            "desc": "Creative works.",                    "group": "Fun",             "icon": "🎨" },
-    { "id": "19",             "name": "Quicknotes",        "url": "https://yblebon.github.io/quicknotes",       "desc": "Quick thoughts.",                    "group": "Projects",        "icon": "📝" },
+    { "id": "19",             "name": "Agile Board",        "url": "https://yblebon.github.io/agile-board",       "desc": "Agile board.",                    "group": "Projects",        "icon": "📝" },
     { "id": "1776968396925",  "name": "GitHub",            "url": "https://github.com/yblebon",                 "desc": "Github projects",                   "group": "Projects",        "icon": "🐙" },
     { "id": "34",             "name": "Terminal",          "url": "https://terminal.yasserblebon.com",          "desc": "Terminal.",                          "group": "Projects",        "icon": "⌨️" },
     { "id": "33",             "name": "Storage",           "url": "https://storage.yasserblebon.com/",          "desc": "Database.",                          "group": "Projects",        "icon": "🗄️" },
